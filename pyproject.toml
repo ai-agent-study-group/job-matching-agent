@@ -1,0 +1,29 @@
+[project]
+name = "job-matching-agent"
+version = "0.1.0"
+description = "구인 알림 공고의 JD를 수집해 내 이력과 요건 단위로 매칭도를 분석하는 에이전트"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.143.0",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.13.1",
+    "pytest>=9.1.1",
+    "ruff>=0.17.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.2,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = ["api", "ingest", "scraper", "llm", "schemas"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
