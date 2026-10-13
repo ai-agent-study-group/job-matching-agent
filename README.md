@@ -52,10 +52,4 @@ uv run ruff check . && uv run ruff format --check .
 
 ## 브랜치와 PR
 
-- main 직접 푸시 금지, PR로만 병합
-- 병합 조건: 승인 1명 이상 + CI 통과 + 최신 main 기준
-- 병합 전 최신 main 위로 rebase, merge 커밋으로 병합 (PR마다 가지 하나, 가지끼리 겹치지 않음)
-- 승인 후 새 커밋이 올라오면 승인 무효
-- 작성자가 설명할 수 없는 코드는 올리지 않음
-
-자세한 규칙: [CONTRIBUTING.md](CONTRIBUTING.md)
+[CONTRIBUTING.md](CONTRIBUTING.md) 참고.
