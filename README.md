@@ -6,10 +6,7 @@
 
 **정기 모임: 매주 화요일 18:00 (Europe/Berlin).** 첫 회의: 2026-10-13.
 
-- [첫 회의 요약](docs/meetings/2026-10-13.md)
-- [Phase 1·2 개발 범위](docs/PROJECT_PLAN.md)
-- [역할과 협업](docs/TEAM.md) · [현재 구조](docs/STRUCTURE.md)
-- [이력서·JD 데이터](docs/DATA.md) · [평가 논의](docs/EVALUATION.md)
+- [첫 회의 요약](docs/meetings/2026-10-13.md) · [현재 구조](docs/STRUCTURE.md)
 - [날짜별 회의 기록](docs/meetings/README.md) · [문서 작성·미리보기](docs/GITHUB_GUIDE.md)
 
 Phase 1은 첫 1개월 동안 이력서 업로드 → JD 수집·분석 → 매칭 공고 목록을 연결하는 범위 초안입니다.
@@ -32,11 +29,11 @@ npm run docs:dev
 
 ## 흐름
 
-1. **입력·수집**: 이력서 업로드·정보 추출과 공고 수집 실행. 기존 메일 수집 계획의 우선순위는 추가 논의
+1. **ingest**: 알림 메일에서 회사·포지션·링크 추출, 중복 제거
 2. **scraper**: 링크 또는 회사 커리어 사이트에서 JD 확보 (ATS 어댑터 + Playwright 범용 추출)
-3. **llm**: JD 필수·우대·업무 구조화, 이력과 요건별 매칭·점수·근거 (산식 미정)
+3. **llm**: JD 구조화, 이력과 요건별 매칭 (충족 여부 + 근거 출처)
 4. **api**: 공고·이력·매칭 결과 저장과 조회 (FastAPI)
-5. **web**: 이력서 업로드, 매칭 공고 목록·근거 표시. 입력 다변화는 Phase 2
+5. **web**: 공고 목록, 매칭 근거 대시보드, 이력 편집
 
 BE는 루트의 Python 프로젝트 하나 (`pyproject.toml`, `src/`), FE는 `web/`.
 BE 모듈은 한 패키지에 두고 실행만 프로세스별로 나눔 (API 서버, 워커). DB, 프로세스 간 작업 전달 방식은 진행하면서 결정.

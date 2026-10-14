@@ -8,10 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "node --conditions=react-server --import tsx --test tests/*.test.ts",
-    "test:scrape": "python3 -m unittest discover -s scripts/scrape -p \"test_*.py\"",
-    "data:scrape": "python3 scripts/scrape/collect.py",
-    "data:review": "python3 scripts/scrape/review.py"
+    "test": "node --conditions=react-server --import tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
