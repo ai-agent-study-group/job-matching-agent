@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 
 from collect import ROOT, atomic_json, validate_spec
 
+
 def approve(source_id, data_dir=ROOT / "data"):
     if not re.fullmatch(r"[a-z0-9-]+", source_id):
         raise ValueError("올바른 자료 ID를 입력해주세요.")
