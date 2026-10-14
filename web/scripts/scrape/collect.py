@@ -3,7 +3,7 @@ import argparse
 import json
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
@@ -61,10 +61,10 @@ def collect(specs, output_dir, fetcher=fetch_html):
             validate_spec(spec)
             body = extract_body(fetcher(spec["url"]), spec["selector"])
             result = {key: spec[key] for key in ("id", "domain", "title", "url", "keywords", "language")}
-            result.update(body=body, collectedAt=datetime.now(timezone.utc).isoformat(), reviewed=False, reviewedAt="", kind="scraped")
+            result.update(body=body, collectedAt=datetime.now(UTC).isoformat(), reviewed=False, reviewedAt="", kind="scraped")
             atomic_json(output_dir / (spec["id"] + ".json"), result)
             print("검토 대기 저장:", spec["id"])
-        except Exception as error:
+        except Exception as error:  # noqa: BLE001  # 한 공고 실패가 배치 전체를 멈추지 않도록 의도적으로 광범위 포착
             failures += 1
             print("수집 실패:", spec.get("id", "unknown"), str(error), file=sys.stderr)
         time.sleep(0.3)

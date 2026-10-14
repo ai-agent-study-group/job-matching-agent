@@ -2,8 +2,8 @@
 import argparse
 import json
 import re
-from datetime import datetime, timezone
-from pathlib import Path
+from datetime import UTC, datetime
+
 from collect import ROOT, atomic_json, validate_spec
 
 def approve(source_id, data_dir=ROOT / "data"):
@@ -19,7 +19,7 @@ def approve(source_id, data_dir=ROOT / "data"):
         raise ValueError("수집 메타데이터를 확인해주세요.")
     path = data_dir / (candidate["domain"] + ".json")
     current = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
-    candidate.update(reviewed=True, reviewedAt=datetime.now(timezone.utc).isoformat())
+    candidate.update(reviewed=True, reviewedAt=datetime.now(UTC).isoformat())
     atomic_json(path, [s for s in current if s["id"] != source_id] + [candidate])
     print("검토 승인 반영:", source_id)
 
