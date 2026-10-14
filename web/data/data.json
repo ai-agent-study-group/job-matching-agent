@@ -1,0 +1,46 @@
+[
+  {
+    "id": "data-ml",
+    "title": "AI 플랫폼 — ML 엔지니어",
+    "url": "https://example.com/jobs/data-ml",
+    "body": "AI 제품을 만드는 팀의 ML 엔지니어 공고입니다. 필수 요건은 Python 기반 머신러닝 개발, PyTorch 또는 유사 프레임워크 경험, 모델 서빙 경험입니다. 우대 사항은 LLM·RAG 파이프라인 구축, MLOps, 벡터 데이터베이스 운영 경험입니다. 이 요약은 공고의 기술 요건만 다루며 연봉·전형 일정은 포함하지 않습니다.",
+    "keywords": [
+      "python",
+      "파이썬",
+      "ml",
+      "머신러닝",
+      "pytorch",
+      "llm",
+      "rag",
+      "mlops"
+    ],
+    "domain": "data",
+    "collectedAt": "2026-10-11",
+    "reviewedAt": "2026-10-11",
+    "reviewed": true,
+    "language": "ko",
+    "kind": "editorial_summary"
+  },
+  {
+    "id": "data-pipeline",
+    "title": "데이터 조직 — 데이터 엔지니어",
+    "url": "https://example.com/jobs/data-pipeline",
+    "body": "데이터 플랫폼의 데이터 엔지니어 공고입니다. 필수 요건은 SQL 활용, 대규모 데이터 파이프라인(ETL) 설계, Spark·Airflow 중 하나 이상의 경험입니다. 우대 사항은 클라우드 데이터 웨어하우스 운영, 스트리밍 처리, 데이터 품질 관리 경험입니다. 이 요약만으로 개별 합격 여부를 판단할 수 없습니다.",
+    "keywords": [
+      "sql",
+      "데이터",
+      "파이프라인",
+      "etl",
+      "spark",
+      "airflow",
+      "스트리밍",
+      "웨어하우스"
+    ],
+    "domain": "data",
+    "collectedAt": "2026-10-11",
+    "reviewedAt": "2026-10-11",
+    "reviewed": true,
+    "language": "ko",
+    "kind": "editorial_summary"
+  }
+]

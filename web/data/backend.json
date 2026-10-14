@@ -1,0 +1,46 @@
+[
+  {
+    "id": "backend-fintech",
+    "title": "핀테크 스타트업 — 백엔드 엔지니어",
+    "url": "https://example.com/jobs/backend-fintech",
+    "body": "핀테크 결제 서비스의 백엔드 엔지니어 공고입니다. 필수 요건은 Java·Spring Boot 기반 서버 개발 3년 이상, REST API 설계, 관계형 데이터베이스 경험입니다. 우대 사항은 Kubernetes·AWS 운영, MSA 구조 경험, 결제·정산 도메인 이해입니다. 이 요약은 공고의 기술 요건만 다루며 연봉·복지·전형 일정은 포함하지 않습니다.",
+    "keywords": [
+      "java",
+      "spring",
+      "백엔드",
+      "서버",
+      "rest",
+      "kubernetes",
+      "aws",
+      "msa"
+    ],
+    "domain": "backend",
+    "collectedAt": "2026-10-11",
+    "reviewedAt": "2026-10-11",
+    "reviewed": true,
+    "language": "ko",
+    "kind": "editorial_summary"
+  },
+  {
+    "id": "backend-commerce",
+    "title": "커머스 플랫폼 — 서버 개발자",
+    "url": "https://example.com/jobs/backend-commerce",
+    "body": "대규모 커머스 플랫폼의 서버 개발자 공고입니다. 필수 요건은 Node.js·TypeScript 기반 백엔드 개발, 대용량 트래픽 처리 경험, 캐시(Redis)와 메시지 큐 활용입니다. 우대 사항은 대규모 분산 시스템 설계, 모니터링·장애 대응 경험입니다. 이 요약은 기술 요건 중심이며 개별 지원 결과를 보장하지 않습니다.",
+    "keywords": [
+      "node",
+      "typescript",
+      "서버",
+      "백엔드",
+      "트래픽",
+      "redis",
+      "분산",
+      "캐시"
+    ],
+    "domain": "backend",
+    "collectedAt": "2026-10-11",
+    "reviewedAt": "2026-10-11",
+    "reviewed": true,
+    "language": "ko",
+    "kind": "editorial_summary"
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "id": "linkedin-backend",
+    "domain": "backend",
+    "title": "링크드인 백엔드 검색 — 수집 차단 예시",
+    "url": "https://www.linkedin.com/jobs/search/?keywords=backend",
+    "keywords": ["java", "spring", "백엔드", "backend"],
+    "language": "en",
+    "selector": "main"
+  }
+]
