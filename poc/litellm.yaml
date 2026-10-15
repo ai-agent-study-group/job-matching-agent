@@ -1,0 +1,12 @@
+# LiteLLM 프록시 설정. 앱은 model_name(별칭)만 알고, 실제 모델과 키는 여기서 결정.
+# 실행 (프로젝트 venv와 의존성이 충돌해서 uvx로 격리 실행):
+#   uvx --env-file .env --from 'litellm[proxy]==1.103.1' litellm --config poc/litellm.yaml --host 127.0.0.1 --port 4000
+model_list:
+  - model_name: haiku
+    litellm_params:
+      model: anthropic/claude-haiku-5-5
+      api_key: os.environ/ANTHROPIC_API_KEY
+  - model_name: sonnet
+    litellm_params:
+      model: anthropic/claude-sonnet-5-5
+      api_key: os.environ/ANTHROPIC_API_KEY
