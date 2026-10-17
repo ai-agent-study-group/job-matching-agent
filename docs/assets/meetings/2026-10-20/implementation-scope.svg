@@ -1,0 +1,91 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="572" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 572" role="img" aria-label="사이트 목록을 먼저 정하면 업로드부터 평가까지 한 번에 이어짐" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">사이트 목록을 먼저 정하면, 업로드부터 평가까지 한 번에 이어짐</text>
+  <g id="legend">
+    <rect x="24" y="42" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="48" y="52" font-size="11.5" fill="#52514e">확정 (4~6은 자동 파이프라인)</text>
+    <rect x="320" y="42" width="16" height="12" rx="3" fill="none" stroke="#fab219" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="344" y="52" font-size="11.5" fill="#52514e">추후 (PoC 이후)</text>
+  </g>
+  <g id="lane-user">
+    <rect x="40" y="64" width="320" height="484" rx="8" fill="#ededec" stroke="none"/>
+    <text x="56" y="86" font-weight="600" fill="#141413">사용자 (FE 화면)</text>
+  </g>
+  <g id="lane-server">
+    <rect x="400" y="64" width="320" height="484" rx="8" fill="#ededec" stroke="none"/>
+    <text x="416" y="86" font-weight="600" fill="#141413">서버 (BE)</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M90 124H66V352H90" marker-end="url(#flow-arrow)"/>
+    <path d="M200 152V172" stroke-dasharray="5 4" marker-end="url(#flow-arrow)"/>
+    <path d="M200 228V248" stroke-dasharray="5 4" marker-end="url(#flow-arrow)"/>
+    <path d="M310 200H450" stroke-dasharray="5 4" marker-end="url(#flow-arrow)"/>
+    <path d="M310 276H450" stroke-dasharray="5 4" marker-start="url(#flow-arrow)" marker-end="url(#flow-arrow)"/>
+    <path d="M560 304V324" stroke-dasharray="5 4" marker-end="url(#flow-arrow)"/>
+    <path d="M310 352H450" marker-end="url(#flow-arrow)"/>
+    <path d="M560 380V400" marker-end="url(#flow-arrow)"/>
+    <path d="M560 456V476" marker-end="url(#flow-arrow)"/>
+    <path d="M450 504H310" marker-end="url(#flow-arrow)"/>
+  </g>
+  <text x="61" y="242" text-anchor="end" font-size="11.5" font-weight="600" fill="#141413">PoC</text>
+  <text x="380" y="192" text-anchor="middle" font-size="11.5" fill="#52514e">파일</text>
+  <text x="380" y="268" text-anchor="middle" font-size="11.5" fill="#52514e">대화</text>
+  <text x="380" y="344" text-anchor="middle" font-size="11.5" fill="#52514e">실행</text>
+  <text x="380" y="496" text-anchor="middle" font-size="11.5" fill="#52514e">결과</text>
+  <g id="step-1">
+    <rect x="90" y="96" width="220" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="200" y="120" text-anchor="middle" font-weight="600" fill="#141413">1. 검색할 사이트 목록 설정</text>
+    <text x="200" y="138" text-anchor="middle" font-size="11.5" fill="#52514e">미리 등록 · 사이트·API</text>
+  </g>
+  <g id="step-2">
+    <rect x="90" y="172" width="220" height="56" rx="8" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="200" y="196" text-anchor="middle" font-weight="600" fill="#141413">2. 이력서 업로드 (추후)</text>
+    <text x="200" y="214" text-anchor="middle" font-size="11.5" fill="#52514e">PDF · Word 파일 선택</text>
+  </g>
+  <g id="server-parse">
+    <rect x="450" y="172" width="220" height="56" rx="8" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="560" y="196" text-anchor="middle" font-weight="600" fill="#141413">이력서 파싱 (추후)</text>
+    <text x="560" y="214" text-anchor="middle" font-size="11.5" fill="#52514e">파일 → 이력 데이터</text>
+  </g>
+  <g id="step-3">
+    <rect x="90" y="248" width="220" height="56" rx="8" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="200" y="272" text-anchor="middle" font-weight="600" fill="#141413">3. 대화로 정보 보충 (추후)</text>
+    <text x="200" y="290" text-anchor="middle" font-size="11.5" fill="#52514e">채팅 화면에서 질문에 답함</text>
+  </g>
+  <g id="server-chat">
+    <rect x="450" y="248" width="220" height="56" rx="8" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="560" y="272" text-anchor="middle" font-weight="600" fill="#141413">대화 agent (추후)</text>
+    <text x="560" y="290" text-anchor="middle" font-size="11.5" fill="#52514e">질문 생성 · 답을 이력에 반영</text>
+  </g>
+  <g id="step-poc">
+    <rect x="90" y="324" width="220" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="200" y="348" text-anchor="middle" font-weight="600" fill="#141413">PoC: 내 이력 직접 등록</text>
+    <text x="200" y="366" text-anchor="middle" font-size="11.5" fill="#52514e">2·3단계 대신 미리 입력</text>
+  </g>
+  <g id="step-4">
+    <rect x="450" y="324" width="220" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="560" y="348" text-anchor="middle" font-weight="600" fill="#141413">4. 검색 &amp; 추출</text>
+    <text x="560" y="366" text-anchor="middle" font-size="11.5" fill="#52514e">공고 목록 → JD 정리</text>
+  </g>
+  <g id="step-5">
+    <rect x="450" y="400" width="220" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="560" y="424" text-anchor="middle" font-weight="600" fill="#141413">5. 비교 &amp; 매칭</text>
+    <text x="560" y="442" text-anchor="middle" font-size="11.5" fill="#52514e">요건별 판정 + 근거 이력</text>
+  </g>
+  <g id="step-6">
+    <rect x="450" y="476" width="220" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="560" y="500" text-anchor="middle" font-weight="600" fill="#141413">6. 평가</text>
+    <text x="560" y="518" text-anchor="middle" font-size="11.5" fill="#52514e">적합도 점수 · 순위</text>
+  </g>
+  <g id="step-7">
+    <rect x="90" y="476" width="220" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="200" y="500" text-anchor="middle" font-weight="600" fill="#141413">7. 결과 확인</text>
+    <text x="200" y="518" text-anchor="middle" font-size="11.5" fill="#52514e">순위별 공고 목록 + 근거</text>
+  </g>
+</svg>
