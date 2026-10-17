@@ -1,0 +1,80 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 320" role="img" aria-label="로그·오류·LLM 기록·지표를 한곳에 모으고, 기준을 넘으면 알림" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="obs-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">로그·오류·LLM 기록·지표를 한곳에 모으고, 기준을 넘으면 알림</text>
+  <g id="legend">
+    <rect x="24" y="44" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="48" y="54" font-size="11.5" fill="#52514e">PoC에 있음</text>
+    <rect x="136" y="44" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.5"/>
+    <text x="160" y="54" font-size="11.5" fill="#52514e">미정 (회의에서 정함)</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M204 112H238"/>
+    <path d="M204 176H238"/>
+    <path d="M204 240H238"/>
+    <path d="M238 94V262"/>
+    <path d="M238 94H270" marker-end="url(#obs-arrow)"/>
+    <path d="M238 150H270" marker-end="url(#obs-arrow)"/>
+    <path d="M238 206H270" marker-end="url(#obs-arrow)"/>
+    <path d="M238 262H270" marker-end="url(#obs-arrow)"/>
+    <path d="M472 94H506"/>
+    <path d="M472 150H506"/>
+    <path d="M472 206H506"/>
+    <path d="M472 262H506"/>
+    <path d="M506 94V262"/>
+    <path d="M506 146H538" marker-end="url(#obs-arrow)"/>
+    <path d="M638 172V210" marker-end="url(#obs-arrow)"/>
+  </g>
+  <text x="238" y="300" text-anchor="middle" font-size="11.5" fill="#52514e">OpenTelemetry 등으로 전송</text>
+  <text x="646" y="196" font-size="11.5" fill="#52514e">기준을 넘으면</text>
+  <g id="src-app">
+    <rect x="24" y="88" width="180" height="48" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="114" y="108" text-anchor="middle" font-weight="600" fill="#141413">API</text>
+    <text x="114" y="125" text-anchor="middle" font-size="11.5" fill="#52514e">요청 처리 · worker는 추후</text>
+  </g>
+  <g id="src-agent">
+    <rect x="24" y="152" width="180" height="48" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="114" y="172" text-anchor="middle" font-weight="600" fill="#141413">agent</text>
+    <text x="114" y="189" text-anchor="middle" font-size="11.5" fill="#52514e">LLM 호출 · 도구 호출</text>
+  </g>
+  <g id="src-ext">
+    <rect x="24" y="216" width="180" height="48" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="114" y="236" text-anchor="middle" font-weight="600" fill="#141413">외부 호출</text>
+    <text x="114" y="253" text-anchor="middle" font-size="11.5" fill="#52514e">사이트 API · DB</text>
+  </g>
+  <g id="sig-log">
+    <rect x="272" y="72" width="200" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="372" y="91" text-anchor="middle" font-weight="600" fill="#141413">로그</text>
+    <text x="372" y="107" text-anchor="middle" font-size="11" fill="#52514e">요청·작업 ID로 묶은 JSON</text>
+  </g>
+  <g id="sig-error">
+    <rect x="272" y="128" width="200" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="372" y="147" text-anchor="middle" font-weight="600" fill="#141413">오류</text>
+    <text x="372" y="163" text-anchor="middle" font-size="11" fill="#52514e">예외 · 스택 · 빈도</text>
+  </g>
+  <g id="sig-llm">
+    <rect x="272" y="184" width="200" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="372" y="203" text-anchor="middle" font-weight="600" fill="#141413">LLM 호출 기록</text>
+    <text x="372" y="219" text-anchor="middle" font-size="11" fill="#52514e">입출력 · 토큰 · 비용 · 지연</text>
+  </g>
+  <g id="sig-metric">
+    <rect x="272" y="240" width="200" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="372" y="259" text-anchor="middle" font-weight="600" fill="#141413">지표</text>
+    <text x="372" y="275" text-anchor="middle" font-size="11" fill="#52514e">응답 시간 · 실패 수 · 비용</text>
+  </g>
+  <g id="view">
+    <rect x="540" y="120" width="196" height="52" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="638" y="142" text-anchor="middle" font-weight="600" fill="#141413">대시보드 · 검색</text>
+    <text x="638" y="160" text-anchor="middle" font-size="11.5" fill="#52514e">도구는 아래 표</text>
+  </g>
+  <g id="alert">
+    <rect x="540" y="212" width="196" height="52" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="638" y="234" text-anchor="middle" font-weight="600" fill="#141413">알림</text>
+    <text x="638" y="252" text-anchor="middle" font-size="11.5" fill="#52514e">Slack · 메일</text>
+  </g>
+</svg>

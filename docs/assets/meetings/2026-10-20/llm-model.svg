@@ -1,0 +1,95 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 440" role="img" aria-label="라이브러리는 호출 형식을, 프록시는 키와 설정까지 한 곳에 모음" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="llm-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">라이브러리는 호출 형식을, 프록시는 키와 설정까지 한 곳에 모음</text>
+  <g id="band-a">
+    <rect x="24" y="56" width="712" height="112" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="40" y="78" font-weight="600" fill="#141413">A. 프레임워크 기본 기능 (LiteLLM 없음)</text>
+    <text x="720" y="78" text-anchor="end" font-size="11.5" fill="#52514e">추가 프로세스 없음 · 현재 PoC</text>
+    <g id="a-impl">
+      <rect x="40" y="90" width="130" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="105" y="118" text-anchor="middle" font-weight="600" fill="#141413">pydantic-ai</text>
+    </g>
+    <g id="a-config">
+      <rect x="202" y="90" width="170" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="287" y="110" text-anchor="middle" font-weight="600" fill="#141413">제공자 SDK 연결</text>
+      <text x="287" y="127" text-anchor="middle" font-size="11.5" fill="#52514e">모델 문자열로 고름</text>
+    </g>
+    <g id="a-provider">
+      <rect x="606" y="90" width="130" height="48" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+      <text x="671" y="110" text-anchor="middle" font-weight="600" fill="#141413">제공자 API</text>
+      <text x="671" y="127" text-anchor="middle" font-size="11.5" fill="#52514e">Claude·OpenAI 등</text>
+    </g>
+    <g id="a-connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+      <path d="M170 114H202" marker-end="url(#llm-arrow)"/>
+      <path d="M372 114H606" marker-end="url(#llm-arrow)"/>
+    </g>
+    <text x="489" y="106" text-anchor="middle" font-size="11.5" fill="#52514e">직접 호출</text>
+    <text x="40" y="156" font-size="11.5" fill="#141413">키: 앱 프로세스에 환경변수로 둠</text>
+  </g>
+  <g id="band-b">
+    <rect x="24" y="180" width="712" height="112" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="40" y="202" font-weight="600" fill="#141413">B. LiteLLM 라이브러리</text>
+    <text x="720" y="202" text-anchor="end" font-size="11.5" fill="#52514e">추가 프로세스 없음</text>
+    <g id="b-impl">
+      <rect x="40" y="214" width="130" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="105" y="242" text-anchor="middle" font-weight="600" fill="#141413">pydantic-ai</text>
+    </g>
+    <g id="b-bridge">
+      <rect x="202" y="214" width="170" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="287" y="234" text-anchor="middle" font-weight="600" fill="#141413">연동 패키지</text>
+      <text x="287" y="251" text-anchor="middle" font-size="11.5" fill="#52514e">pydantic-ai-litellm</text>
+    </g>
+    <g id="b-litellm">
+      <rect x="404" y="214" width="170" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="489" y="234" text-anchor="middle" font-weight="600" fill="#141413">LiteLLM 라이브러리</text>
+      <text x="489" y="251" text-anchor="middle" font-size="11.5" fill="#52514e">앱 프로세스 안에서 실행</text>
+    </g>
+    <g id="b-provider">
+      <rect x="606" y="214" width="130" height="48" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+      <text x="671" y="234" text-anchor="middle" font-weight="600" fill="#141413">제공자 API</text>
+      <text x="671" y="251" text-anchor="middle" font-size="11.5" fill="#52514e">Claude·OpenAI 등</text>
+    </g>
+    <g id="b-connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+      <path d="M170 238H202" marker-end="url(#llm-arrow)"/>
+      <path d="M372 238H404" marker-end="url(#llm-arrow)"/>
+      <path d="M574 238H606" marker-end="url(#llm-arrow)"/>
+    </g>
+    <text x="40" y="280" font-size="11.5" fill="#141413">키: 앱 프로세스에 환경변수로 둠</text>
+  </g>
+  <g id="band-c">
+    <rect x="24" y="304" width="712" height="112" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="40" y="326" font-weight="600" fill="#141413">C. LiteLLM 프록시</text>
+    <text x="720" y="326" text-anchor="end" font-size="11.5" fill="#52514e">프록시 서버 1개 추가</text>
+    <g id="c-impl">
+      <rect x="40" y="338" width="130" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="105" y="366" text-anchor="middle" font-weight="600" fill="#141413">pydantic-ai</text>
+    </g>
+    <g id="c-client">
+      <rect x="202" y="338" width="170" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="287" y="358" text-anchor="middle" font-weight="600" fill="#141413">OpenAI 호환 클라이언트</text>
+      <text x="287" y="375" text-anchor="middle" font-size="11.5" fill="#52514e">pydantic-ai에 내장</text>
+    </g>
+    <g id="proxy-box">
+      <rect x="404" y="338" width="170" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="489" y="358" text-anchor="middle" font-weight="600" fill="#141413">LiteLLM 프록시</text>
+      <text x="489" y="375" text-anchor="middle" font-size="11.5" fill="#52514e">별도 서버 · 설정은 YAML</text>
+    </g>
+    <g id="c-provider">
+      <rect x="606" y="338" width="130" height="48" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+      <text x="671" y="358" text-anchor="middle" font-weight="600" fill="#141413">제공자 API</text>
+      <text x="671" y="375" text-anchor="middle" font-size="11.5" fill="#52514e">Claude·OpenAI 등</text>
+    </g>
+    <g id="c-connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+      <path d="M170 362H202" marker-end="url(#llm-arrow)"/>
+      <path d="M372 362H404" marker-end="url(#llm-arrow)"/>
+      <path d="M574 362H606" marker-end="url(#llm-arrow)"/>
+    </g>
+    <text x="40" y="404" font-size="11.5" fill="#141413">키: 프록시에만 둠 · 앱은 프록시 주소(와 가상 키)만 앎</text>
+  </g>
+</svg>

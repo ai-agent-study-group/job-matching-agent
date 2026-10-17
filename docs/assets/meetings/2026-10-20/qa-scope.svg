@@ -1,0 +1,79 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="376" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 376" role="img" aria-label="PR마다 도는 테스트는 사이트·LLM을 가짜로 바꾸고, 품질 평가만 실제 LLM을 씀" font-size="11.5">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="test-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">PR마다 도는 테스트는 사이트·LLM을 가짜로 바꾸고, 품질 평가만 실제 LLM을 씀</text>
+  <g id="legend">
+    <rect x="24" y="44" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="3 2"/>
+    <text x="48" y="54" fill="#52514e">저장한 데이터 · 가짜 LLM</text>
+    <rect x="196" y="44" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.5"/>
+    <text x="220" y="54" fill="#52514e">실제 호출</text>
+  </g>
+  <text x="24" y="100" font-weight="600" fill="#52514e">실제 흐름</text>
+  <g id="pipeline">
+    <rect x="150" y="72" width="104" height="48" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="202" y="100" text-anchor="middle" font-size="13" fill="#141413">공고 사이트</text>
+    <rect x="270" y="72" width="104" height="48" rx="8" fill="#ededec" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="322" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#141413">어댑터</text>
+    <rect x="390" y="72" width="104" height="48" rx="8" fill="#ededec" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="442" y="92" text-anchor="middle" font-size="13" font-weight="600" fill="#141413">서비스</text>
+    <text x="442" y="110" text-anchor="middle" fill="#52514e">코드 단계</text>
+    <rect x="510" y="72" width="104" height="48" rx="8" fill="#ededec" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="562" y="92" text-anchor="middle" font-size="13" font-weight="600" fill="#141413">agent</text>
+    <text x="562" y="110" text-anchor="middle" fill="#52514e">LLM 단계</text>
+    <rect x="630" y="72" width="104" height="48" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="682" y="100" text-anchor="middle" font-size="13" fill="#141413">LLM 제공사</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M254 96H268" marker-end="url(#test-arrow)"/>
+    <path d="M374 96H388" marker-end="url(#test-arrow)"/>
+    <path d="M494 96H508" marker-end="url(#test-arrow)"/>
+    <path d="M614 96H628" marker-end="url(#test-arrow)"/>
+  </g>
+  <g id="row-unit">
+    <text x="24" y="155" font-size="12.5" font-weight="600" fill="#141413">단위 테스트</text>
+    <text x="24" y="170" font-size="11" fill="#52514e">PR마다 CI</text>
+    <rect x="390" y="140" width="104" height="36" rx="6" fill="#ededec" stroke="none"/>
+    <text x="442" y="162" text-anchor="middle" fill="#52514e">코드 단계만</text>
+  </g>
+  <g id="row-adapter">
+    <text x="24" y="199" font-size="12.5" font-weight="600" fill="#141413">어댑터 테스트</text>
+    <text x="24" y="214" font-size="11" fill="#52514e">PR마다 CI</text>
+    <rect x="150" y="184" width="224" height="36" rx="6" fill="#ededec" stroke="none"/>
+    <rect x="154" y="190" width="96" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="4 3"/>
+    <text x="202" y="206" text-anchor="middle" fill="#141413">저장한 응답</text>
+    <text x="322" y="206" text-anchor="middle" fill="#52514e">어댑터 변환</text>
+  </g>
+  <g id="row-flow">
+    <text x="24" y="243" font-size="12.5" font-weight="600" fill="#141413">흐름 테스트</text>
+    <text x="24" y="258" font-size="11" fill="#52514e">PR마다 CI</text>
+    <rect x="150" y="228" width="584" height="36" rx="6" fill="#ededec" stroke="none"/>
+    <rect x="154" y="234" width="96" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="4 3"/>
+    <text x="202" y="250" text-anchor="middle" fill="#141413">저장한 응답</text>
+    <text x="442" y="250" text-anchor="middle" fill="#52514e">어댑터 → 서비스 → agent</text>
+    <rect x="634" y="234" width="96" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="4 3"/>
+    <text x="682" y="250" text-anchor="middle" fill="#141413">가짜 LLM</text>
+  </g>
+  <g id="row-contract">
+    <text x="24" y="287" font-size="12.5" font-weight="600" fill="#141413">사이트 형식 확인</text>
+    <text x="24" y="302" font-size="11" fill="#52514e">정기 실행</text>
+    <rect x="150" y="272" width="224" height="36" rx="6" fill="#ededec" stroke="none"/>
+    <rect x="154" y="278" width="96" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.5"/>
+    <text x="202" y="294" text-anchor="middle" fill="#141413">실제 사이트</text>
+    <text x="322" y="294" text-anchor="middle" fill="#52514e">응답 형식</text>
+  </g>
+  <g id="row-quality">
+    <text x="24" y="331" font-size="12.5" font-weight="600" fill="#141413">품질 평가</text>
+    <text x="24" y="346" font-size="11" fill="#52514e">수동·정기 · 비용</text>
+    <rect x="150" y="316" width="584" height="36" rx="6" fill="#ededec" stroke="none"/>
+    <rect x="154" y="322" width="96" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="4 3"/>
+    <text x="202" y="338" text-anchor="middle" fill="#141413">평가 셋 공고</text>
+    <text x="442" y="338" text-anchor="middle" fill="#52514e">전체 흐름 → 정답 라벨과 비교</text>
+    <rect x="634" y="322" width="96" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.5"/>
+    <text x="682" y="338" text-anchor="middle" fill="#141413">실제 LLM</text>
+  </g>
+</svg>

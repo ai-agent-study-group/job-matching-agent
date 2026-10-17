@@ -1,0 +1,117 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="716" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 716" role="img" aria-label="바깥(사이트 · agent · DB)은 어댑터로 갈아 끼우고, 앱은 포트만 부름" font-size="11.5">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="hex-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">바깥(사이트 · agent · DB)은 어댑터로 갈아 끼우고, 앱은 포트만 부름</text>
+  <g id="legend">
+    <rect x="24" y="44" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="48" y="54" fill="#52514e">PoC</text>
+    <rect x="128" y="44" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="152" y="54" fill="#52514e">미정 (회의에서 정함)</text>
+    <rect x="284" y="44" width="16" height="12" rx="3" fill="none" stroke="#fab219" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="308" y="54" fill="#52514e">추후</text>
+    <rect x="356" y="44" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="380" y="54" fill="#52514e">외부</text>
+  </g>
+  <g id="layers">
+    <polygon points="700,378 540,101 220,101 60,378 220,655 540,655" fill="#ededec" fill-opacity="0.5" stroke="#c3c2b7" stroke-width="1"/>
+    <polygon points="570,378 475,213.5 285,213.5 190,378 285,542.5 475,542.5" fill="#ededec" fill-opacity="0.6" stroke="#c3c2b7" stroke-width="1"/>
+    <polygon points="460,378 420,308.7 340,308.7 300,378 340,447.3 420,447.3" fill="#ededec" fill-opacity="0.8" stroke="#c3c2b7" stroke-width="1"/>
+    <text x="232" y="122" font-weight="600" fill="#52514e">어댑터</text>
+    <text x="292" y="234" font-weight="600" fill="#52514e">앱</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M386 224V172" marker-end="url(#hex-arrow)"/>
+    <path d="M382 112V92" marker-end="url(#hex-arrow)"/>
+    <path d="M531 258H442" marker-end="url(#hex-arrow)"/>
+    <path d="M600 424V284" marker-end="url(#hex-arrow)"/>
+    <path d="M636 436H688V518" marker-end="url(#hex-arrow)"/>
+    <path d="M522 436H546" marker-end="url(#hex-arrow)"/>
+    <path d="M74 174V488H151" marker-end="url(#hex-arrow)"/>
+    <path d="M74 268H159" marker-end="url(#hex-arrow)"/>
+    <path d="M217 268H248V356" marker-end="url(#hex-arrow)"/>
+    <path d="M225 488H248V400" marker-end="url(#hex-arrow)"/>
+    <path d="M276 398V470H482V458" marker-end="url(#hex-arrow)"/>
+    <path d="M371 470V484" stroke-dasharray="4 3" marker-end="url(#hex-arrow)"/>
+    <path d="M371 526V588" stroke-dasharray="4 3" marker-end="url(#hex-arrow)"/>
+    <path d="M380 614V666" stroke-dasharray="4 3" marker-end="url(#hex-arrow)"/>
+  </g>
+  <text x="606" y="362" fill="#52514e">도구 호출</text>
+  <g id="ext-sites">
+    <rect x="332" y="66" width="100" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="382" y="82" text-anchor="middle" fill="#141413">공고 사이트</text>
+  </g>
+  <g id="ext-user">
+    <rect x="24" y="150" width="100" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="74" y="166" text-anchor="middle" fill="#141413">사용자 · web</text>
+  </g>
+  <g id="ext-llm">
+    <rect x="652" y="520" width="84" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="694" y="536" text-anchor="middle" fill="#141413">LLM 제공사</text>
+  </g>
+  <g id="ext-db">
+    <rect x="350" y="668" width="60" height="24" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="4 3"/>
+    <text x="380" y="684" text-anchor="middle" fill="#141413">DB</text>
+  </g>
+  <g id="src-adapters">
+    <rect x="300" y="112" width="78" height="24" rx="6" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="339" y="128" text-anchor="middle" fill="#141413">Greenhouse</text>
+    <rect x="386" y="112" width="74" height="24" rx="6" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="423" y="128" text-anchor="middle" fill="#141413">연방고용청</text>
+    <rect x="283" y="144" width="99" height="24" rx="6" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="332.5" y="160" text-anchor="middle" fill="#141413">다른 ATS · API</text>
+    <rect x="390" y="144" width="90" height="24" rx="6" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="435" y="160" text-anchor="middle" fill="#141413">스크랩 (추후)</text>
+  </g>
+  <g id="mcp">
+    <rect x="531" y="254" width="80" height="28" rx="6" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="571" y="272" text-anchor="middle" fill="#141413">MCP 서버</text>
+  </g>
+  <g id="agent-adapters">
+    <rect x="548" y="424" width="88" height="24" rx="6" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="592" y="440" text-anchor="middle" fill="#141413">pydantic-ai</text>
+  </g>
+  <g id="driving">
+    <rect x="161" y="254" width="56" height="28" rx="6" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="189" y="272" text-anchor="middle" fill="#141413">CLI</text>
+    <rect x="153" y="474" width="72" height="28" rx="6" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="189" y="492" text-anchor="middle" fill="#141413">API </text>
+  </g>
+  <g id="db-adapters">
+    <rect x="303" y="590" width="64" height="24" rx="6" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="335" y="606" text-anchor="middle" fill="#141413">MongoDB</text>
+    <rect x="375" y="590" width="82" height="24" rx="6" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="416" y="606" text-anchor="middle" fill="#141413">PostgreSQL</text>
+  </g>
+  <g id="port-source">
+    <rect x="320" y="224" width="120" height="40" rx="6" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="380" y="241" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">공고 수집 포트</text>
+    <text x="380" y="256" text-anchor="middle" font-size="11" fill="#52514e">검색 · 본문 조회</text>
+  </g>
+  <g id="port-agent">
+    <rect x="442" y="416" width="80" height="40" rx="6" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="482" y="432" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">agent 포트</text>
+    <text x="482" y="447" text-anchor="middle" font-size="11" fill="#52514e">범위는 LLM-2</text>
+  </g>
+  <g id="port-repo">
+    <rect x="328" y="486" width="104" height="40" rx="6" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="380" y="503" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">저장소 포트</text>
+    <text x="380" y="518" text-anchor="middle" font-size="11" fill="#52514e">DB가 생기면</text>
+  </g>
+  <g id="service">
+    <rect x="204" y="358" width="88" height="40" rx="6" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="248" y="375" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">서비스</text>
+    <text x="248" y="390" text-anchor="middle" font-size="11" fill="#52514e">run_matching</text>
+  </g>
+  <g id="domain">
+    <text x="380" y="330" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">도메인</text>
+    <text x="380" y="352" text-anchor="middle" fill="#141413">Profile</text>
+    <text x="380" y="368" text-anchor="middle" fill="#141413">JobListing</text>
+    <text x="380" y="384" text-anchor="middle" fill="#141413">JobMatch</text>
+    <text x="380" y="408" text-anchor="middle" font-size="11" fill="#52514e">스키마</text>
+  </g>
+</svg>

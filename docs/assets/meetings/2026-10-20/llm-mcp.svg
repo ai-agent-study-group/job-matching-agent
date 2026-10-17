@@ -1,0 +1,89 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="524" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 524" role="img" aria-label="도구는 MCP 서버 한 곳에 등록하고, 우리 agent와 외부 클라이언트가 같이 씀" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="mcp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">도구는 MCP 서버 한 곳에 등록하고, 우리 agent와 외부 클라이언트가 같이 씀</text>
+  <g id="legend">
+    <rect x="24" y="46" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="48" y="56" font-size="11.5" fill="#52514e">미정 (회의에서 정함)</text>
+    <rect x="184" y="46" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="208" y="56" font-size="11.5" fill="#52514e">외부</text>
+    <rect x="264" y="46" width="16" height="12" rx="3" fill="#ededec"/>
+    <text x="288" y="56" font-size="11.5" fill="#52514e">우리 코드</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M96 152V200" marker-end="url(#mcp-arrow)"/>
+    <path d="M224 152V200" marker-end="url(#mcp-arrow)"/>
+    <path d="M352 152V200" marker-end="url(#mcp-arrow)"/>
+    <path d="M518 152V200" marker-end="url(#mcp-arrow)"/>
+    <path d="M658 152V200" marker-end="url(#mcp-arrow)"/>
+    <path d="M224 300V356" marker-end="url(#mcp-arrow)"/>
+    <path d="M532 300V356" marker-end="url(#mcp-arrow)"/>
+    <path d="M432 382H324" marker-end="url(#mcp-arrow)"/>
+    <path d="M224 408V440" marker-end="url(#mcp-arrow)"/>
+    <path d="M532 408V440" marker-end="url(#mcp-arrow)"/>
+  </g>
+  <g id="local-clients">
+    <rect x="24" y="76" width="400" height="88" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="40" y="94" font-size="11.5" fill="#52514e">로컬(stdio) 또는 원격(HTTP)으로 연결</text>
+    <rect x="40" y="104" width="112" height="48" rx="8" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.75"/>
+    <text x="96" y="124" text-anchor="middle" font-weight="600" fill="#141413">우리 agent</text>
+    <text x="96" y="141" text-anchor="middle" font-size="11.5" fill="#52514e">pydantic-ai</text>
+    <rect x="168" y="104" width="112" height="48" rx="8" fill="none" fill-opacity="1" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="224" y="124" text-anchor="middle" font-weight="600" fill="#141413">Claude Code</text>
+    <text x="224" y="141" text-anchor="middle" font-size="11.5" fill="#52514e">CLI · IDE</text>
+    <rect x="296" y="104" width="112" height="48" rx="8" fill="none" fill-opacity="1" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="352" y="124" text-anchor="middle" font-weight="600" fill="#141413">Codex</text>
+    <text x="352" y="141" text-anchor="middle" font-size="11.5" fill="#52514e">CLI · IDE</text>
+  </g>
+  <g id="remote-clients">
+    <rect x="440" y="76" width="296" height="88" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="456" y="94" font-size="11.5" fill="#52514e">원격만 · HTTPS 공개 주소 필요</text>
+    <rect x="456" y="104" width="124" height="48" rx="8" fill="none" fill-opacity="1" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="518" y="124" text-anchor="middle" font-weight="600" fill="#141413">Claude</text>
+    <text x="518" y="141" text-anchor="middle" font-size="11.5" fill="#52514e">claude.ai 커넥터</text>
+    <rect x="596" y="104" width="124" height="48" rx="8" fill="none" fill-opacity="1" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="658" y="124" text-anchor="middle" font-weight="600" fill="#141413">ChatGPT</text>
+    <text x="658" y="141" text-anchor="middle" font-size="11.5" fill="#52514e">개발자 모드 커넥터</text>
+  </g>
+  <g id="mcp-server">
+    <rect x="56" y="200" width="648" height="116" rx="8" fill="none" stroke="#fab219" stroke-width="1.75"/>
+    <text x="72" y="222" font-weight="600" fill="#141413">MCP 서버</text>
+    <text x="148" y="222" font-size="11.5" fill="#52514e">도구 이름 · 설명 · 입력 형식을 한 곳에 등록</text>
+  </g>
+  <g id="simple-tools">
+    <rect x="88" y="236" width="272" height="64" rx="8" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="224" y="256" text-anchor="middle" font-weight="600" fill="#141413">단순 도구</text>
+    <text x="224" y="274" text-anchor="middle" font-size="11.5" fill="#141413">공고 검색 · 본문 조회 · 출처 목록</text>
+    <text x="224" y="290" text-anchor="middle" font-size="11.5" fill="#52514e">서버는 LLM을 부르지 않음</text>
+  </g>
+  <g id="agent-tools">
+    <rect x="392" y="236" width="280" height="64" rx="8" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="532" y="256" text-anchor="middle" font-weight="600" fill="#141413">agent 도구 (둘지는 아래 표)</text>
+    <text x="532" y="274" text-anchor="middle" font-size="11.5" fill="#141413">매칭 · 공고 정리</text>
+    <text x="532" y="290" text-anchor="middle" font-size="11.5" fill="#52514e">서버가 우리 agent로 LLM을 부름</text>
+  </g>
+  <g id="sources">
+    <rect x="124" y="356" width="200" height="52" rx="8" fill="#ededec"/>
+    <text x="224" y="378" text-anchor="middle" font-weight="600" fill="#141413">출처 어댑터</text>
+    <text x="224" y="396" text-anchor="middle" font-size="11.5" fill="#52514e">Greenhouse · 연방고용청 등</text>
+  </g>
+  <g id="service">
+    <rect x="432" y="356" width="200" height="52" rx="8" fill="#ededec"/>
+    <text x="532" y="378" text-anchor="middle" font-weight="600" fill="#141413">매칭 서비스</text>
+    <text x="532" y="396" text-anchor="middle" font-size="11.5" fill="#52514e">run_matching</text>
+  </g>
+  <g id="ext-sites">
+    <rect x="144" y="440" width="160" height="40" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="224" y="464" text-anchor="middle" fill="#141413">공고 사이트 · API</text>
+  </g>
+  <g id="ext-llm">
+    <rect x="452" y="440" width="160" height="40" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="532" y="464" text-anchor="middle" fill="#141413">LLM 제공사</text>
+  </g>
+  <text x="24" y="508" font-size="11.5" fill="#52514e">원격 공개는 HTTPS 배포와 인증(OAuth 또는 토큰)이 필요함 · 배포 위치는 DevOps에서 정함</text>
+</svg>

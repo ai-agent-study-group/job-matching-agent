@@ -1,0 +1,58 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 346" role="img" aria-label="모듈 사이를 오가는 데이터 3가지를 먼저 합의함" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="schema-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">모듈 사이를 오가는 데이터 3가지를 먼저 합의함</text>
+  <g id="legend">
+    <rect x="24" y="48" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="48" y="58" font-size="11.5" fill="#52514e">미정: 형식을 회의에서 정할 데이터(스키마)</text>
+    <rect x="330" y="48" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="354" y="58" font-size="11.5" fill="#52514e">확정: 처리 단계</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M184 110H224" marker-end="url(#schema-arrow)"/>
+    <path d="M184 230H224" marker-end="url(#schema-arrow)"/>
+    <path d="M344 110H444V142" marker-end="url(#schema-arrow)"/>
+    <path d="M344 230H444V198" marker-end="url(#schema-arrow)"/>
+    <path d="M504 170H536" marker-end="url(#schema-arrow)"/>
+    <path d="M624 198V278" marker-end="url(#schema-arrow)"/>
+  </g>
+  <g id="step-upload">
+    <rect x="24" y="82" width="160" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="104" y="106" text-anchor="middle" font-weight="600" fill="#141413">내 이력 등록</text>
+    <text x="104" y="124" text-anchor="middle" font-size="11.5" fill="#52514e">PoC는 직접 입력</text>
+  </g>
+  <g id="step-collect">
+    <rect x="24" y="202" width="160" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="104" y="226" text-anchor="middle" font-weight="600" fill="#141413">사이트 · API 조사</text>
+    <text x="104" y="244" text-anchor="middle" font-size="11.5" fill="#52514e">등록해 둔 사이트 목록</text>
+  </g>
+  <g id="data-resume">
+    <rect x="224" y="82" width="120" height="56" rx="8" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.75"/>
+    <text x="284" y="106" text-anchor="middle" font-weight="600" fill="#141413">이력</text>
+    <text x="284" y="124" text-anchor="middle" font-size="11.5" fill="#52514e">경력 항목 단위</text>
+  </g>
+  <g id="data-jd">
+    <rect x="224" y="202" width="120" height="56" rx="8" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.75"/>
+    <text x="284" y="226" text-anchor="middle" font-weight="600" fill="#141413">JD</text>
+    <text x="284" y="244" text-anchor="middle" font-size="11.5" fill="#52514e">요건 · 스택 · 근무지</text>
+  </g>
+  <g id="step-match">
+    <rect x="384" y="142" width="120" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="444" y="166" text-anchor="middle" font-weight="600" fill="#141413">매칭</text>
+    <text x="444" y="184" text-anchor="middle" font-size="11.5" fill="#52514e">요건별 판정 · 점수</text>
+  </g>
+  <g id="data-result">
+    <rect x="536" y="142" width="176" height="56" rx="8" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.75"/>
+    <text x="624" y="166" text-anchor="middle" font-weight="600" fill="#141413">매칭 결과</text>
+    <text x="624" y="184" text-anchor="middle" font-size="11.5" fill="#52514e">요건별 충족 여부 + 근거</text>
+  </g>
+  <g id="step-store">
+    <rect x="536" y="278" width="176" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="624" y="304" text-anchor="middle" fill="#141413">DB 저장 · 화면 표시</text>
+  </g>
+</svg>
