@@ -1,0 +1,16 @@
+{
+  "name": "job-matching-agent-docs",
+  "private": true,
+  "type": "module",
+  "description": "Local documentation preview tooling for the job matching agent.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "docs:dev": "node scripts/preview-docs.mjs"
+  },
+  "devDependencies": {
+    "liquidjs": "^10.30.0",
+    "marked": "^18.1.1"
+  }
+}

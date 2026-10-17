@@ -1,0 +1,300 @@
+---
+layout: null
+---
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#faf9f6"><meta name="description" content="채용 공고와 이력을 매칭하는 AI agent 스터디의 기획, 기술 논의, 회의 기록을 모은 작업 공간입니다.">
+<title>Job Matching Agent · 스터디 문서</title>
+<link rel="icon" type="image/svg+xml" sizes="any" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22%23252831%22%2F%3E%3Cpath%20d%3D%22M32%2020c-7-5-14-5-21-2v29c7-3%2014-3%2021%202%207-5%2014-5%2021-2V18c-7-3-14-3-21%202v29%22%20fill%3D%22none%22%20stroke%3D%22%23faf9f6%22%20stroke-width%3D%223.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M22%2016v12l4-3%204%203V17%22%20fill%3D%22%23a996d4%22%2F%3E%3C%2Fsvg%3E">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+    :root{color-scheme:light;--paper:#faf9f6;--ink:#252831;--muted:#6e717d;--line:#e7e6e2;--purple:#6951b5;--soft:#eeeaf8;--sidebar:272px}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.75 'Noto Sans KR',system-ui,sans-serif;letter-spacing:-.025em}a{color:inherit;text-decoration:none}button,input{font:inherit}button,a,input{ -webkit-tap-highlight-color:transparent}button{cursor:pointer}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #8f79cc;outline-offset:4px}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.sprite{display:none}.skip-link{position:fixed;left:-9999px}.skip-link:focus{left:16px;top:10px;z-index:20;padding:12px;background:white}.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);background:#f2f1ee;border-right:1px solid var(--line);display:flex;flex-direction:column;padding:30px 20px 20px;z-index:10}.brand{display:flex;gap:12px;align-items:center;padding:0 10px 28px}.brand-icon{display:grid;place-items:center;width:39px;height:43px;background:var(--ink);color:#fff;border-radius:11px 11px 17px 11px}.brand-icon svg{width:24px;height:24px}.brand strong{display:block;font-size:14px;letter-spacing:-.04em;line-height:1.4}.brand small{font-size:10px;letter-spacing:.11em;color:var(--muted)}.search{display:flex;align-items:center;gap:8px;background:#fafaf8;border:1px solid #dfded9;border-radius:8px;padding:9px 10px;margin-bottom:27px;color:#777983}.search svg{width:16px;height:16px}.search input{border:0;outline:0;background:transparent;width:100%;min-width:0;font-size:12px;color:var(--ink)}kbd{white-space:nowrap;font:10px system-ui;color:#888b94;border:1px solid #deddd8;padding:1px 4px;border-radius:4px}.nav-scroll{overflow:auto;flex:1}nav h2{font-size:10px;letter-spacing:.13em;font-weight:600;color:#7a7b84;margin:26px 12px 9px}nav ul{list-style:none;margin:0;padding:0}nav a{display:flex;gap:10px;align-items:center;padding:9px 12px;margin:3px 0;border-radius:7px;color:#5d606b;font-size:12px;line-height:1.6;transition:background .15s,color .15s}nav a svg{width:16px;height:16px;opacity:.8}nav a:hover{background:#e9e7e3;color:var(--ink)}nav a[aria-current=page]{background:#e6e1f1;color:#5b429e;font-weight:600}nav a[hidden]{display:none}.no-results{font-size:12px;color:var(--muted);padding:10px 12px}.sidebar-foot{margin-top:20px;border-top:1px solid #dfded9;padding:18px 10px 0;display:flex;align-items:center;gap:9px;font-size:11px;color:var(--muted)}.status-dot{width:7px;height:7px;border-radius:50%;background:#769881;flex-shrink:0}.sidebar-foot span:last-child{margin-left:auto;font-size:10px}.app{margin-left:var(--sidebar);min-height:100vh}.topbar{height:82px;display:flex;justify-content:space-between;align-items:center;padding:0 48px;border-bottom:1px solid var(--line);gap:16px}.breadcrumbs{font-size:11px;color:#7d7f88;display:flex;align-items:center;gap:12px;min-width:0}.breadcrumbs span:last-child{color:#40434d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:290px}.top-actions{display:flex;align-items:center;gap:20px;flex-shrink:0}.repo-link{display:flex;align-items:center;gap:7px;color:#676a75;font-size:11px}.edit-link{display:flex;align-items:center;gap:7px;padding:8px 13px;border:1px solid #deddd8;border-radius:7px;background:#fff;font-size:11px;font-weight:500;box-shadow:0 1px 2px #25283105}.edit-link svg{width:14px;height:14px}.mobile-menu{display:none;background:none;border:0;padding:6px}.content-wrap{max-width:1240px;margin:auto;padding:48px 48px 28px}main{min-width:0;outline:0}.eyebrow{text-transform:uppercase;letter-spacing:.17em;font-size:10px;font-weight:600;color:#7e6aab;display:flex;align-items:center;gap:9px}.eyebrow:before{content:'';width:19px;height:1px;background:#9d8cbd}.hero{position:relative;display:flex;justify-content:space-between;gap:24px;padding:28px 0 37px;border-bottom:1px solid var(--line)}.hero h1{font-size:clamp(32px,3.2vw,48px);line-height:1.4;letter-spacing:-.065em;font-weight:700;margin:14px 0 18px}.hero h1 span{color:var(--purple)}.hero p{font-size:12px;line-height:1.95;color:var(--muted);margin:0}.hero-meta{display:flex;align-items:center;gap:10px;margin-top:25px;font-size:10px;color:#737480}.pill{border:1px solid #ddd5ed;background:#f4f0fa;color:#745ca4;border-radius:20px;padding:3px 10px;font-size:10px}.hero-art{position:relative;flex-shrink:0;width:230px;min-height:240px;display:grid;place-items:center;margin-top:0}.orbit{position:absolute;width:195px;height:195px;border-radius:50%;border:1px solid #e4dfed}.orbit:after{content:'';position:absolute;inset:18px;border:1px dashed #e3ddea;border-radius:50%}.art-note{position:absolute;width:122px;height:155px;border:1px solid #ded7eb;background:#f0ebf8;border-radius:8px;transform:rotate(-12deg) translate(-13px,4px)}.art-card{width:125px;height:158px;background:#fff;border:1px solid #e5e0ec;border-radius:9px;box-shadow:0 12px 28px #5145690c;transform:rotate(8deg) translate(9px,-4px);padding:21px}.art-card svg{width:40px;height:40px;color:#7761a4;margin-bottom:17px}.art-line{height:4px;background:#e9e6ed;margin-top:9px;border-radius:4px}.art-line:nth-last-child(1){width:57%}.art-dot{position:absolute;bottom:30px;right:24px;width:40px;height:40px;border-radius:50%;background:#dcd3ed;display:grid;place-items:center;color:#7761a4;border:5px solid var(--paper)}.art-dot svg{width:15px;height:15px}.section-heading{display:flex;align-items:center;justify-content:space-between;margin:30px 0 15px;gap:16px}.section-heading h2{font-size:14px;letter-spacing:-.04em;margin:0;font-weight:600}.section-heading span,.section-heading>a{font-size:10px;color:#858590}.section-heading>a{display:flex;align-items:center;gap:4px}.section-heading svg{width:13px;height:13px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.doc-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column;min-height:161px;transition:border-color .15s,transform .15s,box-shadow .15s}.doc-card:hover{border-color:#c3b6dc;transform:translateY(-2px);box-shadow:0 6px 18px #28213505}.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.card-icon{width:33px;height:33px;border-radius:9px;display:grid;place-items:center;background:#f1edf8;color:#7a66a5}.card-icon.sage{background:#edf3ef;color:#638773}.card-icon.sand{background:#f7f0e5;color:#a18455}.card-icon.blue{background:#edf0f6;color:#6b7e9c}.card-icon svg{width:17px;height:17px}.card-top>svg{width:15px;height:15px;color:#a4a1ad}.doc-card h3{font-size:13px;line-height:1.6;margin:0 0 5px;font-weight:600}.doc-card p{font-size:11px;color:var(--muted);margin:0;line-height:1.8}.meeting-card{display:flex;align-items:center;gap:22px;padding:22px 24px;background:#eeebf4;border:1px solid #e2ddec;border-radius:10px}.date-block{width:56px;min-width:56px;text-align:center;padding:8px 0;border-radius:7px;border:1px solid #ddd5e9;background:#f8f6fc;color:#6a568e}.date-block small{display:block;font-size:9px;letter-spacing:.1em}.date-block strong{display:block;font-size:25px;line-height:1.5;font-weight:500}.meeting-copy{flex:1}.meeting-copy h3{font-size:13px;margin:4px 0 5px;font-weight:600}.meeting-copy p{font-size:11px;color:#787180;margin:0}.meeting-label{font-size:9px;color:#847495;letter-spacing:.09em}.meeting-card>svg{color:#8f7ea6;width:17px;height:17px}.team-row{display:flex;align-items:center;justify-content:space-between;margin-top:28px;padding:22px 0;border-top:1px solid var(--line);gap:15px}.team-info{display:flex;align-items:center;gap:15px}.team-caption{font-size:10px;color:var(--muted);line-height:1.8}.team-caption strong{display:block;color:#565863;font-weight:500;font-size:11px}.team-row>a{font-size:10px;color:var(--muted);white-space:nowrap}.page-footer{display:flex;justify-content:space-between;gap:14px;margin-top:15px;padding:18px 0;color:#92919a;font-size:9px;letter-spacing:.02em}.page-footer span:first-child{letter-spacing:.08em}.document h1{font-size:30px;line-height:1.5;letter-spacing:-.055em;margin:0 0 26px;padding-bottom:25px;border-bottom:1px solid var(--line)}.document h2{font-size:19px;margin:40px 0 15px;line-height:1.6;letter-spacing:-.04em}.document h3{font-size:15px;margin:28px 0 12px}.document p,.document li{color:#535661;font-size:13px;line-height:1.95}.document a{color:#6951a5;text-decoration:underline;text-underline-offset:3px}.document strong{color:#353844;font-weight:600}.document table{display:block;width:100%;max-width:100%;overflow:auto;border-collapse:separate;border-spacing:0;margin:22px 0;border:1px solid var(--line);border-radius:8px;font-size:11px;line-height:1.9}.document th,.document td{padding:12px 15px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:top;min-width:100px}.document th{background:#f0efeb;color:#535560;font-weight:500;text-align:left;white-space:nowrap}.document tr:last-child td{border-bottom:0}.document td:last-child,.document th:last-child{border-right:0}.document code{background:#eeece7;border-radius:4px;padding:2px 5px;font-size:.85em;overflow-wrap:anywhere}.document pre{overflow:auto;background:#efeee9;padding:20px;border:1px solid var(--line);border-radius:9px;font-size:12px;line-height:1.8}.document pre code{padding:0;background:none;overflow-wrap:normal}.document blockquote{margin:20px 0;padding:3px 20px;border-left:3px solid #b1a0d0;background:#f1edf7}.document hr{border:0;border-top:1px solid var(--line);margin:32px 0}.document input[type=checkbox]{accent-color:var(--purple)}.overlay{display:none} [hidden]{display:none!important}
+    @media(min-width:1500px){.content-wrap{padding-top:65px}.hero{padding-bottom:48px}.hero h1{font-size:49px}.hero-art{margin-right:45px}}
+    @media(max-width:1100px){:root{--sidebar:242px}.topbar{padding:0 30px}.content-wrap{padding:35px 30px 22px}.hero-art{width:160px}.orbit{width:155px;height:155px}.art-dot{right:-2px}.hero h1{font-size:34px}.hero p br{display:none}.hero p{max-width:340px}}
+    @media(max-width:800px){.sidebar{transform:translateX(-100%);transition:transform .2s}.app{margin-left:0}.mobile-menu{display:grid;place-items:center}.topbar{height:67px;padding:0 22px}.breadcrumbs{flex:1}.top-actions{gap:12px}.repo-link{font-size:0;gap:0}.repo-link svg{width:18px;height:18px}.content-wrap{padding:32px 24px 16px}.hero-art{width:180px}.menu-open .sidebar{transform:translateX(0)}.menu-open .overlay{display:block;position:fixed;inset:0;background:#24213255;z-index:9}.menu-open{overflow:hidden}.hero h1{font-size:38px}}
+    @media(max-width:520px){.content-wrap{padding:25px 20px 15px}.topbar{padding:0 16px}.breadcrumbs{font-size:10px;gap:6px}.breadcrumbs>span:first-child,.breadcrumbs>b{display:none}.edit-link{font-size:10px;padding:7px 9px}.hero{padding-top:21px;padding-bottom:28px;gap:0}.hero h1{font-size:32px}.hero-art{display:none}.hero p{font-size:11px}.hero-meta{margin-top:21px}.cards{grid-template-columns:1fr;gap:10px}.doc-card{min-height:0;padding:18px}.card-top{margin-bottom:13px}.meeting-card{padding:18px 15px;gap:14px}.meeting-copy p{font-size:10px}.team-info{gap:9px}.team-caption{font-size:9px}.team-row>a{font-size:9px}.page-footer{font-size:8px}.document h1{font-size:25px}.document h2{font-size:18px}.document td,.document th{padding:10px}.section-heading{margin-top:25px}.section-heading span{font-size:9px}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+    .reading-number{font-size:10px;color:#97909f;letter-spacing:.08em}.role-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.role-card{display:flex;align-items:center;gap:12px;padding:16px;background:#f3f1ed;border:1px solid var(--line);border-radius:8px;transition:background .15s}.role-card:hover{background:#ede8f4}.role-card>svg:first-child{color:#85749e;width:18px}.role-card>svg:last-child{margin-left:auto;width:14px;color:#a199ab}.role-card span{min-width:0}.role-card strong{display:block;font-weight:500;font-size:12px}.role-card small{display:block;font-size:10px;color:var(--muted);margin-top:3px}.reading-list{padding-left:25px}.reading-list>li{padding:12px 0 12px 8px;border-bottom:1px solid var(--line)}.reading-list>li::marker{color:var(--purple);font-weight:600}.reading-list p{margin:5px 0;font-size:12px}.role-note{padding:16px;background:var(--soft);border-radius:8px}.document>.eyebrow{margin-bottom:14px}@media(max-width:520px){.role-cards{grid-template-columns:1fr}}
+
+    .nav-folder{margin:5px 0;border-radius:8px}.nav-folder summary{list-style:none;display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;color:#565a64;border-radius:7px;user-select:none}.nav-folder summary::-webkit-details-marker{display:none}.nav-folder summary>svg{width:17px;height:17px;color:#8a7c9c}.nav-folder summary>span{flex:1;min-width:0}.nav-folder summary strong{display:block;font-size:12px;font-weight:500;line-height:1.5}.nav-folder summary small{display:block;font-size:10px;color:#8b8593;margin-top:2px}.nav-folder summary::after{content:'›';font-size:18px;color:#9a91a6;transition:transform .15s}.nav-folder[open]>summary::after{transform:rotate(90deg)}.nav-folder summary:hover{background:#eae7ed}.nav-folder[data-active=true]>summary{color:#654b9f;background:#ebe6f3}.folder-body{margin:2px 10px 10px 21px;padding-left:11px;border-left:1px solid #ded7e8}.folder-body a{font-size:11px;padding:7px 8px}.folder-body .new-document{font-size:10px;color:#80679f;margin-top:6px}.new-document svg{width:12px;height:12px}.role-card em{font-style:normal;font-size:10px;color:#8b7c9b;margin-left:7px;font-weight:400}.writing-notice{display:flex;align-items:center;gap:14px;margin-top:23px;padding:19px;border:1px solid #dfd6ee;background:#f3eff9;border-radius:9px}.writing-notice strong{font-size:12px;color:#634b91;font-weight:600}.writing-notice p{font-size:11px;color:#80728e;margin:4px 0 0}.writing-notice>a{display:flex;align-items:center;gap:5px;font-size:10px;white-space:nowrap;color:#795caa;margin-left:auto}.writing-notice>a svg{width:14px;height:14px}.document img{display:block;max-width:100%;height:auto;margin:20px 0;border-radius:8px}.document>blockquote:first-child{padding:12px 18px}.nav-folder summary:focus-visible{outline:3px solid #8f79cc;outline-offset:2px}@media(max-width:520px){.writing-notice{flex-wrap:wrap;gap:10px;padding:16px}.writing-notice>div{flex:1;min-width:210px}.writing-notice>a{margin-left:43px}}
+</style>
+</head><body>
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<svg class="sprite" aria-hidden="true"><defs>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1v15"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h6"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+<symbol id="i-external" viewBox="0 0 24 24"><path d="M7 17 18 6M7 6h11v11"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 4v2"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 10 5-10 5L2 8zM2 12l10 5 10-5M2 16l10 5 10-5"/></symbol>
+<symbol id="i-code" viewBox="0 0 24 24"><path d="m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-13 4h2m4 0h2"/></symbol>
+<symbol id="i-git" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="6" r="2"/><path d="M6 7v10m12-9v2c0 5-12 1-12 7"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M4 7h16M5 7l-3 7h6zm14 0-3 7h6z"/></symbol>
+</defs></svg><button class="overlay" aria-label="문서 메뉴 닫기" tabindex="-1"></button>
+<aside class="sidebar" id="sidebar"><a class="brand" href="#"><span class="brand-icon"><svg aria-hidden="true"><use href="#i-book"></use></svg></span><span><strong>Job Matching Agent</strong><small>STUDY WORKSPACE</small></span></a><label class="search"><svg aria-hidden="true"><use href="#i-search"></use></svg><input id="doc-search" type="search" placeholder="문서 제목 검색" aria-label="문서 제목 검색"><kbd>⌘ K</kbd></label><div class="nav-scroll">{% assign documents = site.pages | sort: 'path' %}
+{% capture new_document_template %}---
+제목: "문서 제목"
+유형: "작업 메모"
+설명: "언제 읽으면 좋은지, 어떤 내용을 다루는지 한두 문장으로 적어주세요."
+관련문서: []
+---
+
+# 문서 제목
+
+## 배경과 목적
+
+이 문서가 필요한 이유와 처음 읽는 사람이 알아야 할 배경을 적어주세요.
+
+## 주요 내용
+
+진행한 작업이나 공유할 내용을 쉬운 말로 설명해주세요.
+전문 용어는 전체 이름과 뜻을 함께 적고, 필요하면 예시나 이미지를 넣어주세요.
+
+## 결정 사항과 미정 사항
+
+- 확정: ?
+- 제안 또는 미정: ?
+
+## 다음 할 일
+
+- [ ] 할 일 작성
+{% endcapture %}
+{% capture new_meeting_template %}---
+제목: "회의 제목"
+유형: "회의 기록"
+설명: "회의 날짜와 주요 안건을 적어주세요."
+관련문서: []
+---
+
+{% for document in documents %}{% if document.path == 'meetings/TEMPLATE.md' %}{{ document.content }}{% endif %}{% endfor %}{% endcapture %}
+<nav aria-label="문서 탐색"><a href="#" data-document=""><svg aria-hidden="true"><use href="#i-grid"></use></svg><span>워크스페이스 홈</span></a><section class="nav-section"><h2>공통 안내</h2><ul><li><a href="#doc=TEAM.md" data-document="TEAM.md"><svg aria-hidden="true"><use href="#i-doc"></use></svg><span>프로젝트 역할</span></a></li><li><a href="#doc=STRUCTURE.md" data-document="STRUCTURE.md"><svg aria-hidden="true"><use href="#i-doc"></use></svg><span>현재 구조와 기술</span></a></li><li><a href="#doc=GITHUB_GUIDE.md" data-document="GITHUB_GUIDE.md"><svg aria-hidden="true"><use href="#i-doc"></use></svg><span>누구나 할 수 있는 문서 작성</span></a></li></ul></section><section class="nav-section"><h2>직군별 작업 공간</h2><details class="nav-folder" data-prefix="po/"><summary><svg aria-hidden="true"><use href="#i-doc"></use></svg><span><strong title="Product Owner — 제품 목표와 우선순위를 정리하는 역할">기획·제품 책임자</strong><small data-owner-for="po">담당 확인</small></span></summary><div class="folder-body"><ul><li><a href="#doc=po/README.md" data-document="po/README.md">작업 공간 안내</a></li>{% for document in documents %}{% assign folder_prefix = document.path | slice: 0, 3 %}{% if folder_prefix == 'po/' and document.path contains '.md' %}{% unless document.path == 'po/README.md' %}
+<li><a href="#doc={{ document.path | uri_escape }}" data-document="{{ document.path | escape }}">{{ document['제목'] | default: document.title | default: document.name | escape }}</a></li>
+{% endunless %}{% endif %}{% endfor %}</ul><a class="new-document" href="https://github.com/ai-agent-study-group/job-matching-agent/new/main?filename=docs%2Fpo%2Fnew-note.md&amp;value={{ new_document_template | uri_escape }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-edit"></use></svg><span>＋ 새 문서 작성</span></a></div></details><details class="nav-folder" data-prefix="fe/"><summary><svg aria-hidden="true"><use href="#i-grid"></use></svg><span><strong title="Front End — 사용자가 보는 화면을 개발하는 역할">프론트엔드</strong><small data-owner-for="fe">담당 확인</small></span></summary><div class="folder-body"><ul><li><a href="#doc=fe/README.md" data-document="fe/README.md">작업 공간 안내</a></li>{% for document in documents %}{% assign folder_prefix = document.path | slice: 0, 3 %}{% if folder_prefix == 'fe/' and document.path contains '.md' %}{% unless document.path == 'fe/README.md' %}
+<li><a href="#doc={{ document.path | uri_escape }}" data-document="{{ document.path | escape }}">{{ document['제목'] | default: document.title | default: document.name | escape }}</a></li>
+{% endunless %}{% endif %}{% endfor %}</ul><a class="new-document" href="https://github.com/ai-agent-study-group/job-matching-agent/new/main?filename=docs%2Ffe%2Fnew-note.md&amp;value={{ new_document_template | uri_escape }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-edit"></use></svg><span>＋ 새 문서 작성</span></a></div></details><details class="nav-folder" data-prefix="be/"><summary><svg aria-hidden="true"><use href="#i-code"></use></svg><span><strong title="Back End — 요청 처리와 자료 저장을 담당하는 역할">백엔드</strong><small data-owner-for="be">담당 확인</small></span></summary><div class="folder-body"><ul><li><a href="#doc=be/README.md" data-document="be/README.md">작업 공간 안내</a></li>{% for document in documents %}{% assign folder_prefix = document.path | slice: 0, 3 %}{% if folder_prefix == 'be/' and document.path contains '.md' %}{% unless document.path == 'be/README.md' %}
+<li><a href="#doc={{ document.path | uri_escape }}" data-document="{{ document.path | escape }}">{{ document['제목'] | default: document.title | default: document.name | escape }}</a></li>
+{% endunless %}{% endif %}{% endfor %}</ul><a class="new-document" href="https://github.com/ai-agent-study-group/job-matching-agent/new/main?filename=docs%2Fbe%2Fnew-note.md&amp;value={{ new_document_template | uri_escape }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-edit"></use></svg><span>＋ 새 문서 작성</span></a></div></details><details class="nav-folder" data-prefix="ai-llm/"><summary><svg aria-hidden="true"><use href="#i-layers"></use></svg><span><strong title="Artificial Intelligence / Large Language Model — 인공지능과 대규모 언어 모델">인공지능·언어 모델</strong><small data-owner-for="ai-llm">담당 확인</small></span></summary><div class="folder-body"><ul><li><a href="#doc=ai-llm/README.md" data-document="ai-llm/README.md">작업 공간 안내</a></li>{% for document in documents %}{% assign folder_prefix = document.path | slice: 0, 7 %}{% if folder_prefix == 'ai-llm/' and document.path contains '.md' %}{% unless document.path == 'ai-llm/README.md' %}
+<li><a href="#doc={{ document.path | uri_escape }}" data-document="{{ document.path | escape }}">{{ document['제목'] | default: document.title | default: document.name | escape }}</a></li>
+{% endunless %}{% endif %}{% endfor %}</ul><a class="new-document" href="https://github.com/ai-agent-study-group/job-matching-agent/new/main?filename=docs%2Fai-llm%2Fnew-note.md&amp;value={{ new_document_template | uri_escape }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-edit"></use></svg><span>＋ 새 문서 작성</span></a></div></details><details class="nav-folder" data-prefix="data/"><summary><svg aria-hidden="true"><use href="#i-book"></use></svg><span><strong title="Data Collection — 자료를 가져와 분류·검토하는 역할">데이터 수집</strong><small data-owner-for="data">담당 확인</small></span></summary><div class="folder-body"><ul><li><a href="#doc=data/README.md" data-document="data/README.md">작업 공간 안내</a></li>{% for document in documents %}{% assign folder_prefix = document.path | slice: 0, 5 %}{% if folder_prefix == 'data/' and document.path contains '.md' %}{% unless document.path == 'data/README.md' %}
+<li><a href="#doc={{ document.path | uri_escape }}" data-document="{{ document.path | escape }}">{{ document['제목'] | default: document.title | default: document.name | escape }}</a></li>
+{% endunless %}{% endif %}{% endfor %}</ul><a class="new-document" href="https://github.com/ai-agent-study-group/job-matching-agent/new/main?filename=docs%2Fdata%2Fnew-note.md&amp;value={{ new_document_template | uri_escape }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-edit"></use></svg><span>＋ 새 문서 작성</span></a></div></details><details class="nav-folder" data-prefix="infra/"><summary><svg aria-hidden="true"><use href="#i-git"></use></svg><span><strong title="Infrastructure / Development and Operations — 실행 환경과 개발·운영을 연결하는 역할">인프라·개발 운영</strong><small data-owner-for="infra">담당 확인</small></span></summary><div class="folder-body"><ul><li><a href="#doc=infra/README.md" data-document="infra/README.md">작업 공간 안내</a></li>{% for document in documents %}{% assign folder_prefix = document.path | slice: 0, 6 %}{% if folder_prefix == 'infra/' and document.path contains '.md' %}{% unless document.path == 'infra/README.md' %}
+<li><a href="#doc={{ document.path | uri_escape }}" data-document="{{ document.path | escape }}">{{ document['제목'] | default: document.title | default: document.name | escape }}</a></li>
+{% endunless %}{% endif %}{% endfor %}</ul><a class="new-document" href="https://github.com/ai-agent-study-group/job-matching-agent/new/main?filename=docs%2Finfra%2Fnew-note.md&amp;value={{ new_document_template | uri_escape }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-edit"></use></svg><span>＋ 새 문서 작성</span></a></div></details></section><section class="nav-section"><h2>함께 기록하기</h2><details class="nav-folder" data-prefix="meetings/"><summary><svg aria-hidden="true"><use href="#i-calendar"></use></svg><span><strong>회의 기록</strong><small>일정 확인</small></span></summary><div class="folder-body"><ul><li><a href="#doc=meetings/README.md" data-document="meetings/README.md">회의 기록 전체</a></li>{% assign meetings = documents | reverse %}{% for document in meetings %}{% if document.path contains 'meetings/' and document.path contains '.md' %}{% unless document.path == 'meetings/README.md' or document.path == 'meetings/TEMPLATE.md' %}
+<li><a href="#doc={{ document.path | uri_escape }}" data-document="{{ document.path | escape }}">{{ document['제목'] | default: document.title | default: document.name | escape }}</a></li>
+{% endunless %}{% endif %}{% endfor %}<li><a href="#doc=meetings/TEMPLATE.md" data-document="meetings/TEMPLATE.md">회의록 템플릿</a></li></ul><a class="new-document" href="https://github.com/ai-agent-study-group/job-matching-agent/new/main?filename=docs%2Fmeetings%2Fnew-note.md&amp;value={{ new_meeting_template | uri_escape }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-edit"></use></svg><span>＋ 회의록 작성</span></a></div></details></section><section class="nav-section"><h2>추가 문서</h2><ul>{% for document in documents %}{% if document.path contains '.md' %}{% unless document.path contains '/' or document.path == 'TEAM.md' or document.path == 'GITHUB_GUIDE.md' or document.path == 'STRUCTURE.md' %}
+<li><a href="#doc={{ document.path | uri_escape }}" data-document="{{ document.path | escape }}"><svg aria-hidden="true"><use href="#i-doc"></use></svg><span>{{ document['제목'] | default: document.title | default: document.name | escape }}</span></a></li>
+{% endunless %}{% endif %}{% endfor %}</ul></section><section class="nav-section"><h2>저장소</h2><ul><li><a href="#doc=@root/CONTRIBUTING.md" data-document="@root/CONTRIBUTING.md"><svg aria-hidden="true"><use href="#i-git"></use></svg><span>기여 규칙</span></a></li><li><a href="#doc=@root/README.md" data-document="@root/README.md"><svg aria-hidden="true"><use href="#i-doc"></use></svg><span>저장소 소개 · README</span></a></li></ul></section><p class="no-results" hidden>일치하는 문서가 없습니다.</p></nav></div><div class="sidebar-foot"><span class="status-dot"></span>함께 만들어가는 중<span>STUDY / 01</span></div></aside>
+<div class="app"><header class="topbar"><button class="mobile-menu" aria-label="문서 메뉴 열기" aria-expanded="false" aria-controls="sidebar"><svg aria-hidden="true"><use href="#i-menu"></use></svg></button><div class="breadcrumbs"><span>워크스페이스</span><b aria-hidden="true">/</b><span id="current-title">개요</span></div><div class="top-actions"><a class="repo-link" href="https://github.com/ai-agent-study-group/job-matching-agent"><svg aria-hidden="true"><use href="#i-git"></use></svg>GitHub</a><a class="edit-link" id="edit-link" href="https://github.com/ai-agent-study-group/job-matching-agent/edit/main/docs/index.html"><svg aria-hidden="true"><use href="#i-edit"></use></svg>GitHub에서 수정</a></div></header><div class="content-wrap"><main id="main-content" tabindex="-1"><section class="hero"><div><div class="eyebrow">Our shared notebook</div><h1>함께 만들고,<br><span>기록하며 배웁니다.</span></h1><p>채용 공고와 이력을 요건별로 매칭하는 agent를 함께 만드는 작업 공간.<br> 직군별 메모와 작업 공유, 회의의 기록을 한곳에 모읍니다.</p><div class="hero-meta"><span>정기 모임 일정은 회의 기록에서 확인</span></div></div><div class="hero-art" aria-hidden="true"><div class="orbit"></div><div class="art-note"></div><div class="art-card"><svg aria-hidden="true"><use href="#i-scale"></use></svg><div class="art-line"></div><div class="art-line"></div><div class="art-line"></div></div><span class="art-dot"><svg aria-hidden="true"><use href="#i-book"></use></svg></span></div></section>
+<div class="section-heading"><h2>우리의 작업 공간</h2><span>직군별 폴더에 메모와 공유 내용을 남겨주세요</span></div><section class="role-cards" aria-label="직군별 작업 공간"><a class="role-card" href="#doc=po/README.md"><svg aria-hidden="true"><use href="#i-doc"></use></svg><span><strong title="Product Owner — 제품 목표와 우선순위를 정리하는 역할">기획·제품 책임자 <em data-owner-for="po">담당 확인</em></strong><small>기획 메모 · 요구사항 · 사용자 흐름</small></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></a><a class="role-card" href="#doc=fe/README.md"><svg aria-hidden="true"><use href="#i-grid"></use></svg><span><strong title="Front End — 사용자가 보는 화면을 개발하는 역할">프론트엔드 <em data-owner-for="fe">담당 확인</em></strong><small>화면 구현 · 공통 부품 · 작업 공유</small></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></a><a class="role-card" href="#doc=be/README.md"><svg aria-hidden="true"><use href="#i-code"></use></svg><span><strong title="Back End — 요청 처리와 자료 저장을 담당하는 역할">백엔드 <em data-owner-for="be">담당 확인</em></strong><small>API · 서버 연결 · 개발 메모</small></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></a><a class="role-card" href="#doc=ai-llm/README.md"><svg aria-hidden="true"><use href="#i-layers"></use></svg><span><strong title="Artificial Intelligence / Large Language Model — 인공지능과 대규모 언어 모델">인공지능·언어 모델 <em data-owner-for="ai-llm">담당 확인</em></strong><small>모델 · 프롬프트 · 실험 기록</small></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></a><a class="role-card" href="#doc=data/README.md"><svg aria-hidden="true"><use href="#i-book"></use></svg><span><strong title="Data Collection — 자료를 가져와 분류·검토하는 역할">데이터 수집 <em data-owner-for="data">담당 확인</em></strong><small>출처 · 수집 · 분류 · 검토</small></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></a><a class="role-card" href="#doc=infra/README.md"><svg aria-hidden="true"><use href="#i-git"></use></svg><span><strong title="Infrastructure / Development and Operations — 실행 환경과 개발·운영을 연결하는 역할">인프라·개발 운영 <em data-owner-for="infra">담당 확인</em></strong><small>환경 · 배포 · 자동 검사 · 운영</small></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></a></section><aside class="writing-notice"><span class="card-icon"><svg aria-hidden="true"><use href="#i-edit"></use></svg></span><div><strong>문서는 변경 검토 요청 없이 바로 저장할 수 있어요.</strong><p>원하는 폴더에 Markdown 문서를 추가하세요. 작성이 처음이라면 쉬운 안내부터 확인해보세요.</p></div><a href="#doc=GITHUB_GUIDE.md">작성 방법 <svg aria-hidden="true"><use href="#i-arrow"></use></svg></a></aside><div class="section-heading"><h2>공통 안내</h2><span>역할과 문서 작성 방법</span></div><section class="cards" aria-label="공통 안내"><a class="doc-card" href="#doc=TEAM.md"><div class="card-top"><span class="card-icon"><svg aria-hidden="true"><use href="#i-users"></use></svg></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></div><h3>프로젝트 역할</h3><p>담당과 직군별 작업 공간 한눈에 보기</p></a><a class="doc-card" href="#doc=STRUCTURE.md"><div class="card-top"><span class="card-icon"><svg aria-hidden="true"><use href="#i-layers"></use></svg></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></div><h3>현재 구조와 기술</h3><p>코드 위치와 영역 사이의 연결</p></a><a class="doc-card" href="#doc=GITHUB_GUIDE.md"><div class="card-top"><span class="card-icon"><svg aria-hidden="true"><use href="#i-edit"></use></svg></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></div><h3>누구나 할 수 있는 문서 작성</h3><p>Markdown 기초 · 파일 만들기 · 이미지 첨부</p></a><a class="doc-card" href="#doc=meetings/README.md"><div class="card-top"><span class="card-icon"><svg aria-hidden="true"><use href="#i-calendar"></use></svg></span><svg aria-hidden="true"><use href="#i-arrow"></use></svg></div><h3>회의 기록</h3><p>안건과 공유된 내용, 결정 사항</p></a></section><noscript>문서를 보려면 JavaScript를 켜거나 상단 GitHub 저장소에서 Markdown 파일을 확인해주세요.</noscript></main><footer class="page-footer"><span>JOB MATCHING AGENT STUDY</span><span>함께 생각하고, 만들고, 기록합니다.</span></footer></div></div>
+  {% for document in documents %}
+    {% if document.path contains '.md' %}
+      <template data-source="{{ document.path | escape }}" data-title="{{ document['제목'] | default: document.title | default: document.name | escape }}" data-url="{{ document.url | escape }}">{{ document.content | markdownify }}</template>
+    {% endif %}
+  {% endfor %}
+<script>
+    const main = document.getElementById('main-content');
+    const editLink = document.getElementById('edit-link');
+    const currentTitle = document.getElementById('current-title');
+    const search = document.getElementById('doc-search');
+    const menuButton = document.querySelector('.mobile-menu');
+    const home = document.createElement('template');
+    const documents = new Map(Array.from(document.querySelectorAll('template[data-source]'), template => [template.dataset.source, template]));
+    // Role ownership has one source: the table in docs/TEAM.md.
+    const teamTable = documents.get('TEAM.md')?.content.querySelector('table');
+    if (teamTable) {
+      for (const row of teamTable.querySelectorAll('tbody tr')) {
+        const cells = row.querySelectorAll('td');
+        const link = cells[3]?.querySelector('a');
+        if (!link) continue;
+        const path = new URL(link.getAttribute('href'), 'https://documents.invalid/').pathname;
+        for (const slug of ['po', 'fe', 'be', 'ai-llm', 'data', 'infra']) {
+          if (!path.includes('/' + slug + '/')) continue;
+          for (const node of document.querySelectorAll('[data-owner-for="' + slug + '"]')) node.textContent = cells[2].textContent.trim();
+        }
+      }
+    }
+    home.content.append(...Array.from(main.childNodes).map(node => node.cloneNode(true)));
+    const repositoryBase = 'https://github.com/ai-agent-study-group/job-matching-agent/blob/main/';
+    const rootDocuments = new Map([
+      ['@root/README.md', { file: 'README.md', title: '저장소 소개 · README', endpoint: 'readme', local: 'root-readme' }],
+      ['@root/CONTRIBUTING.md', { file: 'CONTRIBUTING.md', title: '기여 규칙', endpoint: 'contents/CONTRIBUTING.md', local: 'root-contributing' }]
+    ]);
+    const rootRequests = new Map();
+    for (const [path, config] of rootDocuments) {
+      const template = document.createElement('template');
+      template.dataset.title = config.title;
+      template.innerHTML = '<h1>' + config.title + '</h1><p>문서를 불러오는 중입니다.</p>';
+      documents.set(path, template);
+    }
+    async function loadRootDocument(path) {
+      const config = rootDocuments.get(path);
+      const template = documents.get(path);
+      try {
+        const local = ['localhost', '127.0.0.1'].includes(location.hostname);
+        const response = await fetch(local ? '/__docs/' + config.local : 'https://api.github.com/repos/ai-agent-study-group/job-matching-agent/' + config.endpoint + '?ref=main', {
+          headers: { Accept: 'application/vnd.github.html+json' }, cache: 'no-store'
+        });
+        if (!response.ok) throw new Error('Document request failed');
+        template.innerHTML = await response.text();
+        for (const link of template.content.querySelectorAll('a[href]')) {
+          const href = link.getAttribute('href');
+          if (href && !href.startsWith('#')) link.href = new URL(href, repositoryBase).href;
+        }
+        for (const image of template.content.querySelectorAll('img[src]')) {
+          image.src = new URL(image.getAttribute('src'), 'https://raw.githubusercontent.com/ai-agent-study-group/job-matching-agent/main/').href;
+        }
+      } catch {
+        template.innerHTML = '<h1>' + config.title + '</h1><p>문서를 불러오지 못했습니다. 새로고침하거나 <a href="' + repositoryBase + config.file + '">GitHub에서 확인해주세요.</a></p>';
+      }
+      if (activePath === path) render();
+    }
+    const documentRoutes = new Map();
+    for (const [path, template] of documents) {
+      documentRoutes.set(path, path);
+      documentRoutes.set(path.replace(/\.md$/, '.html'), path);
+      if (template.dataset.url) documentRoutes.set(decodeURIComponent(template.dataset.url).replace(/^\//, ''), path);
+    }
+    const editBase = 'https://github.com/ai-agent-study-group/job-matching-agent/edit/main/docs/';
+    const legacyRoles = new Map(Object.entries({product: 'po/README.md', frontend: 'fe/README.md', backend: 'be/README.md', agent: 'ai-llm/README.md', data: 'data/README.md', evaluation: 'po/README.md', operations: 'infra/README.md'}));
+    const legacyDocuments = new Map([['PROJECT_PLAN.md', 'TEAM.md']]);
+    let activePath = '';
+    let searchFolderStates;
+
+    function render(focus = false) {
+      const parameters = new URLSearchParams(location.hash.slice(1));
+      activePath = parameters.get('doc') || legacyRoles.get(parameters.get('role')) || '';
+      activePath = legacyDocuments.get(activePath) || activePath;
+      if (rootDocuments.has(activePath) && !rootRequests.has(activePath)) rootRequests.set(activePath, loadRootDocument(activePath));
+      const source = activePath ? documents.get(activePath) : home;
+      if (source) {
+        main.replaceChildren(source.content.cloneNode(true));
+        document.title = (source.dataset.title || '스터디 문서') + ' · Job Matching Agent';
+        if (activePath) {
+          const sourceUrl = new URL(activePath, new URL('.', location.href));
+          for (const image of main.querySelectorAll('img[src]')) {
+            const src = image.getAttribute('src');
+            if (src) image.src = new URL(src, sourceUrl).href;
+          }
+        }
+      } else {
+        const heading = document.createElement('h1');
+        heading.textContent = '문서를 찾을 수 없습니다';
+        const message = document.createElement('p');
+        message.textContent = '폴더를 펼쳐 문서를 선택해주세요. 공개 사이트는 배포 후, 로컬 미리보기는 파일 저장 후 반영됩니다.';
+        main.replaceChildren(heading, message);
+        document.title = '문서를 찾을 수 없습니다 · Job Matching Agent';
+      }
+      main.classList.toggle('document', Boolean(activePath));
+      currentTitle.textContent = source && activePath ? (source.dataset.title || activePath) : activePath ? '문서를 찾을 수 없습니다' : '개요';
+      setMenu(false);
+      editLink.href = rootDocuments.has(activePath) ? 'https://github.com/ai-agent-study-group/job-matching-agent/edit/main/' + rootDocuments.get(activePath).file : editBase + (documents.has(activePath) ? activePath.split('/').map(encodeURIComponent).join('/') : 'index.html');
+      for (const link of main.querySelectorAll('a[href]')) {
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('#')) continue;
+        const url = new URL(href, repositoryBase + (rootDocuments.has(activePath) ? '' : 'docs/' + activePath));
+        if (!url.href.startsWith(repositoryBase)) continue;
+        const repositoryPath = decodeURIComponent(url.pathname.slice(new URL(repositoryBase).pathname.length));
+        const path = rootDocuments.has('@root/' + repositoryPath) ? '@root/' + repositoryPath : documentRoutes.get(repositoryPath.replace(/^docs\//, ''));
+        if (!path) continue;
+        const parameters = new URLSearchParams({ doc: path });
+        if (url.hash) parameters.set('section', decodeURIComponent(url.hash.slice(1)));
+        link.href = '#' + parameters.toString();
+        link.removeAttribute('target');
+      }
+      for (const link of document.querySelectorAll('a[href]')) {
+        const hostname = new URL(link.href, location.href).hostname;
+        if (hostname === 'github.com' || hostname.endsWith('.github.com')) {
+          link.target = '_blank';
+          link.relList.add('noopener', 'noreferrer');
+        }
+      }
+      for (const link of document.querySelectorAll('[data-document]')) {
+        if (link.dataset.document === activePath) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      }
+      for (const folder of document.querySelectorAll('.nav-folder')) folder.dataset.active = String(activePath.startsWith(folder.dataset.prefix));
+      if (focus) main.focus({ preventScroll: true });
+      const section = parameters.get('section');
+      if (focus || section) (section ? document.getElementById(section) || main : main).scrollIntoView({ block: 'start' });
+    }
+
+    main.addEventListener('click', event => {
+      const link = event.target.closest('a');
+      if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const href = link.getAttribute('href');
+      if (!href || /^#(?:doc|role)=/.test(href) || /^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('//')) return;
+      const target = new URL(href, 'https://documents.invalid/' + activePath);
+      let route = decodeURIComponent(target.pathname.slice(1));
+      const siteDirectory = new URL('.', location.href).pathname.replace(/^\//, '');
+      if (siteDirectory && route.startsWith(siteDirectory)) route = route.slice(siteDirectory.length);
+      const path = documentRoutes.get(route);
+      if (path) {
+        event.preventDefault();
+        const parameters = new URLSearchParams({ doc: path });
+        if (target.hash) parameters.set('section', decodeURIComponent(target.hash.slice(1)));
+        location.hash = parameters.toString();
+        if (path === activePath) render(true);
+      }
+    });
+    document.querySelector('.skip-link').addEventListener('click', event => { event.preventDefault(); main.focus(); });
+    window.addEventListener('hashchange', () => render(true));
+    function setMenu(open) {
+      document.body.classList.toggle('menu-open', open);
+      menuButton.setAttribute('aria-expanded', String(open));
+      document.getElementById('sidebar').inert = matchMedia('(max-width: 800px)').matches && !open;
+    }
+    menuButton.addEventListener('click', () => {
+      const open = !document.body.classList.contains('menu-open');
+      setMenu(open);
+      if (open) search.focus();
+    });
+    document.querySelector('.overlay').addEventListener('click', () => { setMenu(false); menuButton.focus(); });
+    matchMedia('(max-width: 800px)').addEventListener('change', () => setMenu(false));
+    function filterNavigation() {
+      const query = search.value.toLocaleLowerCase().trim();
+      const folders = Array.from(document.querySelectorAll('.nav-folder'));
+      if (query && !searchFolderStates) searchFolderStates = new Map(folders.map(folder => [folder, folder.open]));
+      let matches = 0;
+      for (const link of document.querySelectorAll('nav a')) {
+        const owner = link.closest('.nav-folder')?.querySelector('summary').textContent || '';
+        link.hidden = Boolean(query) && !(link.textContent + owner).toLocaleLowerCase().includes(query);
+        if (!link.hidden) matches++;
+      }
+      for (const folder of folders) {
+        const visible = Array.from(folder.querySelectorAll('a')).some(link => !link.hidden);
+        folder.hidden = !visible;
+        if (query) folder.open = visible;
+        else if (searchFolderStates) folder.open = searchFolderStates.get(folder) || false;
+      }
+      if (!query) searchFolderStates = undefined;
+      for (const group of document.querySelectorAll('.nav-section')) group.hidden = !Array.from(group.querySelectorAll('a')).some(link => !link.hidden);
+      document.querySelector('.no-results').hidden = matches > 0;
+    }
+    search.addEventListener('input', filterNavigation);
+    document.addEventListener('keydown', event => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        if (matchMedia('(max-width: 800px)').matches) setMenu(true);
+        search.focus();
+      }
+      if (event.key === 'Escape' && document.body.classList.contains('menu-open')) { setMenu(false); menuButton.focus(); }
+      if (event.key === 'Tab' && document.body.classList.contains('menu-open')) {
+        const nodes = Array.from(document.getElementById('sidebar').querySelectorAll('a, input, summary')).filter(element => !element.hidden && element.getClientRects().length);
+        const first = nodes[0], last = nodes[nodes.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    });
+    filterNavigation();
+    render();
+</script>
+</body></html>
