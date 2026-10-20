@@ -18,7 +18,7 @@
 | 경로 | 내용 | 담당 상태 |
 | --- | --- | --- |
 | `src/domain/` | 모든 층이 같이 쓰는 데이터 형식 (Profile · SearchQuery · JobPosting · JD · MatchResult) | - |
-| `src/port/` | 코어와 어댑터 사이 약속. `inbound` = 유즈케이스, `outbound` = 공고 출처 · 저장소 | - |
+| `src/port/` | 코어와 어댑터 사이 약속. `inbound` = 서비스, `outbound` = 공고 출처 · 저장소 | - |
 | `src/service/` | 유즈케이스 구현 · 도구 / 서비스 로직 | - |
 | `src/adapter/inbound/` | `api`(FE용 /api) · `mcp`(MCP 서버) · `agent`(pydantic-ai) | - |
 | `src/adapter/outbound/` | 공고 출처(Greenhouse · 연방고용청 API, 스크래퍼는 추후) · 저장소(추후) | - |
