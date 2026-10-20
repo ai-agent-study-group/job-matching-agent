@@ -17,19 +17,20 @@
 
 | 경로 | 내용 | 담당 상태 |
 | --- | --- | --- |
-| `src/ingest/` | 알림 메일 수집용 기존 공간. 현재 PoC 제외 | 재배정 대상 |
-| `src/scraper/` | 공고 소스 어댑터. MCP 도입 시 도구 뒤에서 호출할 구조 검토 | 재배정 대상 |
-| `src/llm/` | agent 실행, 요건별 매칭, 근거와 점수 산정 | 재배정 대상 |
-| `src/api/` | REST API, 저장·조회와 실행 연결 | 재배정 대상 |
-| `src/schemas/` | JD, 이력, 매칭 결과 스키마 초안 | 전원 합의 |
-| `tests/` | 백엔드 테스트 | 구현 담당별 작성 |
+| `src/domain/` | 모든 층이 같이 쓰는 데이터 형식 (Profile · SearchQuery · JobPosting · JD · MatchResult) | 전원 합의 |
+| `src/port/` | 코어와 어댑터 사이 약속. `inbound` = 유즈케이스, `outbound` = 공고 출처 · 저장소 | 역할 구분 후 배정 |
+| `src/service/` | 유즈케이스 구현 · 도구 / 서비스 로직 | 역할 구분 후 배정 |
+| `src/adapter/inbound/` | `api`(FE용 /api) · `mcp`(MCP 서버) · `agent`(pydantic-ai) | 역할 구분 후 배정 |
+| `src/adapter/outbound/` | 공고 출처(Greenhouse · 연방고용청 API, 스크래퍼는 추후) · 저장소(추후) | 역할 구분 후 배정 |
+| `src/main.py` | 조립: 어댑터를 service에 연결하고 /api와 /mcp를 한 앱에 올림 | 역할 구분 후 배정 |
+| `test/` | `src/`와 같은 구조의 백엔드 테스트 | 구현 담당별 작성 |
 | `web/` | 사이트 목록 설정, 이력 등록, 결과·근거 확인 | 역할 구분 후 배정 |
 | `infra/` | 배포, CI | 역할 구분 후 배정 |
 | `eval/` | 평가셋, 정답 라벨 | 역할 구분 후 배정 |
 | `docs/` | 작업 문서, 공통 안내, 날짜별 회의 기록 | 전원 |
 
 BE는 루트의 Python 프로젝트 하나(`pyproject.toml`, `src/`), FE는 `web/`입니다. 현재 API는 `/health`만 구현되어 있습니다. 위 표는 작업 범위이며 기능 구현 완료를 뜻하지 않습니다.
-DB, 실행 프로세스와 작업 전달 방식, MCP 서버와 agent 구현·포트의 코드 위치는 미정입니다. 기존 BE1·BE2·LLM1·LLM2 구분과 새 작업의 관계는 [프로젝트 역할](docs/TEAM.md)에서 확인합니다.
+`src/`는 헥사고날(포트 · 어댑터) 구조입니다. DB, 실행 프로세스와 작업 전달 방식은 미정입니다. 기존 BE1·BE2·LLM1·LLM2 구분과 새 작업의 관계는 [프로젝트 역할](docs/TEAM.md)에서 확인합니다.
 
 ## 로컬 실행
 
@@ -37,7 +38,7 @@ DB, 실행 프로세스와 작업 전달 방식, MCP 서버와 agent 구현·포
 
 ```bash
 uv sync                         # BE 의존성 + 개발 도구 설치 (.venv 자동 생성)
-uv run uvicorn api.main:app --reload
+uv run uvicorn main:app --reload
 # http://localhost:8000/health
 ```
 
@@ -50,7 +51,7 @@ uv run ruff check . && uv run ruff format --check .
 
 의존성 추가: `uv add <라이브러리>` (개발 도구는 `uv add --dev`)
 
-`src/` 아래에 모듈을 새로 만들면 `pyproject.toml`의 `module-name` 목록에도 추가.
+`src/` 바로 아래에 패키지(폴더)를 새로 만들면 `pyproject.toml`의 `module-name` 목록에도 추가. `main.py`는 파일이라 목록에 넣지 않음.
 
 ## 브랜치와 PR
 
