@@ -1,1 +1,1 @@
-"""JobUseCase (search_jobs · get_job)."""
+"""JobServicePort (search_jobs · get_job)."""

@@ -11,15 +11,15 @@
 - **추후:** 이력서 업로드·파싱, 대화로 이력 보충. 파싱은 Markdown 변환 + LLM 구조화가 후보입니다.
 - **PoC 제외:** Gmail 등 구인 사이트 알림 메일 수집.
 
-범위와 미결 질문은 [10월 20일 회의 안건](docs/meetings/2026-10-20.md)에 정리합니다. 스키마 필드, 역할 구분과 담당자, 구현 비교 방식은 회의에서 확정합니다.
+범위와 미결 질문은 [10월 20일 회의 안건](docs/meetings/2026-10-20.md)에 정리합니다. 도메인 항목, 역할 구분과 담당자, 구현 비교 방식은 회의에서 확정합니다.
 
 ## 디렉터리와 작업 범위
 
 | 경로 | 내용 | 담당 상태 |
 | --- | --- | --- |
 | `src/domain/` | 모든 층이 같이 쓰는 데이터 형식 (Profile · SearchQuery · JobPosting · JD · MatchResult) | - |
-| `src/port/` | 코어와 어댑터 사이 약속. `inbound` = 서비스, `outbound` = 공고 출처 · 저장소 | - |
-| `src/service/` | 유즈케이스 구현 · 도구 / 서비스 로직 | - |
+| `src/port/` | 코어와 어댑터 사이 약속. `inbound` = 서비스 포트, `outbound` = 공고 출처 · 저장소 | - |
+| `src/service/` | 서비스 포트 구현 · 도구 / 서비스 로직 | - |
 | `src/adapter/inbound/` | `api`(FE용 /api) · `mcp`(MCP 서버) · `agent`(pydantic-ai) | - |
 | `src/adapter/outbound/` | 공고 출처(Greenhouse · 연방고용청 API, 스크래퍼는 추후) · 저장소(추후) | - |
 | `src/main.py` | 조립: 어댑터를 service에 연결하고 /api와 /mcp를 한 앱에 올림 | - |
