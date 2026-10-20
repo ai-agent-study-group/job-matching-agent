@@ -1,1 +1,1 @@
-"""SourceService: list_sources (SourceUseCase 구현)."""
+"""SourceService: 출처 불러오기 · list_sources (SourceServicePort 구현)."""
