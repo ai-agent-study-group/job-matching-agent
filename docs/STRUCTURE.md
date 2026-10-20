@@ -21,12 +21,13 @@ PoC에서는 매칭 agent가 공고 원문을 읽습니다. Gmail 알림 수집�
 
 | 경로 | 내용 | 담당 상태 |
 | --- | --- | --- |
-| `src/ingest/` | 알림 메일 수집용 기존 공간. PoC 제외 | 재배정 대상 |
-| `src/scraper/` | 공고 소스 어댑터. MCP 도입 시 도구 뒤에서 호출할 구조 검토 | 재배정 대상 |
-| `src/llm/` | agent 실행, 요건별 매칭과 점수 산정 | 재배정 대상 |
-| `src/api/` | FastAPI, 데이터 저장·조회와 실행 연결 | 재배정 대상 |
-| `src/schemas/` | JD·이력·매칭 결과의 공통 Pydantic 스키마 | 전원 합의 |
-| `tests/` | 백엔드 테스트 | 각 담당 |
+| `src/domain/` | 모든 층이 같이 쓰는 데이터 형식 (Profile · SearchQuery · JobPosting · JD · MatchResult) | 전원 합의 |
+| `src/port/` | 코어와 어댑터 사이 약속. `inbound` = 유즈케이스, `outbound` = 공고 출처 · 저장소 | 역할 구분 후 배정 |
+| `src/service/` | 유즈케이스 구현 · 도구 / 서비스 로직 | 역할 구분 후 배정 |
+| `src/adapter/inbound/` | `api`(FE용 /api) · `mcp`(MCP 서버) · `agent`(pydantic-ai) | 역할 구분 후 배정 |
+| `src/adapter/outbound/` | 공고 출처(Greenhouse · 연방고용청 API, 스크래퍼는 추후) · 저장소(추후) | 역할 구분 후 배정 |
+| `src/main.py` | 조립: 어댑터를 service에 연결하고 /api와 /mcp를 한 앱에 올림 | 역할 구분 후 배정 |
+| `test/` | `src/`와 같은 구조의 백엔드 테스트 | 각 담당 |
 | `web/` | 사이트 목록 설정, 이력 등록, 결과·근거 확인 화면 | 역할 구분 후 배정 |
 | `eval/` | 평가셋과 정답 라벨 | 역할 구분 후 배정 |
 | `infra/` | 배포와 CI | 역할 구분 후 배정 |
@@ -35,7 +36,7 @@ PoC에서는 매칭 agent가 공고 원문을 읽습니다. Gmail 알림 수집�
 
 백엔드는 루트의 `pyproject.toml`로 관리하는 Python 프로젝트입니다. 실행 프로세스와 작업 전달 방식은 회의에서 정합니다.
 현재 구현된 API는 `/health`이며 다른 모듈과 `web/`은 작업을 시작할 공간입니다. 위 표는 각 모듈의 구현 범위를 안내합니다.
-MCP 서버와 agent 구현·포트의 코드 위치도 미정입니다.
+`src/`는 헥사고날(포트 · 어댑터) 구조입니다. 바깥 층이 안쪽을 import하고, 도메인은 아무것도 import하지 않습니다.
 
 ## 함께 정할 연결 지점
 
