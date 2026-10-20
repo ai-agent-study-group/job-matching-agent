@@ -1,0 +1,106 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="572" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 572" role="img" aria-label="MCP 서버는 커넥터와 JMA 앱의 우리 agent가 같이 부르는 도구 서버" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="mcp2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">MCP 서버는 커넥터와 JMA 앱의 우리 agent가 같이 부르는 도구 서버</text>
+  <g id="legend">
+    <rect x="24" y="46" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="48" y="56" font-size="11.5" fill="#52514e">agent</text>
+    <rect x="88" y="46" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="112" y="56" font-size="11.5" fill="#52514e">MCP 도구</text>
+    <rect x="184" y="46" width="16" height="12" rx="3" fill="#8b5cf6" fill-opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="208" y="56" font-size="11.5" fill="#52514e">MCP 서버</text>
+    <rect x="280" y="46" width="16" height="12" rx="3" fill="#2e9e6a" fill-opacity="0.12" stroke="#2e9e6a" stroke-width="1.5"/>
+    <text x="304" y="56" font-size="11.5" fill="#52514e">JMA 앱</text>
+    <rect x="352" y="46" width="16" height="12" rx="3" fill="#c3c2b7" fill-opacity="0.25" stroke="none"/>
+    <text x="376" y="56" font-size="11.5" fill="#52514e">코드</text>
+    <rect x="416" y="46" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="440" y="56" font-size="11.5" fill="#52514e">외부</text>
+    <rect x="480" y="46" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="4 3"/>
+    <text x="504" y="56" font-size="11.5" fill="#52514e">추후</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M272 160V184" marker-end="url(#mcp2-arrow)"/>
+    <path d="M272 216V256" marker-end="url(#mcp2-arrow)"/>
+    <path d="M640 116V128" marker-end="url(#mcp2-arrow)"/>
+    <path d="M640 180V256" marker-end="url(#mcp2-arrow)"/>
+    <path d="M260 464V488" marker-end="url(#mcp2-arrow)"/>
+  </g>
+  <text x="280" y="242" font-size="11.5" fill="#52514e">MCP · Streamable HTTP</text>
+  <text x="648" y="222" font-size="11.5" fill="#52514e">같은 도구 호출</text>
+  <g id="clients">
+    <rect x="24" y="72" width="496" height="88" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="40" y="92" font-size="11.5" fill="#52514e">채널 1 · 사용자의 AI 앱 · 원격(HTTPS)으로 연결</text>
+    <rect x="40" y="104" width="110" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="95" y="122" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">Claude Code</text>
+    <text x="95" y="139" text-anchor="middle" font-size="11" fill="#52514e">CLI · IDE</text>
+    <rect x="158" y="104" width="110" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="213" y="122" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">Codex</text>
+    <text x="213" y="139" text-anchor="middle" font-size="11" fill="#52514e">CLI · IDE</text>
+    <rect x="276" y="104" width="110" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="331" y="122" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">Claude</text>
+    <text x="331" y="139" text-anchor="middle" font-size="11" fill="#52514e">claude.ai</text>
+    <rect x="394" y="104" width="110" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="449" y="122" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">ChatGPT</text>
+    <text x="449" y="139" text-anchor="middle" font-size="11" fill="#52514e">개발자 모드</text>
+  </g>
+  <g id="fe">
+    <rect x="544" y="80" width="192" height="36" rx="8" fill="#2e9e6a" fill-opacity="0.1" stroke="#2e9e6a" stroke-width="1.75"/>
+    <text x="640" y="103" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">채널 2 · JMA 앱</text>
+  </g>
+  <g id="agent">
+    <rect x="544" y="128" width="192" height="52" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="640" y="150" text-anchor="middle" font-weight="600" fill="#141413">agent</text>
+    <text x="640" y="168" text-anchor="middle" font-size="11.5" fill="#52514e">API 뒤 · pydantic-ai</text>
+  </g>
+  <g id="auth">
+    <rect x="24" y="184" width="496" height="32" rx="8" fill="none" stroke="#52514e" stroke-width="1.5"/>
+    <text x="272" y="205" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">HTTPS · 인증 (DevOps-3)</text>
+  </g>
+  <g id="mcp-endpoint">
+    <rect x="24" y="256" width="712" height="208" rx="8" fill="#8b5cf6" fill-opacity="0.05" stroke="#8b5cf6" stroke-width="1.75"/>
+    <rect x="24" y="256" width="712" height="40" rx="8" fill="#8b5cf6" fill-opacity="0.14" stroke="none"/>
+    <text x="40" y="282" font-size="15" font-weight="600" fill="#141413">MCP 서버</text>
+    <text x="720" y="281" text-anchor="end" font-size="11.5" fill="#52514e">FastAPI 앱 하나</text>
+    <text x="40" y="334" font-size="12" font-weight="600" fill="#52514e">도구</text>
+    <text x="40" y="387" font-size="12" font-weight="600" fill="#52514e">서비스</text>
+    <text x="40" y="435" font-size="12" font-weight="600" fill="#52514e">연결</text>
+  </g>
+  <g id="tool-simple">
+    <rect x="104" y="308" width="152" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="180" y="326" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">search_jobs</text>
+    <text x="180" y="342" text-anchor="middle" font-size="11" fill="#52514e">검색 · 조건 필터</text>
+  </g>
+  <g id="tool-get">
+    <rect x="268" y="308" width="120" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="328" y="326" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">get_job</text>
+    <text x="328" y="342" text-anchor="middle" font-size="11" fill="#52514e">공고 본문</text>
+  </g>
+  <g id="tool-sources">
+    <rect x="400" y="308" width="136" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="468" y="326" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">list_sources</text>
+    <text x="468" y="342" text-anchor="middle" font-size="11" fill="#52514e">출처 목록</text>
+  </g>
+  <g id="tool-agent">
+    <rect x="548" y="308" width="172" height="44" rx="8" fill="none" stroke="#fab219" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="634" y="326" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">agent 도구</text>
+    <text x="634" y="342" text-anchor="middle" font-size="11" fill="#52514e">추후 · 서버 키 비용</text>
+  </g>
+  <g id="service">
+    <rect x="104" y="364" width="616" height="36" rx="8" fill="#ededec" stroke="none"/>
+    <text x="412" y="387" text-anchor="middle" font-size="12.5" fill="#141413">도구 안 코드: 조건 필터 · 정규화</text>
+  </g>
+  <g id="sources-adapter">
+    <rect x="104" y="412" width="312" height="40" rx="8" fill="#c3c2b7" fill-opacity="0.25" stroke="none"/>
+    <text x="260" y="437" text-anchor="middle" font-weight="600" fill="#141413">출처 어댑터</text>
+  </g>
+  <g id="ext-sites">
+    <rect x="160" y="488" width="200" height="36" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="260" y="511" text-anchor="middle" fill="#141413">공고 사이트 · API</text>
+  </g>
+  <text x="24" y="552" font-size="11.5" fill="#52514e">stdio는 로컬 개발용 · 원격 공개는 HTTPS와 인증이 필요함 (DevOps-3)</text>
+</svg>

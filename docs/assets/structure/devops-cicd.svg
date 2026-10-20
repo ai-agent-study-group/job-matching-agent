@@ -1,36 +1,36 @@
 <!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
-<svg xmlns="http://www.w3.org/2000/svg" width="760" height="352" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 352" role="img" aria-label="지금은 PR 검사만 자동이고, 배포와 정기 작업은 정해야 함" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="352" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 352" role="img" aria-label="PR 검사는 있고, 원격 공개를 위해 배포까지 1차에 정함" font-size="13">
   <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
   <defs>
     <marker id="cicd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
     </marker>
   </defs>
-  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">지금은 PR 검사만 자동이고, 배포와 정기 작업은 정해야 함</text>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">PR 검사는 있고, 원격 공개를 위해 배포까지 1차에 정함</text>
   <g id="legend">
-    <rect x="24" y="44" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.5"/>
-    <text x="48" y="54" font-size="11.5" fill="#52514e">지금 있음</text>
-    <rect x="120" y="44" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.5"/>
-    <text x="144" y="54" font-size="11.5" fill="#52514e">미정 (회의에서 정함)</text>
-    <rect x="284" y="44" width="16" height="12" rx="3" fill="none" stroke="#fab219" stroke-width="1.5" stroke-dasharray="4 3"/>
-    <text x="308" y="54" font-size="11.5" fill="#52514e">추후</text>
+    <rect x="24" y="44" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="48" y="54" font-size="11.5" fill="#52514e">CI (검사 · 병합)</text>
+    <rect x="150" y="44" width="16" height="12" rx="3" fill="#8b5cf6" fill-opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="174" y="54" font-size="11.5" fill="#52514e">CD (빌드 · 배포)</text>
+    <rect x="276" y="44" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="4 3"/>
+    <text x="300" y="54" font-size="11.5" fill="#52514e">추후</text>
   </g>
   <g id="lane-labels">
     <text x="24" y="98" font-weight="600" fill="#141413">CI</text>
     <text x="24" y="114" font-size="11.5" fill="#52514e">PR · main 푸시</text>
     <text x="24" y="202" font-weight="600" fill="#141413">CD</text>
-    <text x="24" y="218" font-size="11.5" fill="#52514e">배포</text>
+    <text x="24" y="218" font-size="11.5" fill="#52514e">배포 · 1차 필요</text>
     <text x="24" y="300" font-weight="600" fill="#141413">정기 작업</text>
-    <text x="24" y="316" font-size="11.5" fill="#52514e">스케줄</text>
+    <text x="24" y="316" font-size="11.5" fill="#52514e">스케줄 · 추후</text>
   </g>
   <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
     <path d="M268 100H290" marker-end="url(#cicd-arrow)"/>
     <path d="M424 100H446" marker-end="url(#cicd-arrow)"/>
     <path d="M580 100H602" marker-end="url(#cicd-arrow)"/>
     <path d="M358 128V136"/>
-    <path d="M670 128V168H224V174" stroke-dasharray="5 4" marker-end="url(#cicd-arrow)"/>
-    <path d="M312 204H346" stroke-dasharray="5 4" marker-end="url(#cicd-arrow)"/>
-    <path d="M524 204H558" stroke-dasharray="5 4" marker-end="url(#cicd-arrow)"/>
+    <path d="M670 128V168H224V174" marker-end="url(#cicd-arrow)"/>
+    <path d="M312 204H346" marker-end="url(#cicd-arrow)"/>
+    <path d="M524 204H558" marker-end="url(#cicd-arrow)"/>
     <path d="M256 304H278" marker-end="url(#cicd-arrow)"/>
   </g>
   <g id="ci-pr">
@@ -44,8 +44,8 @@
     <text x="358" y="114" text-anchor="middle" font-size="11.5" fill="#52514e">ruff · pytest</text>
   </g>
   <g id="ci-check-more">
-    <rect x="292" y="136" width="132" height="24" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
-    <text x="358" y="152" text-anchor="middle" font-size="11" fill="#141413">+ Test-2 · web 검사</text>
+    <rect x="292" y="136" width="132" height="24" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="358" y="152" text-anchor="middle" font-size="11" fill="#141413">+ 도구 테스트 · web</text>
   </g>
   <g id="ci-review">
     <rect x="448" y="72" width="132" height="56" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
@@ -58,27 +58,27 @@
     <text x="670" y="114" text-anchor="middle" font-size="11.5" fill="#52514e">merge commit</text>
   </g>
   <g id="cd-build">
-    <rect x="136" y="176" width="176" height="56" rx="8" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <rect x="136" y="176" width="176" height="56" rx="8" fill="#8b5cf6" fill-opacity="0.1" stroke="#8b5cf6" stroke-width="1.75"/>
     <text x="224" y="200" text-anchor="middle" font-weight="600" fill="#141413">빌드</text>
     <text x="224" y="218" text-anchor="middle" font-size="11.5" fill="#52514e">Docker 이미지 또는 소스</text>
   </g>
   <g id="cd-deploy">
-    <rect x="348" y="176" width="176" height="56" rx="8" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <rect x="348" y="176" width="176" height="56" rx="8" fill="#8b5cf6" fill-opacity="0.1" stroke="#8b5cf6" stroke-width="1.75"/>
     <text x="436" y="200" text-anchor="middle" font-weight="600" fill="#141413">배포</text>
     <text x="436" y="218" text-anchor="middle" font-size="11.5" fill="#52514e">자동 / 수동 승인</text>
   </g>
   <g id="cd-verify">
-    <rect x="560" y="176" width="176" height="56" rx="8" fill="#fab219" fill-opacity="0.04" stroke="#fab219" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <rect x="560" y="176" width="176" height="56" rx="8" fill="#8b5cf6" fill-opacity="0.1" stroke="#8b5cf6" stroke-width="1.75"/>
     <text x="648" y="200" text-anchor="middle" font-weight="600" fill="#141413">배포 후 확인</text>
-    <text x="648" y="218" text-anchor="middle" font-size="11.5" fill="#52514e">/health · E2E</text>
+    <text x="648" y="218" text-anchor="middle" font-size="11.5" fill="#52514e">/health · 도구 목록 조회</text>
   </g>
   <g id="cron-schedule">
-    <rect x="136" y="280" width="120" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <rect x="136" y="280" width="120" height="48" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.5" stroke-dasharray="5 4"/>
     <text x="196" y="308" text-anchor="middle" font-weight="600" fill="#141413">스케줄</text>
   </g>
   <g id="cron-jobs">
-    <rect x="280" y="280" width="456" height="48" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <rect x="280" y="280" width="456" height="48" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.5" stroke-dasharray="5 4"/>
     <text x="508" y="300" text-anchor="middle" font-weight="600" fill="#141413">사이트 형식 확인 · 품질 평가</text>
-    <text x="508" y="318" text-anchor="middle" font-size="11.5" fill="#52514e">Test-2의 정기 실행 테스트</text>
+    <text x="508" y="318" text-anchor="middle" font-size="11.5" fill="#52514e">QA-2의 정기 실행 테스트</text>
   </g>
 </svg>
