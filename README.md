@@ -17,16 +17,16 @@
 
 | 경로 | 내용 | 담당 상태 |
 | --- | --- | --- |
-| `src/domain/` | 모든 층이 같이 쓰는 데이터 형식 (Profile · SearchQuery · JobPosting · JD · MatchResult) | 전원 합의 |
-| `src/port/` | 코어와 어댑터 사이 약속. `inbound` = 유즈케이스, `outbound` = 공고 출처 · 저장소 | 역할 구분 후 배정 |
-| `src/service/` | 유즈케이스 구현 · 도구 / 서비스 로직 | 역할 구분 후 배정 |
-| `src/adapter/inbound/` | `api`(FE용 /api) · `mcp`(MCP 서버) · `agent`(pydantic-ai) | 역할 구분 후 배정 |
-| `src/adapter/outbound/` | 공고 출처(Greenhouse · 연방고용청 API, 스크래퍼는 추후) · 저장소(추후) | 역할 구분 후 배정 |
-| `src/main.py` | 조립: 어댑터를 service에 연결하고 /api와 /mcp를 한 앱에 올림 | 역할 구분 후 배정 |
-| `test/` | `src/`와 같은 구조의 백엔드 테스트 | 구현 담당별 작성 |
-| `web/` | 사이트 목록 설정, 이력 등록, 결과·근거 확인 | 역할 구분 후 배정 |
-| `infra/` | 배포, CI | 역할 구분 후 배정 |
-| `eval/` | 평가셋, 정답 라벨 | 역할 구분 후 배정 |
+| `src/domain/` | 모든 층이 같이 쓰는 데이터 형식 (Profile · SearchQuery · JobPosting · JD · MatchResult) | - |
+| `src/port/` | 코어와 어댑터 사이 약속. `inbound` = 유즈케이스, `outbound` = 공고 출처 · 저장소 | - |
+| `src/service/` | 유즈케이스 구현 · 도구 / 서비스 로직 | - |
+| `src/adapter/inbound/` | `api`(FE용 /api) · `mcp`(MCP 서버) · `agent`(pydantic-ai) | - |
+| `src/adapter/outbound/` | 공고 출처(Greenhouse · 연방고용청 API, 스크래퍼는 추후) · 저장소(추후) | - |
+| `src/main.py` | 조립: 어댑터를 service에 연결하고 /api와 /mcp를 한 앱에 올림 | - |
+| `test/` | `src/`와 같은 구조의 백엔드 테스트 | - |
+| `web/` | 사이트 목록 설정, 이력 등록, 결과·근거 확인 | - |
+| `infra/` | 배포, CI | - |
+| `eval/` | 평가셋, 정답 라벨 | - |
 | `docs/` | 작업 문서, 공통 안내, 날짜별 회의 기록 | 전원 |
 
 BE는 루트의 Python 프로젝트 하나(`pyproject.toml`, `src/`), FE는 `web/`입니다. 현재 API는 `/health`만 구현되어 있습니다. 위 표는 작업 범위이며 기능 구현 완료를 뜻하지 않습니다.
