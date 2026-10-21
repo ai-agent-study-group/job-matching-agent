@@ -14,6 +14,7 @@ import pytest
 from adapter.outbound.source.api.arbeitsagentur.client import ArbeitsagenturClient
 
 SEARCH = json.loads((Path(__file__).parent / "search_response.json").read_text())
+DETAIL = json.loads((Path(__file__).parent / "detail_response.json").read_text())
 
 
 def fake_api(monkeypatch: pytest.MonkeyPatch, body: dict) -> list[httpx2.Request]:
@@ -81,3 +82,17 @@ def test_search_fails_on_unknown_place(monkeypatch):
         asyncio.run(
             ArbeitsagenturClient().search({"keywords": ["AI Engineer"], "locations": ["Munich"]})
         )
+
+
+def test_fetch_sends_reference_number_in_base64(monkeypatch):
+    """fetch가 참조번호를 base64로 바꿔 상세 주소로 보낸다.
+
+    목적: 상세 조회 주소는 참조번호를 그대로가 아니라 base64로 받음.
+    기대 결과: 요청 주소가 /pc/v4/jobdetails/<base64(참조번호)>이고, 본문까지 채운 JobPosting이 돌아옴.
+    """
+    sent = fake_api(monkeypatch, DETAIL)
+
+    posting = asyncio.run(ArbeitsagenturClient().fetch("13509-000021100c7004-S"))
+
+    assert sent[0].url.path.endswith("/pc/v4/jobdetails/MTM1MDktMDAwMDIxMTAwYzcwMDQtUw==")
+    assert posting.description == DETAIL["stellenangebotsBeschreibung"]
