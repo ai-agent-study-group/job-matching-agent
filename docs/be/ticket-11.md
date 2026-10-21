@@ -26,11 +26,11 @@
 
 [BE 설계의 폴더 구조 그림](../structure/be.md)에서 이 티켓에서 만든 부분만 켠 상태입니다. 진한 테두리가 만든 부분이고, 흐린 부분은 이 티켓 범위 밖입니다.
 
-![호출 흐름: LLM이나 테스트가 get_usage로 검색 요청 DTO 형식을 받고, 그 형식대로 search_jobs를 부르고, 고른 공고를 get_job으로 가져오는 14단계](../assets/be/arbeitsagentur-call-flow.svg?v=2)
+![호출 흐름: LLM이나 테스트가 get_usage로 검색 요청 DTO 형식을 받고, 그 형식대로 search_jobs를 부르고, 고른 공고를 get_job으로 가져오는 14단계](../assets/be/arbeitsagentur-call-flow.svg?v=3)
 
 위 그림의 길을 실제로 부르는 순서입니다. 맨 왼쪽은 실제 LLM(Claude Code 등)이 붙어도 되고, 테스트에서는 가짜(mock)를 붙여도 됩니다.
 
-1. **사용법 읽기 (1~4):** `get_usage()`가 서비스로 가고, 서비스가 어댑터의 `usage()`로 `ArbeitsagenturSearchRequestDTO`를 받아 JSON 스키마로 바꿔 돌려줍니다. LLM은 그 형식을 보고 `params`를 채웁니다.
+1. **사용법 읽기 (1~4):** `get_usage()`가 서비스로 가고, 서비스가 어댑터의 `get_request_dto()`로 `ArbeitsagenturSearchRequestDTO`를 받아 JSON 스키마로 바꿔 돌려줍니다. LLM은 그 형식을 보고 `params`를 채웁니다.
 2. **검색 (5~9):** `search_jobs(params)`를 부르면 어댑터가 같은 요청 DTO로 검사하고, 키워드 × 위치 조합마다 API를 부른 뒤 중복을 빼고 `JobPosting` 목록(본문 없음)을 돌려줍니다.
 3. **본문 가져오기 (10~14):** LLM이 고른 공고를 `get_job(posting_id)`로 부르면, 본문까지 채운 `JobPosting` 하나가 옵니다.
 
@@ -53,7 +53,7 @@
 예: 사용자가 "뮌헨에서 정규직 풀타임 AI 엔지니어 찾아줘"라고 할 때
 
 1. **`get_usage()`**
-    - 서비스가 어댑터의 `usage()`로 검색 파라미터 DTO 클래스를 받아 JSON 스키마로 바꿔 돌려줌
+    - 서비스가 어댑터의 `get_request_dto()`로 검색 파라미터 DTO 클래스를 받아 JSON 스키마로 바꿔 돌려줌
     - API의 모든 parameter 값들과 설명이 들어 있어서 LLM이 이걸 보고 다음 호출의 값을 채움
 2. **`search_jobs(params)`**
 
@@ -154,5 +154,5 @@ Claude Code에 MCP 서버를 붙여 확인한 결과입니다.
 ## 다음 할 일
 
 - [ ] #11 PR: domain · 출구 포트 · 연방고용청 어댑터 · 단위 테스트 · `httpx2` 의존성
-- [ ] #11 티켓 본문을 지금 포트 모양(`usage()` · `search(params)`)에 맞추기
+- [x] #11 티켓 본문을 지금 포트 모양(`get_request_dto()` · `search(params)`)에 맞추기
 - [ ] 실제 API를 부르는 계약 테스트와 정기 실행 티켓 만들기
