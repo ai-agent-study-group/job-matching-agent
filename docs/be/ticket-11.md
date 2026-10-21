@@ -1,7 +1,7 @@
 ---
 제목: "Arbeitsagentur 공고 출처 어댑터 (#11)"
 유형: "작업 메모"
-설명: "티켓 #11에서 만든 JobPosting · JobSource 포트 · 연방고용청 어댑터와, LLM이 도구를 부를 때 어떻게 동작하는지 정리합니다. 이 코드를 처음 읽거나 #12 작업을 시작하기 전에 읽으면 좋습니다."
+설명: "티켓 #11에서 만든 JobPosting · JobSource 포트 · 연방고용청 어댑터와, LLM이 도구를 부를 때 어떻게 동작하는지 정리합니다. 이 코드를 처음 읽을 때 보면 좋습니다."
 관련문서:
     - "../structure/be.md"
     - "../structure/llm.md"
@@ -22,9 +22,9 @@
 
 ### 전체 그림
 
-![헥사고날 폴더 구조 그림에서 만든 부분만 켠 상태: domain/job.py, port/outbound/source.py, adapter/outbound/source/api/arbeitsagentur/는 #11, adapter/inbound/mcp/server.py, port/inbound/job.py, service/job.py는 #12](../assets/be/arbeitsagentur-hexagon.png)
+![헥사고날 폴더 구조 그림에서 #11에서 만든 domain/job.py, port/outbound/source.py, adapter/outbound/source/api/arbeitsagentur/만 켠 상태](../assets/be/arbeitsagentur-hexagon.png)
 
-[BE 설계의 폴더 구조 그림](../structure/be.md)에서 만든 부분만 켠 상태입니다. 진한 실선은 #11에서 만든 것, 진한 점선은 #12에서 PR로 올릴 것(지금은 로컬)이고, 흐린 부분은 아직 만들지 않았습니다.
+[BE 설계의 폴더 구조 그림](../structure/be.md)에서 이 티켓에서 만든 부분만 켠 상태입니다. 진한 테두리가 만든 부분이고, 흐린 부분은 이 티켓 범위 밖입니다.
 
 ![호출 흐름: LLM이나 테스트가 get_usage로 검색 요청 DTO 형식을 받고, 그 형식대로 search_jobs를 부르고, 고른 공고를 get_job으로 가져오는 14단계](../assets/be/arbeitsagentur-call-flow.svg)
 
@@ -33,20 +33,6 @@
 1. **사용법 읽기 (1~4):** `get_usage()`가 서비스로 가고, 서비스가 어댑터의 `usage()`로 `ArbeitsagenturSearchRequestDTO`를 받아 JSON 스키마로 바꿔 돌려줍니다. LLM은 그 형식을 보고 `params`를 채웁니다.
 2. **검색 (5~9):** `search_jobs(params)`를 부르면 어댑터가 같은 요청 DTO로 검사하고, 키워드 × 위치 조합마다 API를 부른 뒤 중복을 빼고 `JobPosting` 목록(본문 없음)을 돌려줍니다.
 3. **본문 가져오기 (10~14):** LLM이 고른 공고를 `get_job(posting_id)`로 부르면, 본문까지 채운 `JobPosting` 하나가 옵니다.
-
-### 만든 것
-
-| 파일 | 하는 일 | 티켓 |
-| --- | --- | --- |
-| `domain/job.py` | `JobPosting`: 공고 하나 (source · id · company · title · location · url · description) | #11 |
-| `port/outbound/source.py` | `JobSource` 포트: `usage()` · `search(params)` · `fetch(posting_id)` | #11 |
-| `adapter/outbound/source/api/arbeitsagentur/dto.py` | 검색 요청 DTO(`ArbeitsagenturSearchRequestDTO`), 공고 한 건 DTO(`ArbeitsagenturJobDTO`)와 `to_posting()` | #11 |
-| `adapter/outbound/source/api/arbeitsagentur/client.py` | `ArbeitsagenturClient`: 연방고용청 API 호출 | #11 |
-| `test/adapter/outbound/source/api/arbeitsagentur/` | 단위 테스트 5개 | #11 |
-| `port/inbound/job.py`, `service/job.py` | `JobServicePort` · `JobService`: `get_usage` · `search_jobs` · `get_job` | #12 |
-| `adapter/inbound/mcp/server.py` | MCP 서버: 서비스 함수 3개를 읽기 전용 도구로 등록 | #12 |
-
-#12 부분은 #11을 LLM으로 확인하려고 먼저 만들었고, PR은 #12에서 따로 올립니다.
 
 ### `JobPosting` 필드
 
@@ -168,5 +154,4 @@ Claude Code에 MCP 서버를 붙여 확인한 결과입니다.
 
 - [ ] #11 PR: domain · 출구 포트 · 연방고용청 어댑터 · 단위 테스트 · `httpx2` 의존성
 - [ ] #11 티켓 본문을 지금 포트 모양(`usage()` · `search(params)`)에 맞추기
-- [ ] #12 PR: 입구 포트 · 서비스 · MCP 서버 · `fastmcp` 의존성
 - [ ] 실제 API를 부르는 계약 테스트와 정기 실행 티켓 만들기
