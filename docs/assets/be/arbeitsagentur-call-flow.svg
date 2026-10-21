@@ -59,7 +59,7 @@
 
   <g class="num"><circle cx="374" cy="226" r="9"/><text x="374" y="230">2</text></g>
   <path class="call" d="M386 226H602" marker-end="url(#cf-arrow)"/>
-  <text class="lbl mono" x="494" y="219" text-anchor="middle">get_request_dto()</text>
+  <text class="lbl mono" x="494" y="219" text-anchor="middle">get_search_request_dto()</text>
 
   <g class="num"><circle cx="596" cy="260" r="9"/><text x="596" y="264">3</text></g>
   <path class="ret" d="M584 260H368" marker-end="url(#cf-arrow)"/>
