@@ -12,6 +12,7 @@ import httpx2
 import pytest
 
 from adapter.outbound.source.api.arbeitsagentur.client import ArbeitsagenturClient
+from domain.job import JobPosting
 
 SEARCH = json.loads((Path(__file__).parent / "search_response.json").read_text())
 DETAIL = json.loads((Path(__file__).parent / "detail_response.json").read_text())
@@ -40,7 +41,7 @@ def test_search_sends_one_request_per_keyword_and_place(monkeypatch):
     - (was, wo) 조합마다 하나씩 요청 4개
     - 모든 요청에 arbeitszeit가 "vz;tz"
     - angebotsart처럼 넣지 않은 필터는 보내지 않음
-    - 가짜 응답 4개에 반복된 공고 2건이 한 번씩만 반환됨
+    - 가짜 응답 4개에 반복된 공고 2건이 한 번씩만, 저장한 응답의 값 그대로 JobPosting으로 반환됨
     """
     sent = fake_api(monkeypatch, SEARCH)
 
@@ -67,6 +68,14 @@ def test_search_sends_one_request_per_keyword_and_place(monkeypatch):
     # 넣지 않은 필터는 보내지 않아야 함 (빈 값은 400)
     assert all("angebotsart" not in q for q in queries)
     assert len(postings) == len(SEARCH["ergebnisliste"])
+    assert postings[0] == JobPosting(
+        source="arbeitsagentur",
+        id="12336-a26f1192j0456062-S",
+        company="EXXETA AG",
+        title="AI Engineer (m/d/w)",
+        location="München",
+        url=SEARCH["ergebnisliste"][0]["externeURL"],
+    )
 
 
 def test_search_fails_on_unknown_place(monkeypatch):
