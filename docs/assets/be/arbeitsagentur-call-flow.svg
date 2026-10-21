@@ -1,0 +1,125 @@
+<!-- 색은 헥사고날 폴더 그림과 같음: 파랑 = 애플리케이션(service) · 초록 = 어댑터 · 회색 = 바깥 · 노랑 글자 = 도메인(JobPosting). 실선 = 호출, 점선 = 돌려받는 값 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="884" viewBox="0 0 960 884" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', sans-serif" font-size="12.5" role="img" aria-label="LLM이나 테스트가 get_usage로 검색 요청 DTO 형식을 받고, 그 형식대로 search_jobs를 부르고, 고른 공고를 get_job으로 가져오는 14단계 호출 흐름">
+  <defs>
+    <marker id="cf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#59626e"/>
+    </marker>
+    <style>
+      .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+      .lbl { paint-order: stroke; stroke: #ffffff; stroke-width: 5px; stroke-linejoin: round; fill: #1f2328; }
+      .call { stroke: #59626e; stroke-width: 1.6; fill: none; }
+      .ret { stroke: #59626e; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+      .num circle { fill: #1f2328; }
+      .num text { fill: #ffffff; font-size: 11px; font-weight: 700; text-anchor: middle; }
+      .dom { fill: #684800; font-weight: 700; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" rx="10" fill="#ffffff"/>
+  <text x="24" y="34" font-size="15" font-weight="700" fill="#1f2328">호출 흐름: 사용법을 읽고 → 그 형식대로 검색하고 → 고른 공고의 본문을 가져옴</text>
+  <text x="24" y="56" font-size="12" fill="#68717c">실선 = 호출 · 점선 = 돌려받는 값 · 숫자 = 순서 · MCP 서버(server.py)는 서비스 함수를 도구로 열어 주기만 해서 따로 그리지 않음</text>
+
+  <g id="phases">
+    <rect x="16" y="144" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="161" font-size="13" font-weight="700" fill="#1f2328">1. 사용법 읽기</text>
+    <rect x="16" y="366" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="383" font-size="13" font-weight="700" fill="#1f2328">2. 검색</text>
+    <rect x="16" y="668" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="685" font-size="13" font-weight="700" fill="#1f2328">3. 본문 가져오기</text>
+  </g>
+
+  <g id="lifelines" stroke="#c9ccd1" stroke-width="1.2" stroke-dasharray="4 4">
+    <path d="M110 134V870"/>
+    <path d="M360 134V870"/>
+    <path d="M610 134V870"/>
+    <path d="M854 134V870"/>
+  </g>
+
+  <g id="lanes">
+    <rect x="24" y="76" width="172" height="58" rx="10" fill="#f3f4f6" stroke="#8c95a0" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="110" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2f36">LLM 또는 테스트</text>
+    <text x="110" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">연결부 · Claude Code · mock</text>
+
+    <rect x="262" y="76" width="196" height="58" rx="10" fill="#ecf2ff" stroke="#6d95d6" stroke-width="1.6"/>
+    <text x="360" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#21488a" class="mono">JobService</text>
+    <text x="360" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">service/job.py · MCP 도구</text>
+
+    <rect x="508" y="76" width="204" height="58" rx="10" fill="#edf7f1" stroke="#58a67e" stroke-width="1.6"/>
+    <text x="610" y="99" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d6145" class="mono">ArbeitsagenturClient</text>
+    <text x="610" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">JobSource 구현 · client · dto</text>
+
+    <rect x="772" y="76" width="164" height="58" rx="10" fill="#f3f4f6" stroke="#8c95a0" stroke-width="1.4"/>
+    <text x="854" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2f36">연방고용청 API</text>
+    <text x="854" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">Jobsuche</text>
+  </g>
+
+  <!-- 1. 사용법 읽기 -->
+  <g class="num"><circle cx="124" cy="192" r="9"/><text x="124" y="196">1</text></g>
+  <path class="call" d="M136 192H352" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="244" y="185" text-anchor="middle">get_usage()</text>
+
+  <g class="num"><circle cx="374" cy="226" r="9"/><text x="374" y="230">2</text></g>
+  <path class="call" d="M386 226H602" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="494" y="219" text-anchor="middle">usage()</text>
+
+  <g class="num"><circle cx="596" cy="260" r="9"/><text x="596" y="264">3</text></g>
+  <path class="ret" d="M584 260H368" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="476" y="253" text-anchor="middle" font-size="11">ArbeitsagenturSearchRequestDTO</text>
+
+  <g class="num"><circle cx="346" cy="294" r="9"/><text x="346" y="298">4</text></g>
+  <path class="ret" d="M334 294H118" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="226" y="287" text-anchor="middle">JSON 스키마: 필드 · 허용 값 · 설명</text>
+
+  <rect x="30" y="308" width="160" height="46" rx="8" fill="#ffffff" stroke="#8c95a0" stroke-width="1.2"/>
+  <text x="110" y="327" text-anchor="middle" font-size="12" fill="#1f2328">형식에 맞춰 params를 채움</text>
+  <text x="110" y="345" text-anchor="middle" font-size="11.5" fill="#68717c">Munich → München</text>
+
+  <!-- 2. 검색 -->
+  <g class="num"><circle cx="124" cy="414" r="9"/><text x="124" y="418">5</text></g>
+  <path class="call" d="M136 414H352" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="244" y="407" text-anchor="middle">search_jobs(params)</text>
+
+  <g class="num"><circle cx="374" cy="448" r="9"/><text x="374" y="452">6</text></g>
+  <path class="call" d="M386 448H602" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="494" y="441" text-anchor="middle"><tspan class="mono">search(params)</tspan> 그대로 넘김</text>
+
+  <rect x="516" y="462" width="188" height="46" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
+  <text x="610" y="481" text-anchor="middle" font-size="12" fill="#1f2328">RequestDTO로 검사</text>
+  <text x="610" y="499" text-anchor="middle" font-size="11.5" fill="#68717c">키워드 × 위치 조합으로 나눔</text>
+
+  <g class="num"><circle cx="624" cy="530" r="9"/><text x="624" y="534">7</text></g>
+  <path class="call" d="M636 530H846" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="740" y="523" text-anchor="middle"><tspan class="mono">GET /pc/v6/jobs</tspan> 조합마다</text>
+
+  <g class="num"><circle cx="840" cy="564" r="9"/><text x="840" y="568">8</text></g>
+  <path class="ret" d="M828 564H618" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="722" y="557" text-anchor="middle">공고 목록 (본문 없음)</text>
+
+  <rect x="516" y="578" width="188" height="46" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
+  <text x="610" y="597" text-anchor="middle" font-size="12" fill="#1f2328">참조번호로 중복 제거</text>
+  <text x="610" y="615" text-anchor="middle" font-size="11.5" fill="#68717c" class="mono">JobDTO → to_posting()</text>
+
+  <g class="num"><circle cx="596" cy="646" r="9"/><text x="596" y="650">9</text></g>
+  <path class="ret" d="M584 646H118" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="350" y="639" text-anchor="middle"><tspan class="mono dom">list[JobPosting]</tspan> 본문 없음 · LLM이 읽을 공고를 고름</text>
+
+  <!-- 3. 본문 가져오기 -->
+  <g class="num"><circle cx="124" cy="716" r="9"/><text x="124" y="720">10</text></g>
+  <path class="call" d="M136 716H352" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="244" y="709" text-anchor="middle">get_job(posting_id)</text>
+
+  <g class="num"><circle cx="374" cy="750" r="9"/><text x="374" y="754">11</text></g>
+  <path class="call" d="M386 750H602" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="494" y="743" text-anchor="middle">fetch(posting_id)</text>
+
+  <g class="num"><circle cx="624" cy="784" r="9"/><text x="624" y="788">12</text></g>
+  <path class="call" d="M636 784H846" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="741" y="777" text-anchor="middle" font-size="11">GET /pc/v4/jobdetails/{base64}</text>
+
+  <g class="num"><circle cx="840" cy="818" r="9"/><text x="840" y="822">13</text></g>
+  <path class="ret" d="M828 818H618" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="722" y="811" text-anchor="middle">공고 한 건 + 본문</text>
+
+  <g class="num"><circle cx="596" cy="852" r="9"/><text x="596" y="856">14</text></g>
+  <path class="ret" d="M584 852H118" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="350" y="845" text-anchor="middle"><tspan class="mono dom">JobPosting</tspan> 본문(description)까지 채움</text>
+</svg>
