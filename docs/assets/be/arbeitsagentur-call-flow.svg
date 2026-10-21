@@ -16,7 +16,7 @@
   </defs>
   <rect width="100%" height="100%" rx="10" fill="#ffffff"/>
   <text x="24" y="34" font-size="15" font-weight="700" fill="#1f2328">호출 흐름: 사용법을 읽고 → 그 형식대로 검색하고 → 고른 공고의 본문을 가져옴</text>
-  <text x="24" y="56" font-size="12" fill="#68717c">실선 = 호출 · 점선 = 돌려받는 값 · 숫자 = 순서 · MCP 서버(server.py)는 서비스 함수를 도구로 열어 주기만 해서 따로 그리지 않음</text>
+  <text x="24" y="56" font-size="12" fill="#68717c">실선 화살표 = 호출 · 점선 화살표 = 돌려받는 값 · 숫자 = 순서 · 점선 상자 = 이 티켓에서 만들지 않은 부분 (부르는 쪽)</text>
 
   <g id="phases">
     <rect x="16" y="144" width="928" height="24" rx="6" fill="#f5f5f2"/>
@@ -39,7 +39,7 @@
     <text x="110" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2f36">LLM 또는 테스트</text>
     <text x="110" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">연결부 · Claude Code · mock</text>
 
-    <rect x="262" y="76" width="196" height="58" rx="10" fill="#ecf2ff" stroke="#6d95d6" stroke-width="1.6"/>
+    <rect x="262" y="76" width="196" height="58" rx="10" fill="#ecf2ff" stroke="#6d95d6" stroke-width="1.6" stroke-dasharray="5 4"/>
     <text x="360" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#21488a" class="mono">JobService</text>
     <text x="360" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">service/job.py · MCP 도구</text>
 

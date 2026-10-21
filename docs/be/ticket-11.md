@@ -26,7 +26,7 @@
 
 [BE 설계의 폴더 구조 그림](../structure/be.md)에서 이 티켓에서 만든 부분만 켠 상태입니다. 진한 테두리가 만든 부분이고, 흐린 부분은 이 티켓 범위 밖입니다.
 
-![호출 흐름: LLM이나 테스트가 get_usage로 검색 요청 DTO 형식을 받고, 그 형식대로 search_jobs를 부르고, 고른 공고를 get_job으로 가져오는 14단계](../assets/be/arbeitsagentur-call-flow.svg)
+![호출 흐름: LLM이나 테스트가 get_usage로 검색 요청 DTO 형식을 받고, 그 형식대로 search_jobs를 부르고, 고른 공고를 get_job으로 가져오는 14단계](../assets/be/arbeitsagentur-call-flow.svg?v=2)
 
 위 그림의 길을 실제로 부르는 순서입니다. 맨 왼쪽은 실제 LLM(Claude Code 등)이 붙어도 되고, 테스트에서는 가짜(mock)를 붙여도 됩니다.
 
@@ -149,6 +149,7 @@ Claude Code에 MCP 서버를 붙여 확인한 결과입니다.
     - `keywords` · `locations`를 `params` 밖 인자로 꺼낼지 (지금은 `params` 안에 있음)
     - 키워드 검색이 느슨해서 엉뚱한 공고가 섞임. 유사도로 보완하는 방법 (위의 "추후 보완할 점")
     - 출처가 여러 개가 되면 `search_jobs`가 어떻게 나눠 부를지 (#9 `list_sources`와 같이)
+    - **API 변경 감지 (계약 테스트 · API 모니터링):** 단위 테스트는 저장한 응답과 가짜 HTTP로 돌아서, 연방고용청 API가 바뀌어도 계속 통과함. 실제 API를 부르는 계약 테스트를 GitHub Actions 일정(예: 매일)으로 돌려 바뀐 걸 알아채자는 제안. 확인할 것: 응답이 DTO로 읽히는지, 필터 파라미터가 아직 결과를 줄이는지(문서에 없는 파라미터는 없어져도 오류 없이 무시됨), `Munich`이 여전히 `UNGUELTIG`로 오는지, 목록 `;` 잇기가 동작하는지
 
 ## 다음 할 일
 
