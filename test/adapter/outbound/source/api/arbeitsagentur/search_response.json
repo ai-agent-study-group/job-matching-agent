@@ -1,0 +1,56 @@
+{
+  "ergebnisliste": [
+    {
+      "referenznummer": "12336-a26f1192j0456062-S",
+      "stellenangebotsTitel": "AI Engineer (m/d/w)",
+      "firma": "EXXETA AG",
+      "stellenlokationen": [
+        {
+          "adresse": {
+            "plz": "81929",
+            "ort": "München",
+            "region": "BAYERN",
+            "land": "DEUTSCHLAND"
+          },
+          "breite": 48.1597981,
+          "laenge": 11.6619151
+        }
+      ],
+      "externeURL": "https://gute-jobs.de/viewjob-nsx8n?utm_source=jsba-premium&utm_medium=n-a&utm_campaign=jsba-premium&utm_term=ai-engineer-m-d-w",
+      "arbeitszeitVollzeit": true,
+      "datumErsteVeroeffentlichung": "2026-10-14"
+    },
+    {
+      "referenznummer": "13509-000021100c7004-S",
+      "stellenangebotsTitel": "Senior AI Engineer (w/m/d)",
+      "firma": "BWI GmbH",
+      "stellenlokationen": [
+        {
+          "adresse": {
+            "plz": "80331",
+            "ort": "München",
+            "region": "BAYERN",
+            "land": "DEUTSCHLAND"
+          },
+          "breite": 48.1355827,
+          "laenge": 11.5739758
+        }
+      ],
+      "arbeitszeitVollzeit": true,
+      "datumErsteVeroeffentlichung": "2026-10-19"
+    }
+  ],
+  "maxErgebnisse": 102,
+  "page": 1,
+  "size": 2,
+  "woOutput": {
+    "bereinigterOrt": "München",
+    "suchmodus": "UMKREISSUCHE",
+    "koordinaten": [
+      {
+        "lat": 48.1476759,
+        "lon": 11.5695622
+      }
+    ]
+  }
+}
