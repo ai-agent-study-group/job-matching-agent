@@ -1,6 +1,6 @@
 ---
 name: General
-about: 칸반 보드에 올릴 작업 하나 (PR 하나 크기)
+about: 일반적인 (BE/LLM/DevOps 전용) 티켓
 title: "[영역] "
 labels: ''
 assignees: ''
