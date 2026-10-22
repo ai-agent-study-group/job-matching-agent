@@ -38,6 +38,7 @@ BE는 루트의 Python 프로젝트 하나(`pyproject.toml`, `src/`), FE는 `web
 
 ```bash
 uv sync                         # BE 의존성 + 개발 도구 설치 (.venv 자동 생성)
+uv run pre-commit install       # 커밋 전 ruff 검사 · 포맷 hook 설치 (clone 후 한 번)
 uv run uvicorn main:app --reload
 # http://localhost:8000/health
 ```

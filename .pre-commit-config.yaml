@@ -1,0 +1,14 @@
+# 커밋 전에 CI와 같은 ruff 검사 · 포맷을 돌림. uv.lock에 잠긴 ruff 버전을 씀
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types: [python]
