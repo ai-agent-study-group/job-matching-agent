@@ -22,9 +22,11 @@ build-backend = "uv_build"
 
 [tool.uv.build-backend]
 module-name = ["domain", "port", "service", "adapter"]
+namespace = true  # __init__.py 없는 폴더도 패키지로 빌드
 
 [tool.ruff]
 line-length = 100
 
 [tool.pytest.ini_options]
 testpaths = ["test"]
+addopts = ["--import-mode=importlib"]  # 다른 폴더의 같은 이름 테스트 파일 허용
