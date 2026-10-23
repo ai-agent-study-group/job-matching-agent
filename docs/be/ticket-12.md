@@ -24,20 +24,20 @@
 
 [BE 설계의 폴더 구조 그림](../structure/be.md)에서 이 티켓에서 만든 부분만 켠 상태입니다. 진한 테두리가 만든 부분이고, 흐린 부분은 이 티켓 범위 밖입니다. AI 앱과 잇는 `/mcp`(HTTP)는 아직 만들지 않았고, 지금은 stdio로 붙습니다.
 
-![호출 흐름: MCP 클라이언트가 도구 목록을 받고, get_usage · search_jobs · get_job을 부르면 서버가 JobService로, JobService가 출처 어댑터로 넘기는 16단계](../assets/be/mcp-server-call-flow.svg)
+![호출 흐름: MCP 클라이언트가 도구 목록을 받고, get_usage · search_jobs · get_job을 부르면 서버가 JobService로, JobService가 출처 어댑터로 넘기는 16단계](../assets/be/mcp-server-call-flow.svg?v=2)
 
 1. **연결 (1~2):** 서버는 시작할 때 `JobService`의 메서드 세 개를 도구로 등록합니다. 클라이언트가 붙으면 도구 이름 · 설명 · 인자 형식을 받습니다.
 2. **사용법 읽기 (3~7):** `get_usage`는 출처의 검색 요청 DTO를 JSON 스키마로 바꿔 돌려줍니다.
 3. **검색 (8~12):** `search_jobs`는 `params`를 그대로 출처에 넘깁니다. 형식이 틀리면 `get_usage`를 먼저 부르라는 오류가 갑니다.
-4. **본문 가져오기 (13~16):** `get_job`은 공고 하나를 본문까지 채워 돌려줍니다.
+4. **본문 가져오기 (13~16):** `get_job`은 공고 하나를 링크와 본문까지 채워 돌려줍니다.
 
 ### 도구 세 개
 
 | 도구 | 받는 것 | 돌려주는 것 |
 | --- | --- | --- |
 | `get_usage` | 없음 | `search_jobs`의 `params` 형식 (JSON 스키마) |
-| `search_jobs` | `params`: `get_usage`가 알려 준 형식의 검색 조건 | 공고 목록 (본문 없음) |
-| `get_job` | `posting_id`: `search_jobs` 결과의 `id` | 본문까지 채운 공고 하나 |
+| `search_jobs` | `params`: `get_usage`가 알려 준 형식의 검색 조건 | 공고 목록 (링크 · 본문 없음, 최대 300건. 넘으면 범위를 좁히라는 오류) |
+| `get_job` | `posting_id`: `search_jobs` 결과의 `id` | 링크 · 본문까지 채운 공고 하나 |
 
 `search_jobs`가 `params` 하나만 받는 이유는 출처마다 검색 조건이 달라서입니다. 도구 인자를 한 출처 모양으로 고정할 수 없어서, 안쪽 모양은 `get_usage`로 알려 줍니다.
 
@@ -63,7 +63,7 @@ uv run fastmcp list --command "uv run python -m adapter.inbound.mcp.server"
 
 # 도구 하나 부르기 (실제 연방고용청 API)
 uv run fastmcp call --command "uv run python -m adapter.inbound.mcp.server" \
-  --target search_jobs --input-json '{"params": {"keywords": ["AI Engineer"], "locations": ["München"], "size": 2}}' 2>/dev/null
+  --target search_jobs --input-json '{"params": {"keywords": ["AI Engineer"], "locations": ["München"]}}' 2>/dev/null
 
 # Claude Code에 등록 (이 프로젝트에서만)
 claude mcp add jobs -- uv run --directory <저장소 경로> python -m adapter.inbound.mcp.server
