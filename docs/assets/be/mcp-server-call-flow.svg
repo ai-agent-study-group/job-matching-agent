@@ -131,5 +131,5 @@
 
   <g class="num"><circle cx="840" cy="970" r="9"/><text x="840" y="974">16</text></g>
   <path class="ret" d="M828 970H118" marker-end="url(#mf-arrow)"/>
-  <text class="lbl" x="470" y="963" text-anchor="middle"><tspan class="mono dom">JobPosting</tspan> 본문(description)까지 채움</text>
+  <text class="lbl" x="470" y="963" text-anchor="middle"><tspan class="mono dom">JobPosting</tspan> 링크(url) · 본문(description)까지 채움</text>
 </svg>
