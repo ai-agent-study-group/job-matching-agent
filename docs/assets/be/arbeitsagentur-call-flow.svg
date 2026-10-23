@@ -95,12 +95,12 @@
   <text class="lbl" x="722" y="557" text-anchor="middle">공고 목록 (본문 없음)</text>
 
   <rect x="516" y="578" width="188" height="46" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
-  <text x="610" y="597" text-anchor="middle" font-size="12" fill="#1f2328">참조번호로 중복 제거</text>
-  <text x="610" y="615" text-anchor="middle" font-size="11.5" fill="#68717c" class="mono">JobDTO → to_posting()</text>
+  <text x="610" y="597" text-anchor="middle" font-size="12" fill="#1f2328">같은 공고 합침 · 300건 검사</text>
+  <text x="610" y="615" text-anchor="middle" font-size="11.5" fill="#68717c" class="mono">JobDTO → to_summary()</text>
 
   <g class="num"><circle cx="596" cy="646" r="9"/><text x="596" y="650">9</text></g>
   <path class="ret" d="M584 646H118" marker-end="url(#cf-arrow)"/>
-  <text class="lbl" x="350" y="639" text-anchor="middle"><tspan class="mono dom">list[JobPosting]</tspan> 본문 없음 · LLM이 읽을 공고를 고름</text>
+  <text class="lbl" x="350" y="639" text-anchor="middle"><tspan class="mono dom">list[JobPosting]</tspan> 링크 · 본문 없음 · LLM이 읽을 공고를 고름</text>
 
   <!-- 3. 본문 가져오기 -->
   <g class="num"><circle cx="124" cy="716" r="9"/><text x="124" y="720">10</text></g>
@@ -121,5 +121,5 @@
 
   <g class="num"><circle cx="596" cy="852" r="9"/><text x="596" y="856">14</text></g>
   <path class="ret" d="M584 852H118" marker-end="url(#cf-arrow)"/>
-  <text class="lbl" x="350" y="845" text-anchor="middle"><tspan class="mono dom">JobPosting</tspan> 본문(description)까지 채움</text>
+  <text class="lbl" x="350" y="845" text-anchor="middle"><tspan class="mono dom">JobPosting</tspan> 링크(url) · 본문(description)까지 채움</text>
 </svg>

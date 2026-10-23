@@ -26,13 +26,13 @@
 
 [BE 설계의 폴더 구조 그림](../structure/be.md)에서 이 티켓에서 만든 부분만 켠 상태입니다. 진한 테두리가 만든 부분이고, 흐린 부분은 이 티켓 범위 밖입니다.
 
-![호출 흐름: LLM이나 테스트가 get_usage로 검색 요청 DTO 형식을 받고, 그 형식대로 search_jobs를 부르고, 고른 공고를 get_job으로 가져오는 14단계](../assets/be/arbeitsagentur-call-flow.svg?v=5)
+![호출 흐름: LLM이나 테스트가 get_usage로 검색 요청 DTO 형식을 받고, 그 형식대로 search_jobs를 부르고, 고른 공고를 get_job으로 가져오는 14단계](../assets/be/arbeitsagentur-call-flow.svg?v=6)
 
 위 그림의 길을 실제로 부르는 순서입니다. 맨 왼쪽은 실제 LLM(Claude Code 등)이 붙어도 되고, 테스트에서는 가짜(mock)를 붙여도 됩니다.
 
 1. **사용법 읽기 (1~4):** `get_usage()`가 서비스로 가고, 서비스가 어댑터의 `usage()`로 `ArbeitsagenturSearchRequestDTO`를 받아 JSON 스키마로 바꿔 돌려줍니다. LLM은 그 형식을 보고 `params`를 채웁니다.
-2. **검색 (5~9):** `search_jobs(params)`를 부르면 어댑터가 같은 요청 DTO로 검사하고, 키워드 × 위치 조합마다 API를 부른 뒤 중복을 빼고 `JobPosting` 목록(본문 없음)을 돌려줍니다.
-3. **본문 가져오기 (10~14):** LLM이 고른 공고를 `get_job(posting_id)`로 부르면, 본문까지 채운 `JobPosting` 하나가 옵니다.
+2. **검색 (5~9):** `search_jobs(params)`를 부르면 어댑터가 같은 요청 DTO로 검사하고, 키워드 × 위치 조합마다 API를 부른 뒤 같은 공고를 합쳐 `JobPosting` 목록(링크 · 본문 없음)을 돌려줍니다. 합쳐서 300건이 넘으면 범위를 좁혀 다시 부르라는 오류를 돌려줍니다.
+3. **본문 가져오기 (10~14):** LLM이 고른 공고를 `get_job(posting_id)`로 부르면, 링크와 본문까지 채운 `JobPosting` 하나가 옵니다.
 
 ### `JobPosting` 필드
 
@@ -44,8 +44,8 @@
 | `id` | `referenznummer` (예: `12336-a26f1192j0456062-S`) | 출처 안에서의 공고 번호. 본문을 다시 가져올 때 씀 |
 | `company` | `firma` | 회사 이름 |
 | `title` | `stellenangebotsTitel` | 목록에 보여 줌 |
-| `location` | `stellenlokationen`의 도시(`adresse.ort`)들 | 목록에 보여 줌. 지역 검색은 API가 `wo` · `umkreis`로 해 줌 |
-| `url` | `externeURL`, 없으면 연방고용청 공고 페이지 | 사용자가 눌러서 원문을 보거나 지원하는 링크. 제휴 업체 공고는 원래 공고로 감 |
+| `location` | `stellenlokationen`의 도시(`adresse.ort`)들 | 목록에 보여 줌. 지역 검색은 API가 `wo` · `umkreis`로 해 줌. 검색 결과에는 검색한 지명의 근무지만 오고, 전체 근무지는 `get_job`에서 옴 |
+| `url` | `externeURL`, 없으면 연방고용청 공고 페이지 | 사용자가 눌러서 원문을 보거나 지원하는 링크. 제휴 업체 공고는 원래 공고로 감. 검색 결과에는 넣지 않고 `get_job`에서만 채워서 기본값 `None` |
 | `description` | 상세 조회의 `stellenangebotsBeschreibung` | 공고 본문. 검색 결과에는 없고 하나씩 가져올 때만 와서 기본값 `None` |
 
 ### 호출할 때 동작
@@ -66,13 +66,14 @@
     - 키워드 × 위치 조합마다 GET을 동시에 보냄
 
       ```http
-      GET /pc/v6/jobs?was=AI Engineer&wo=München&angebotsart=1&arbeitszeit=vz&befristung=2&size=50&page=1
+      GET /pc/v6/jobs?was=AI Engineer&wo=München&angebotsart=1&arbeitszeit=vz&befristung=2&size=301
       ```
 
-    - 결과를 참조번호로 중복 제거하고 `JobPosting` 목록으로 돌려줌 (본문 없음)
+    - 같은 공고(참조번호)는 하나로 합치고 근무지는 이어 붙임
+    - 합쳐서 300건이 넘으면 범위를 좁혀 다시 부르라는 오류, 아니면 `JobPosting` 목록으로 돌려줌 (링크 · 본문 없음)
 3. **`get_job(posting_id)`**
     - 참조번호를 base64로 바꿔 `GET /pc/v4/jobdetails/{...}`를 부름
-    - 본문까지 채운 `JobPosting` 하나를 돌려줌
+    - 링크와 본문까지 채운 `JobPosting` 하나를 돌려줌
 
 Claude Code에 MCP 서버를 붙여 확인한 결과입니다.
 
@@ -90,8 +91,10 @@ Claude Code에 MCP 서버를 붙여 확인한 결과입니다.
 | 검색어(`was`)와 지역(`wo`)은 하나씩만 받음. 공백으로 이으면 키워드는 결과가 줄고(102건 · 111건 → 68건), 지역은 첫 도시만 씀 | 키워드 × 위치 조합마다 따로 부르고 합침 |
 | 목록 값은 `;`로 이어야 함(`arbeitszeit=vz;tz`). 같은 키를 반복하면 오류 없이 0건 | 목록을 `;`로 이어 보냄 |
 | 빈 값(`angebotsart=`)을 보내면 400 | 넣지 않은 필드는 보내지 않음 |
+| 빈 키워드(`was=`)는 400. 빈 지명은 `wo`가 빠져서 그 조합만 오류 없이 독일 전체를 검색함 | 검색 요청 DTO에서 빈 글자를 막음 |
 | 독일어 지명만 알아들음. `Munich`은 오류 없이 0건이고 응답에 `suchmodus: UNGUELTIG`가 옴 | 오류로 바꿔 돌려줘서 LLM이 `München`으로 고쳐 다시 부르게 함 |
-| 한 검색으로 받을 수 있는 건 최대 1만 건(`page × size`) | `size` · `page`를 각각 100까지만 받음 |
+| `size`를 안 보내면 25건만 줌. `size`는 500까지 받음 | 조합마다 `size=301`로 한 번만 부름. 300건 이하면 그 한 번에 전부 오고, 301건이 꽉 차면 300건을 넘는다는 뜻 |
+| 근무지가 여러 곳인 공고는 검색한 지명마다 나오고, 검색 목록에는 그 지명의 근무지 하나만 보임 (상세 조회에는 전부) | 같은 공고는 하나로 합치고 근무지를 이어 붙임 |
 | 제휴 업체 공고는 연방고용청 페이지에 280자 정도 요약만 있음 | `url`은 원래 공고 링크(`externeURL`)를 우선함 |
 | 검색 결과에는 본문이 없음 | 본문은 `get_job`으로 하나씩 받음 |
 | 문서에 없는 파라미터(`beruf`, `arbeitsort`, `pav`, `externestellenboersen`, `quereinstieg`)도 동작함 | 검색 파라미터 DTO에 넣고, 예고 없이 바뀔 수 있다고 주석을 남김 |
@@ -106,17 +109,23 @@ Claude Code에 MCP 서버를 붙여 확인한 결과입니다.
 | 〃 | 목록은 `;`로 이음 | `arbeitszeit=vz&arbeitszeit=tz`로 보내면 오류 없이 **0건** (`vz;tz`는 25,891건) |
 | 〃 | 넣지 않은 필터는 보내지 않음 | `angebotsart=`처럼 빈 값을 보내면 400 오류 |
 | 〃 | 같은 공고는 참조번호로 한 번만 | 조합 여러 개에서 같은 공고가 겹쳐 나옴 |
+| 〃 | 요청마다 `size`가 301 (상한 + 1) | 300건 이하로 받으면 300건을 넘었는지 알 수 없어서, 잘린 결과를 그대로 줌 |
+| `test_search_merges_places_of_the_same_posting` | 같은 공고가 여러 지명 검색에 나오면 근무지를 합침 | 마지막으로 검색한 지명의 도시만 남음. 예: 근무지 8곳인 공고를 München · Berlin · Hamburg로 검색하면 `Hamburg`로만 보임 |
+| `test_search_asks_to_narrow_when_one_search_has_too_many` | 조합 하나가 300건을 넘으면 오류 | 받은 300건만 주면 LLM은 결과가 잘린 줄 모름 |
+| `test_search_asks_to_narrow_when_merged_postings_exceed_limit` | 조합마다는 300건 이하여도 합쳐서 넘으면 오류 | LLM에게 한 번에 너무 많이 감 |
 | `test_search_fails_on_unknown_place` | 모르는 지명이면 오류 | `wo=Munich`은 오류 없이 0건 → LLM이 "공고 없음"으로 답함. 오류를 내야 LLM이 `München`으로 고쳐 다시 부름 |
 | `test_to_posting_links_partner_postings_to_the_original` | 제휴 업체 공고는 원래 링크(`externeURL`) | 연방고용청 페이지에는 280자 정도 요약만 있음 |
+| `test_to_summary_is_posting_without_url_and_description` | 검색 결과용(`to_summary`)은 `to_posting`에서 `url` · 본문만 뺀 것 | 검색 결과에 링크가 들어가면 LLM에게 가는 양이 약 1.5배 |
 | `test_to_posting_joins_each_city_once` | 근무지 도시를 중복 없이 이음 | 같은 도시가 여러 번 나오거나 빈 값이 섞임 |
 | `test_search_request_rejects_unknown_keys` | 검색 요청 DTO(`ArbeitsagenturSearchRequestDTO`)가 모르는 키를 막음 (`extra="forbid"`) | Pydantic 기본값은 모르는 키를 조용히 버림 → LLM이 `get_usage`를 안 읽고 지어낸 키(`location`)로 불러도 통과 |
+| `test_search_request_rejects_empty_text` | 빈 키워드 · 빈 지명을 막음 | 빈 키워드는 400, 빈 지명은 그 조합만 오류 없이 독일 전체를 검색함 |
 
 **테스트하지 않는 것**
 
-- **Pydantic이 원래 해 주는 검사:** 타입, `size` · `page` 범위 같은 것
+- **Pydantic이 원래 해 주는 검사:** 타입, `veroeffentlichtseit` 범위 같은 것
 - **연방고용청 API 자체가 바뀌는 것:** 단위 테스트는 저장한 응답(`search_response.json`)과 가짜 HTTP로 돌아서, API가 바뀌어도 계속 통과함. API 변경 감지는 실제 API를 부르는 계약 테스트를 정기 실행으로 따로 둬야 함 (다음 할 일)
 
-**테스트가 실제로 잡는지 확인한 방법:** `;` 잇기 제거, 제휴 링크 무시, 모르는 키 허용을 하나씩 일부러 넣어 돌렸고, 매번 해당 테스트가 실패했습니다.
+**테스트가 실제로 잡는지 확인한 방법:** `;` 잇기 제거, 제휴 링크 무시, 모르는 키 허용을 하나씩 일부러 넣어 돌렸고, 매번 해당 테스트가 실패했습니다. 근무지 합치기와 빈 글자 검사 테스트도 고치기 전 코드에 돌려 실패하는 것을 확인했습니다.
 
 ### 추후 보완할 점: 키워드 검색의 한계
 
@@ -144,6 +153,9 @@ Claude Code에 MCP 서버를 붙여 확인한 결과입니다.
     - 첫 출처는 연방고용청. Greenhouse는 회사 단위라 보류
     - 출처만의 사용법은 어댑터의 검색 파라미터 DTO에 둠. `get_usage`가 그 DTO를 스키마로 돌려주고, `search_jobs`는 `params`를 받아 어댑터가 같은 DTO로 검사함
     - 포트와 서비스는 dict만 주고받아서 어느 출처인지 모름
+    - 검색 결과는 최대 300건까지 전부 주고, 넘으면 범위를 좁혀 다시 부르라는 오류를 줌. LLM에게 한 번에 가는 양을 막기 위함 (공고 1건 ≈ 91토큰, 300건 ≈ 2.7만 토큰). `size` · `page`는 LLM이 정하지 않음
+    - 검색 결과에는 `url` · 본문을 넣지 않고(`to_summary`), `get_job`에서만 채움(`to_posting`). `url`이 공고 1건 토큰의 약 35%라서
+    - 조합 하나라도 실패하면 검색 전체를 실패시킴. 성공한 것만 주면 LLM이 빠진 조합(예: 틀린 지명)을 모르고, 성공 · 실패를 같이 주려면 반환 모양을 포트 · 서비스 · 도구까지 바꿔야 함
     - 코드 주석은 한국어, LLM이 읽는 docstring과 설명은 영어
 - 제안 또는 미정:
     - `keywords` · `locations`를 `params` 밖 인자로 꺼낼지 (지금은 `params` 안에 있음)

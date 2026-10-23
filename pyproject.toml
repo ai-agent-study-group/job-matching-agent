@@ -5,6 +5,7 @@ description = "구인 알림 공고의 JD를 수집해 내 이력과 요건 단�
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.143.0",
+    "httpx2>=2.13.1",
     "uvicorn[standard]>=0.54.0",
 ]
 

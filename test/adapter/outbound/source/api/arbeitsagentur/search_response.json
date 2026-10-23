@@ -1,0 +1,35 @@
+{
+  "ergebnisliste": [
+    {
+      "referenznummer": "12336-a26f1192j0456062-S",
+      "stellenangebotsTitel": "AI Engineer (m/d/w)",
+      "firma": "EXXETA AG",
+      "stellenlokationen": [
+        {
+          "adresse": {
+            "plz": "81929",
+            "ort": "München"
+          }
+        }
+      ],
+      "externeURL": "https://gute-jobs.de/viewjob-nsx8n?utm_source=jsba-premium&utm_medium=n-a&utm_campaign=jsba-premium&utm_term=ai-engineer-m-d-w"
+    },
+    {
+      "referenznummer": "13509-000021100c7004-S",
+      "stellenangebotsTitel": "Senior AI Engineer (w/m/d)",
+      "firma": "BWI GmbH",
+      "stellenlokationen": [
+        {
+          "adresse": {
+            "plz": "80331",
+            "ort": "München"
+          }
+        }
+      ]
+    }
+  ],
+  "maxErgebnisse": 102,
+  "woOutput": {
+    "suchmodus": "UMKREISSUCHE"
+  }
+}
