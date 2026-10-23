@@ -66,15 +66,31 @@ def test_search_request_rejects_unknown_keys():
         )
 
 
-def test_to_posting_fills_description_only_from_detail():
-    """상세 응답을 바꾸면 본문(description)이 채워지고, 검색 결과는 본문이 비어 있다.
+def test_search_request_rejects_empty_text():
+    """빈 키워드나 빈 지명이 든 검색 파라미터는 거부한다.
 
-    목적: 본문은 상세 응답의 stellenangebotsBeschreibung에만 있고 검색 결과에는 없음.
-    기대 결과: 상세 응답 → description이 그 본문과 같음. 같은 공고의 검색 결과 → description은 None.
+    목적: 빈 키워드("")는 API가 400으로 답하고, 빈 지명은 위치 없이 보내져서 그 조합만
+    오류 없이 독일 전체를 검색함.
+    기대 결과: keywords [""], locations ["München", ""] 모두 ValidationError.
     """
-    detail = ArbeitsagenturJobDTO.model_validate(DETAIL).to_posting()
-    listed = ArbeitsagenturJobDTO.model_validate(SEARCH["ergebnisliste"][1]).to_posting()
+    with pytest.raises(ValidationError):
+        ArbeitsagenturSearchRequestDTO.model_validate({"keywords": [""]})
+    with pytest.raises(ValidationError):
+        ArbeitsagenturSearchRequestDTO.model_validate(
+            {"keywords": ["AI Engineer"], "locations": ["München", ""]}
+        )
 
-    assert detail.id == listed.id == DETAIL["referenznummer"]
-    assert detail.description == DETAIL["stellenangebotsBeschreibung"]
-    assert listed.description is None
+
+def test_to_summary_is_posting_without_url_and_description():
+    """검색 결과용 변환(to_summary)은 to_posting에서 url과 본문만 뺀 것이다.
+
+    목적: 검색 결과는 LLM에게 한 번에 최대 300건이 가서, url(공고 1건 토큰의 약 35%)과 본문을 빼고
+    LLM이 고른 공고만 get_job(to_posting)으로 채움.
+    기대 결과: 상세 응답 → to_posting은 url · description이 채워지고, to_summary는 그 둘만 None.
+    """
+    job = ArbeitsagenturJobDTO.model_validate(DETAIL)
+    full, summary = job.to_posting(), job.to_summary()
+
+    assert full.url == f"{JOB_PAGE}/{DETAIL['referenznummer']}"
+    assert full.description == DETAIL["stellenangebotsBeschreibung"]
+    assert summary == full.model_copy(update={"url": None, "description": None})

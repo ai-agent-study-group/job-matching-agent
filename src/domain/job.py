@@ -11,7 +11,9 @@ class JobPosting(BaseModel):
     company: str = Field(description="Company name")
     title: str = Field(description="Job title")
     location: str = Field(description="Location as written by the source")
-    url: str = Field(description="Posting page URL")
+    url: str | None = Field(
+        default=None, description="Posting page URL; only set when a single posting is fetched"
+    )
     description: str | None = Field(
         default=None,
         description="Posting body as plain text; only set when a single posting is fetched",

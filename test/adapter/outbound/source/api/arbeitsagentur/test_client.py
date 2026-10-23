@@ -1,30 +1,36 @@
 """ArbeitsagenturClient: 보내는 요청의 모양과 응답 처리.
 
-실제 API 대신 fake_api가 모든 요청에 정해 둔 응답을 돌려주고, 보낸 요청을 기록함.
+실제 API 대신 fake_api가 정해 둔 응답(또는 요청마다 만든 응답)을 돌려주고, 보낸 요청을 기록함.
 각 테스트는 실제 API를 불러서 알아낸 동작 중, 틀려도 오류 없이 결과만 틀려지는 것을 지킴.
 """
 
 import asyncio
 import json
+from collections.abc import Callable
 from pathlib import Path
 
 import httpx2
 import pytest
 
-from adapter.outbound.source.api.arbeitsagentur.client import ArbeitsagenturClient
+from adapter.outbound.source.api.arbeitsagentur.client import MAX_POSTINGS, ArbeitsagenturClient
 from domain.job import JobPosting
 
 SEARCH = json.loads((Path(__file__).parent / "search_response.json").read_text())
 DETAIL = json.loads((Path(__file__).parent / "detail_response.json").read_text())
 
 
-def fake_api(monkeypatch: pytest.MonkeyPatch, body: dict) -> list[httpx2.Request]:
-    """실제 API 대신 모든 요청에 body를 돌려주고, 보낸 요청 목록을 돌려준다."""
+def fake_api(
+    monkeypatch: pytest.MonkeyPatch, body: dict | Callable[[httpx2.Request], dict]
+) -> list[httpx2.Request]:
+    """실제 API 대신 모든 요청에 body를 돌려주고, 보낸 요청 목록을 돌려준다.
+
+    body가 함수면 요청마다 body(request)를 돌려준다.
+    """
     sent = []
 
     def handler(request: httpx2.Request) -> httpx2.Response:
         sent.append(request)
-        return httpx2.Response(200, json=body)
+        return httpx2.Response(200, json=body(request) if callable(body) else body)
 
     real = httpx2.AsyncClient
     monkeypatch.setattr(
@@ -41,6 +47,7 @@ def test_search_sends_one_request_per_keyword_and_place(monkeypatch):
     - (was, wo) 조합마다 하나씩 요청 4개
     - 모든 요청에 arbeitszeit가 "vz;tz"
     - angebotsart처럼 넣지 않은 필터는 보내지 않음
+    - 모든 요청에 size가 상한 + 1
     - 가짜 응답 4개에 반복된 공고 2건이 한 번씩만, 저장한 응답의 값 그대로 JobPosting으로 반환됨
     """
     sent = fake_api(monkeypatch, SEARCH)
@@ -67,6 +74,8 @@ def test_search_sends_one_request_per_keyword_and_place(monkeypatch):
     assert all(q["arbeitszeit"] == "vz;tz" for q in queries)
     # 넣지 않은 필터는 보내지 않아야 함 (빈 값은 400)
     assert all("angebotsart" not in q for q in queries)
+    # 상한보다 1건 더 받아야 넘었는지 알 수 있음
+    assert all(q["size"] == str(MAX_POSTINGS + 1) for q in queries)
     assert len(postings) == len(SEARCH["ergebnisliste"])
     assert postings[0] == JobPosting(
         source="arbeitsagentur",
@@ -74,8 +83,73 @@ def test_search_sends_one_request_per_keyword_and_place(monkeypatch):
         company="EXXETA AG",
         title="AI Engineer (m/d/w)",
         location="München",
-        url=SEARCH["ergebnisliste"][0]["externeURL"],
     )
+
+
+def test_search_merges_places_of_the_same_posting(monkeypatch):
+    """같은 공고가 여러 지명 검색에 나오면 근무지를 합쳐 한 건으로 돌려준다.
+
+    목적: 검색 목록은 공고의 근무지 중 검색한 지명과 맞는 곳 하나만 보여 줌. 근무지가 여러 곳인
+    공고는 지명마다 나오는데, 하나만 남기면 마지막으로 검색한 지명의 도시만 남음.
+    기대 결과: München · Berlin 검색에 같은 참조번호 → 공고 1건, location "München, Berlin".
+    """
+
+    def by_place(request: httpx2.Request) -> dict:
+        place = {"adresse": {"ort": request.url.params["wo"]}}
+        job = {"referenznummer": "1", "stellenangebotsTitel": "AI Engineer"}
+        return {"ergebnisliste": [job | {"stellenlokationen": [place]}]}
+
+    fake_api(monkeypatch, by_place)
+
+    postings = asyncio.run(
+        ArbeitsagenturClient().search(
+            {"keywords": ["AI Engineer"], "locations": ["München", "Berlin"]}
+        )
+    )
+
+    assert [p.location for p in postings] == ["München, Berlin"]
+
+
+def test_search_asks_to_narrow_when_one_search_has_too_many(monkeypatch):
+    """키워드 × 지명 조합 하나의 공고가 상한을 넘으면 오류를 낸다.
+
+    목적: 상한까지만 받아서 주면 LLM은 결과가 잘린 줄 모름.
+    기대 결과: 응답이 상한 + 1건(요청한 만큼 꽉 참) → 범위를 좁혀 다시 부르라는 ValueError.
+    """
+    jobs = [
+        {"referenznummer": str(i), "stellenangebotsTitel": "Softwareentwickler"}
+        for i in range(MAX_POSTINGS + 1)
+    ]
+    fake_api(monkeypatch, {"ergebnisliste": jobs})
+
+    with pytest.raises(ValueError, match="Narrow the search"):
+        asyncio.run(ArbeitsagenturClient().search({"keywords": ["Softwareentwickler"]}))
+
+
+def test_search_asks_to_narrow_when_merged_postings_exceed_limit(monkeypatch):
+    """조합마다는 상한 이하여도, 합친 공고가 상한을 넘으면 오류를 낸다.
+
+    목적: 상한은 LLM에게 한 번에 가는 양을 막으려는 것이라 조합 하나가 아니라 결과 전체에 걸림.
+    기대 결과: München · Berlin이 서로 다른 공고를 상한의 절반 + 1건씩 → ValueError.
+    """
+    half = MAX_POSTINGS // 2 + 1
+
+    def by_place(request: httpx2.Request) -> dict:
+        place = request.url.params["wo"]
+        jobs = [
+            {"referenznummer": f"{place}-{i}", "stellenangebotsTitel": "AI Engineer"}
+            for i in range(half)
+        ]
+        return {"ergebnisliste": jobs}
+
+    fake_api(monkeypatch, by_place)
+
+    with pytest.raises(ValueError, match="Narrow the search"):
+        asyncio.run(
+            ArbeitsagenturClient().search(
+                {"keywords": ["AI Engineer"], "locations": ["München", "Berlin"]}
+            )
+        )
 
 
 def test_search_fails_on_unknown_place(monkeypatch):
