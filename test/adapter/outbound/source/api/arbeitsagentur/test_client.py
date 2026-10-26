@@ -20,17 +20,19 @@ DETAIL = json.loads((Path(__file__).parent / "detail_response.json").read_text()
 
 
 def fake_api(
-    monkeypatch: pytest.MonkeyPatch, body: dict | Callable[[httpx2.Request], dict]
+    monkeypatch: pytest.MonkeyPatch,
+    body: dict | Callable[[httpx2.Request], dict],
+    status: int = 200,
 ) -> list[httpx2.Request]:
     """실제 API 대신 모든 요청에 body를 돌려주고, 보낸 요청 목록을 돌려준다.
 
-    body가 함수면 요청마다 body(request)를 돌려준다.
+    body가 함수면 요청마다 body(request)를 돌려준다. 응답 코드는 status.
     """
     sent = []
 
     def handler(request: httpx2.Request) -> httpx2.Response:
         sent.append(request)
-        return httpx2.Response(200, json=body(request) if callable(body) else body)
+        return httpx2.Response(status, json=body(request) if callable(body) else body)
 
     real = httpx2.AsyncClient
     monkeypatch.setattr(
@@ -179,3 +181,16 @@ def test_fetch_sends_reference_number_in_base64(monkeypatch):
 
     assert sent[0].url.path.endswith("/pc/v4/jobdetails/MTM1MDktMDAwMDIxMTAwYzcwMDQtUw==")
     assert posting.description == DETAIL["stellenangebotsBeschreibung"]
+
+
+def test_fetch_fails_on_unknown_id(monkeypatch):
+    """없는 참조번호면 fetch가 그 참조번호가 든 오류를 낸다.
+
+    목적: API는 없는 참조번호에 404로 답함. 그대로 두면 LLM에게 base64 주소와 HTTP 설명 링크가
+    든 오류가 가서 무엇이 틀렸는지 읽기 어려움.
+    기대 결과: API가 404를 돌려줄 때, 참조번호가 들어간 ValueError.
+    """
+    fake_api(monkeypatch, {}, status=404)
+
+    with pytest.raises(ValueError, match="99999-0000000000-S"):
+        asyncio.run(ArbeitsagenturClient().fetch("99999-0000000000-S"))
