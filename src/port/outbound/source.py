@@ -9,6 +9,8 @@ from domain.job import JobPosting
 
 
 class JobSource(ABC):
+    """공고 출처 outbound 포트. 어댑터의 source 부분에서 구현."""
+
     @abstractmethod
     async def usage(self) -> type[BaseModel]:
         """The DTO class of this source's search parameters."""

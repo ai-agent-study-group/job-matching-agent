@@ -19,6 +19,8 @@ MAX_POSTINGS = 300
 
 
 class ArbeitsagenturClient(JobSource):
+    """연방고용청 공고 API 검색 어댑터."""
+
     async def usage(self) -> type[ArbeitsagenturSearchRequestDTO]:
         return ArbeitsagenturSearchRequestDTO
 
@@ -45,9 +47,8 @@ class ArbeitsagenturClient(JobSource):
         # 상한보다 많으면 보내지 않고 좁히라고 함
         if len(found) > MAX_POSTINGS:
             raise ValueError(
-                f"More than {MAX_POSTINGS} postings match. Narrow the search and call search_jobs "
-                "again, e.g. with veroeffentlichtseit, arbeitszeit, befristung, umkreis or more "
-                "specific keywords."
+                f"More than {MAX_POSTINGS} postings match. Narrow the search, e.g. with "
+                "veroeffentlichtseit, arbeitszeit, befristung, umkreis or more specific keywords."
             )
         return [job.to_summary() for job in found]
 
@@ -57,6 +58,11 @@ class ArbeitsagenturClient(JobSource):
         ref = base64.b64encode(posting_id.encode()).decode()
         async with httpx2.AsyncClient(headers=HEADERS) as client:
             response = await client.get(f"{API}/pc/v4/jobdetails/{ref}")
+        # 없는 참조번호는 404
+        if response.status_code == 404:
+            raise ValueError(
+                f"No posting with id '{posting_id}'. Use an id from the search results."
+            )
         response.raise_for_status()
         return ArbeitsagenturJobDTO.model_validate(response.json()).to_posting()
 
