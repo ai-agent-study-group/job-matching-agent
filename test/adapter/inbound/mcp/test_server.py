@@ -6,6 +6,7 @@
 
 import asyncio
 
+import pytest
 from fastmcp import Client
 from pydantic import BaseModel, ConfigDict
 
@@ -80,3 +81,29 @@ def test_search_jobs_returns_postings():
     )
 
     assert result.structured_content == {"result": [POSTING.model_dump()]}
+
+
+@pytest.mark.parametrize(
+    ("params", "wrong_key"),
+    [
+        pytest.param({"kw": ["AI Engineer"]}, "kw", id="unknown-key"),
+        pytest.param(
+            {"keywords": ["AI Engineer"], "location": "München"}, "location", id="extra-key"
+        ),
+        pytest.param({"keywords": "AI Engineer"}, "keywords", id="wrong-type"),
+    ],
+)
+def test_search_jobs_bad_params_tells_wrong_key_and_get_usage(params, wrong_key):
+    """params가 틀리면 틀린 키와 get_usage를 부르라는 안내가 오류로 온다.
+
+    목적: LLM이 params를 지어내거나 잘못 보내도 무엇이 틀렸는지 보고 스스로 고치게 함.
+    기대 결과: 오류이고, 메시지에 틀린 키 이름과 "get_usage"가 들어 있음.
+    """
+    result = run(
+        lambda client: client.call_tool("search_jobs", {"params": params}, raise_on_error=False)
+    )
+    text = result.content[0].text
+
+    assert result.is_error
+    assert wrong_key in text
+    assert "get_usage" in text
