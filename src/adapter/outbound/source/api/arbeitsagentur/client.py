@@ -19,6 +19,8 @@ MAX_POSTINGS = 300
 
 
 class ArbeitsagenturClient(JobSource):
+    """연방고용청 공고 API 검색 어댑터."""
+
     async def usage(self) -> type[ArbeitsagenturSearchRequestDTO]:
         return ArbeitsagenturSearchRequestDTO
 

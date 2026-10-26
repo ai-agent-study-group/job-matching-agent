@@ -7,6 +7,8 @@ from domain.job import JobPosting
 
 
 class JobServicePort(ABC):
+    """MCP 서버 · JMA 앱에 제공하는 기능 목록."""
+
     @abstractmethod
     async def get_usage(self) -> dict[str, Any]:
         """JSON schema of the search_jobs parameters."""

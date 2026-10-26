@@ -10,6 +10,8 @@ from port.outbound.source import JobSource
 
 
 class JobService(JobServicePort):
+    """출처(JobSource)를 받아 JobServicePort의 기능을 구현."""
+
     def __init__(self, source: JobSource):
         self.source = source
 
