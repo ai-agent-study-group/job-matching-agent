@@ -3,8 +3,10 @@
 import re
 from html.parser import HTMLParser
 
-# 앞뒤로 줄을 바꾸는 태그. 목록 항목(li)과 br은 앞에서만 바꿈
+# 열리고 닫힐 때 줄을 바꾸는 태그. 예: <p>A</p><p>B</p> → "A\n\nB"
 BLOCKS = {"p", "div", "ul", "ol", "tr", "h1", "h2", "h3", "h4", "h5", "h6"}
+# 안의 글자(JS · CSS 코드)를 버리는 태그. 예: <style>.x{}</style><p>Body</p> → "Body"
+HIDDEN = {"script", "style"}
 
 
 class _TextParser(HTMLParser):
@@ -13,18 +15,25 @@ class _TextParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.parts: list[str] = []
+        self.hidden = False  # script · style 안에 있는지
 
     def handle_starttag(self, tag, attrs):
+        if tag in HIDDEN:
+            self.hidden = True
         if tag in BLOCKS or tag in ("li", "br"):
             self.parts.append("\n")
         if tag == "li":
             self.parts.append("- ")
 
     def handle_endtag(self, tag):
+        if tag in HIDDEN:
+            self.hidden = False
         if tag in BLOCKS:
             self.parts.append("\n")
 
     def handle_data(self, data):
+        if self.hidden:
+            return
         # HTML은 공백 · 줄바꿈을 한 칸으로 보여 줌
         self.parts.append(re.sub(r"\s+", " ", data))
 
