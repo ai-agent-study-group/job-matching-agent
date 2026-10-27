@@ -117,11 +117,12 @@ LLM이 검색어를 잘 쓰도록 `q` · `q_fields` 설명에 적은 내용입�
 
 ### 본문 HTML을 글자로 바꾸기
 
-`text_parser.py`의 `to_text()`가 하는 일은 세 가지입니다.
+`text_parser.py`의 `to_text()`가 하는 일은 네 가지입니다.
 
 1. `<p>`, `</p>`, `<li>` 같은 태그를 지움
 2. 태그가 있던 자리에 줄바꿈을 넣음. 문단 · 제목 사이는 빈 줄, 목록 항목은 한 줄씩 앞에 `- `
 3. `&amp;` 같은 HTML 기호를 원래 글자(`&`)로 바꿈
+4. `<script>` · `<style>` 안의 JS · CSS 코드는 버림. 화면에 안 보이는 내용이라 본문에 섞이면 안 됨
 
 ```text
 <p>We build agents.</p><ul><li>Python &amp; ML</li><li>LLMs</li></ul>
@@ -172,6 +173,7 @@ freehire 약관상 실제 응답은 저장해서 공개 저장소에 올릴 수 
 | `test_search_request_rejects_unknown_keys` | 모르는 키를 막음 (`extra="forbid"`) | Pydantic 기본값은 모르는 키를 조용히 버림 |
 | `test_to_posting_turns_html_into_text_and_links_the_freehire_page` | 문단은 빈 줄, 목록은 `- `, `&amp;`는 `&` | 본문이 한 줄로 붙거나 태그가 LLM에게 그대로 감 |
 | `test_to_summary_is_posting_without_url_and_description` | 검색 결과용(`to_summary`)은 `to_posting`에서 `url` · 본문만 뺀 것 | 검색 결과에 링크 · 미리보기가 섞임 |
+| `test_to_text_drops_script_and_style` | `<script>` · `<style>` 안의 코드는 버림 | `HTMLParser`가 그 코드도 글자로 넘겨서 본문에 JS · CSS가 섞임 |
 
 **테스트하지 않는 것:** freehire API 자체가 바뀌는 것. 단위 테스트는 지어낸 응답과 가짜 HTTP로 돌아서 API가 바뀌어도 계속 통과합니다. 실제 API를 부르는 계약 테스트로 따로 봐야 합니다.
 
