@@ -3,10 +3,12 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  test:
+  backend:
+    name: Backend CI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -15,3 +17,21 @@ jobs:
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run pytest
+
+  # web/ FE 추가할 때 아래 주석을 해제.
+  # frontend:
+  #   name: Frontend CI
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: web
+  #   steps:
+  #     - uses: actions/checkout@v7
+  #     - uses: actions/setup-node@v6
+  #       with:
+  #         node-version: 22
+  #         cache: npm
+  #         cache-dependency-path: web/package-lock.json
+  #     - run: npm ci
+  #     - run: npm run lint
+  #     - run: npm test
