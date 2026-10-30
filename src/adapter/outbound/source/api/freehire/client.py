@@ -98,5 +98,5 @@ def _to_query(request: FreehireSearchRequestDTO) -> dict[str, Any]:
     # API는 위치를 OR로 묶어서 독일 + 베를린이면 독일 전체가 나옴.
     # 도시가 있으면 나라는 빼고 도시로만 찾음. 나라는 받은 공고에서 거름 (search 참고)
     if request.cities:
-        del query["countries"]
+        query.pop("countries", None)
     return query
