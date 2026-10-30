@@ -12,7 +12,11 @@ from pathlib import Path
 import httpx2
 import pytest
 
-from adapter.outbound.source.api.freehire.client import MAX_POSTINGS, FreehireClient
+from adapter.outbound.source.api.freehire.client import (
+    MAX_ERROR_CHARS,
+    MAX_POSTINGS,
+    FreehireClient,
+)
 from adapter.outbound.source.api.freehire.dto import JOB_PAGE
 from domain.job import JobPosting
 
@@ -21,13 +25,15 @@ DETAIL = json.loads((Path(__file__).parent / "detail_response.json").read_text()
 
 
 def fake_api(
-    monkeypatch: pytest.MonkeyPatch, body: dict, status: int = 200
+    monkeypatch: pytest.MonkeyPatch, body: dict | str, status: int = 200
 ) -> list[httpx2.Request]:
     """실제 API 대신 모든 요청에 body를 돌려주고, 보낸 요청 목록을 돌려준다."""
     sent = []
 
     def handler(request: httpx2.Request) -> httpx2.Response:
         sent.append(request)
+        if isinstance(body, str):
+            return httpx2.Response(status, text=body)
         return httpx2.Response(status, json=body)
 
     real = httpx2.AsyncClient
@@ -132,6 +138,21 @@ def test_search_passes_on_the_reason_of_a_bad_request(monkeypatch):
 
     with pytest.raises(ValueError, match="at most 5 OR alternatives"):
         search({"q": "a OR b OR c OR d OR e OR f", "countries": ["de"]})
+
+
+def test_search_cuts_a_bad_request_that_is_not_json(monkeypatch):
+    """400 본문이 JSON이 아니어도 MAX_ERROR_CHARS까지 그대로 오류로 낸다.
+
+    목적: 앞단(Cloudflare 등)이 긴 HTML로 막아도 내용을 잃지 않고, 토큰도 낭비하지 않음.
+    기대 결과: 상한을 넘는 HTML 본문 → 앞부분만 잘린 ValueError.
+    """
+    body = "<html>" + "x" * MAX_ERROR_CHARS
+    fake_api(monkeypatch, body, status=400)
+
+    with pytest.raises(ValueError) as error:
+        search({"q": "a", "countries": ["de"]})
+
+    assert str(error.value) == body[:MAX_ERROR_CHARS]
 
 
 def test_requests_share_one_client(monkeypatch):

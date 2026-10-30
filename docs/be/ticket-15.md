@@ -107,7 +107,7 @@ LLM이 검색어를 잘 쓰도록 `q` · `q_fields` 설명에 적은 내용입�
 | 위치 조건은 "또는(OR)"으로 묶임. `countries=de` 8,254건, `cities=Berlin` 2,373건, 둘 다 8,277건 (독일 전체 또는 베를린) | 도시가 있으면 나라는 요청에서 빼고 도시로만 찾은 뒤, 받은 공고를 나라로 거름 |
 | 목록은 같은 키를 반복해서 받음(`cities=Berlin&cities=Hamburg`). `q_fields`만 쉼표로 이은 글자 하나(`q_fields=title,company`) | 목록은 httpx가 반복 키로 보냄. `q_fields`만 쉼표로 이음 |
 | 모르는 파라미터는 버리고 `meta.ignored_params`에 적음. 허용 목록 밖 값은 0건으로 답하고 `meta.ignored_values`에 적음. 둘 다 오류는 아님 | 둘 중 하나라도 있으면 오류. 그대로 두면 LLM이 "공고 없음"으로 답함 |
-| 잘못된 검색(`OR` 6개 이상 등)은 400과 `{"error": 이유}` | 그 이유를 그대로 오류로 돌려줌 |
+| 잘못된 검색(`OR` 6개 이상 등)은 400과 `{"error": 이유}` | 본문을 500자까지 그대로 오류로 돌려줌. 코드는 내용을 보지 않아서 JSON으로 읽지 않고, 앞단에서 막혀 HTML이 와도 그대로 감. HTML 페이지는 길 수 있어서 자름 |
 | 한 번에 최대 100건(`limit`). `meta.total`은 검색된 전체 수 | `limit=100`으로 한 번만 부르고, `total`이 100을 넘으면 범위를 좁히라는 오류 |
 | 검색 결과의 본문은 앞부분만 잘린 미리보기, 공고 하나 조회는 전체. 둘 다 HTML이고, 글자로 달라는 옵션은 없음 | 검색 결과에는 본문을 넣지 않음. `get_job`에서 HTML을 글자로 바꿔 넣음 |
 | 공고 하나 조회는 마감된 공고도 돌려줌 (`closed_at`에 값이 있음) | 마감된 공고면 오류. 그대로 주면 LLM이 마감된 공고를 추천할 수 있음 |
@@ -164,6 +164,7 @@ freehire 약관상 실제 응답은 저장해서 공개 저장소에 올릴 수 
 | `test_search_asks_to_narrow_when_total_exceeds_limit` | 100건을 넘으면 오류 | 100건만 주면 LLM은 결과가 잘린 줄 모름 |
 | `test_search_fails_when_freehire_ignores_part_of_it` | `ignored_*`가 있으면 오류 | 0건이 와서 LLM이 "공고 없음"으로 답함 |
 | `test_search_passes_on_the_reason_of_a_bad_request` | 400이면 freehire가 준 이유를 오류로 | LLM에게 주소와 HTTP 설명 링크만 가서 무엇이 틀렸는지 모름 |
+| `test_search_cuts_a_bad_request_that_is_not_json` | 400 본문이 HTML이어도 500자까지 그대로 오류로 | 내용을 잃거나, 긴 HTML 페이지가 통째로 가서 토큰을 낭비함 |
 | `test_requests_share_one_client` | 요청들이 처음 만든 클라이언트를 같이 씀 | 요청마다 연결을 새로 맺음 |
 | `test_fetch_escapes_the_id_in_the_path` | id의 `/` 같은 글자를 바꿔 넣음 | id는 LLM이 넘기는 값이라 `../companies` 같은 id로 다른 주소를 부를 수 있음 |
 | `test_fetch_returns_the_posting_with_its_freehire_page` | `url`은 freehire 공고 페이지, 본문은 글자 | 약관상 공고마다 freehire 링크가 필요함 |

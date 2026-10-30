@@ -15,6 +15,8 @@ HEADERS = {"User-Agent": "ai-agent-study-group/job-matching-agent"}  # freehire�
 MAX_POSTINGS = 100
 # 쉬는 연결을 이 시간(초)이 지나면 버림. freehire(Cloudflare)가 400초 쉰 연결을 끊어서 여유를 둠
 KEEPALIVE_SECONDS = 300
+# 400 본문을 LLM에게 넘길 때의 최대 글자 수. HTML 오류 페이지는 길 수 있어서 토큰을 아끼려고 자름
+MAX_ERROR_CHARS = 500
 
 
 class FreehireClient(JobSource):
@@ -68,7 +70,9 @@ class FreehireClient(JobSource):
         response = await self.http.get(f"{API}/jobs/search", params=query | {"limit": MAX_POSTINGS})
         # 잘못된 검색(OR 6개 이상 등)은 400과 이유가 옴
         if response.status_code == 400:
-            raise ValueError(response.json()["error"])
+            # 코드는 내용을 보지 않고 LLM에게 넘기기만 해서 JSON으로 읽지 않음.
+            # 앞단(Cloudflare 등)에서 막히면 HTML이 오는데, 이 경우도 그대로 넘어감
+            raise ValueError(response.text[:MAX_ERROR_CHARS])
         response.raise_for_status()
         body = response.json()
         meta = body["meta"]
