@@ -1,0 +1,11 @@
+{
+  "data": {
+    "public_slug": "ai-engineer-acme-cambridge",
+    "title": "AI Engineer",
+    "company": "Acme",
+    "location": "Cambridge, UK",
+    "description": "<p>We build\n  agents.</p><ul><li>Python &amp; ML</li><li>LLMs</li></ul><p>Apply<br>now</p>",
+    "countries": ["gb"],
+    "closed_at": null
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "public_slug": "ai-engineer-acme-cambridge",
+      "title": "AI Engineer",
+      "company": "Acme",
+      "location": "Cambridge, UK",
+      "description": "<p>We build agents. You will design and ship LLM features end to",
+      "countries": ["gb"]
+    },
+    {
+      "public_slug": "ml-engineer-globex-cambridge",
+      "title": "ML Engineer",
+      "company": "Globex",
+      "location": "Cambridge, MA",
+      "description": "<p>Join our ML platform team to train and serve models at",
+      "countries": ["us"]
+    }
+  ],
+  "meta": {
+    "total": 2,
+    "limit": 100,
+    "offset": 0
+  }
+}
