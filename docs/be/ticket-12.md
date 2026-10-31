@@ -63,7 +63,7 @@ uv run fastmcp list --command "uv run python -m adapter.inbound.mcp.server"
 
 # 도구 하나 부르기 (실제 연방고용청 API)
 uv run fastmcp call --command "uv run python -m adapter.inbound.mcp.server" \
-  --target search_jobs --input-json '{"params": {"keywords": ["AI Engineer"], "locations": ["München"]}}' 2>/dev/null
+  --target arbeitsagentur_search_jobs --input-json '{"params": {"keywords": ["AI Engineer"], "locations": ["München"]}}' 2>/dev/null
 
 # Claude Code에 등록 (이 프로젝트에서만)
 claude mcp add jobs -- uv run --directory <저장소 경로> python -m adapter.inbound.mcp.server

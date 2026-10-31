@@ -14,7 +14,19 @@ def create_server(jobs: JobServicePort) -> FastMCP:
 
 if __name__ == "__main__":
     # 로컬에서 stdio로 실행할 때의 조립
+    import asyncio
+
     from adapter.outbound.source.api.arbeitsagentur.client import ArbeitsagenturClient
+    from adapter.outbound.source.api.freehire.client import FreehireClient
     from service.job import JobService
 
-    create_server(JobService(ArbeitsagenturClient())).run()
+    # freehire는 약관상 개인 사용만 무료라 배포용 조립(src/main.py)에는 넣지 않음
+    async def main() -> None:
+        async with ArbeitsagenturClient() as arbeitsagentur, FreehireClient() as freehire:
+            # 임시: JobService가 출처를 하나만 받아서 출처마다 서버를 만들어 합침. #9에서 바뀔 예정
+            mcp = FastMCP("jobs")
+            mcp.mount(create_server(JobService(arbeitsagentur)), namespace="arbeitsagentur")
+            mcp.mount(create_server(JobService(freehire)), namespace="freehire")
+            await mcp.run_async()
+
+    asyncio.run(main())

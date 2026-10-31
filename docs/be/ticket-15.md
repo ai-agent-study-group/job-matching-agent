@@ -14,7 +14,7 @@
 
 [#15](https://github.com/ai-agent-study-group/job-matching-agent/issues/15)는 두 번째 공고 출처로 [freehire.me](https://freehire.me)를 붙이는 작업입니다. freehire는 여러 회사의 채용 페이지(Greenhouse, Ashby 등)에서 공고를 모아 두고, 장소와 키워드로 검색하게 해 줍니다.
 
-출처를 하나 더 붙이면서 [#11](./ticket-11.md)에서 만든 출처 포트(`usage` · `search` · `fetch`)가 다른 출처에도 그대로 맞는지 같이 확인했습니다. 포트는 고치지 않고 어댑터만 추가했습니다.
+출처를 하나 더 붙이면서 [#11](./ticket-11.md)에서 만든 출처 포트(`usage` · `search` · `fetch`)가 다른 출처에도 그대로 맞는지 같이 확인했습니다. 공고를 다루는 함수는 고치지 않았고, 포트에는 열고 닫는 함수만 추가했습니다.
 
 freehire 약관상 키 없이 쓰면 **개인적 · 비상업적 사용**만 됩니다. 그래서 내 컴퓨터에서 띄우는 서버에서만 켜고, 배포 서버에는 넣지 않습니다.
 
@@ -147,9 +147,9 @@ We build agents.
 
 ### HTTP 연결
 
-- **클라이언트를 하나만 씀:** `FreehireClient`를 만들 때 `httpx2.AsyncClient`를 하나 만들어 두고, 모든 요청이 같이 씁니다. 서버가 뜰 때 어댑터가 한 번 만들어지니, 여러 사용자의 요청이 맺어 둔 연결을 다시 씁니다. 실제 검색을 두 번 보내 연결 수가 1개로 유지되는 것을 확인했습니다.
+- **클라이언트를 하나만 씀:** `async with`로 어댑터를 열 때 `httpx2.AsyncClient`를 하나 만들어 두고, 모든 요청이 같이 씁니다. 서버가 뜰 때 한 번 열리니, 여러 사용자의 요청이 맺어 둔 연결을 다시 씁니다. 실제 검색을 두 번 보내 연결 수가 1개로 유지되는 것을 확인했습니다.
 - **설정:** 동시 연결은 10개까지, 쉬는 연결은 2개까지 보관하고, 쉰 지 300초가 지나면 버립니다. freehire가 400초에 끊으니 그보다 먼저 버리게 했습니다. 버린 뒤 오는 요청은 httpx가 알아서 새로 연결합니다.
-- **닫지 않음:** 클라이언트는 서버 프로세스와 수명이 같아서, 프로세스가 끝날 때 운영체제가 연결을 닫습니다. 서버가 도는 중에 어댑터를 새로 만드는 구조가 되면 그때 서버 종료 시점(lifespan)에 닫는 코드를 넣습니다.
+- **열고 닫기:** `JobSource` 포트에 `__aenter__` · `__aexit__`를 넣었습니다. 서버를 띄우는 코드는 `async with source:`만 쓰면 되고, 어댑터가 무엇을 열고 닫는지는 몰라도 됩니다. 포트의 기본 함수는 아무것도 하지 않아서, 닫아야 할 연결이 있는 어댑터만 구현합니다. `FreehireClient`는 `async with` 안에서만 쓸 수 있습니다.
 
 ### 테스트
 
@@ -166,6 +166,7 @@ freehire 약관상 실제 응답은 저장해서 공개 저장소에 올릴 수 
 | `test_search_passes_on_the_reason_of_a_bad_request` | 400이면 freehire가 준 이유를 오류로 | LLM에게 주소와 HTTP 설명 링크만 가서 무엇이 틀렸는지 모름 |
 | `test_search_cuts_a_bad_request_that_is_not_json` | 400 본문이 HTML이어도 500자까지 그대로 오류로 | 내용을 잃거나, 긴 HTML 페이지가 통째로 가서 토큰을 낭비함 |
 | `test_requests_share_one_client` | 요청들이 처음 만든 클라이언트를 같이 씀 | 요청마다 연결을 새로 맺음 |
+| `test_client_closes_when_the_block_ends_with_an_error` | `async with`가 끝나면 도중에 오류가 나도 닫음 | 맺어 둔 연결이 프로세스가 끝날 때까지 남음 |
 | `test_fetch_escapes_the_id_in_the_path` | id의 `/` 같은 글자를 바꿔 넣음 | id는 LLM이 넘기는 값이라 `../companies` 같은 id로 다른 주소를 부를 수 있음 |
 | `test_fetch_returns_the_posting_with_its_freehire_page` | `url`은 freehire 공고 페이지, 본문은 글자 | 약관상 공고마다 freehire 링크가 필요함 |
 | `test_fetch_fails_on_unknown_id` | 없는 id면 그 id가 든 오류 | HTTP 설명 링크가 든 오류가 감 |
@@ -181,7 +182,7 @@ freehire 약관상 실제 응답은 저장해서 공개 저장소에 올릴 수 
 ## 결정 사항과 미정 사항
 
 - 확정:
-    - 포트는 그대로 두고 어댑터만 추가함
+    - 포트에는 열고 닫는 함수(`__aenter__` · `__aexit__`)만 추가함. 공통 클래스는 DB처럼 다른 포트도 열고 닫아야 할 때 만듦
     - 검색 결과에는 `url` · 본문을 넣지 않고 `get_job`에서만 채움. `url`은 freehire 공고 페이지 (약관)
     - 검색 결과 상한은 100건 (freehire가 한 번에 주는 최대). 넘으면 범위를 좁히라는 오류. `offset`으로 나눠 받지 않음
     - `q`는 필수, `cities`나 `countries` 중 하나 이상 필수. 나머지는 사용자가 원할 때만 LLM이 채움
@@ -189,7 +190,9 @@ freehire 약관상 실제 응답은 저장해서 공개 저장소에 올릴 수 
     - 마감된 공고는 `get_job`에서 오류
     - 본문 HTML은 글자로 바꿈. 검색 결과의 AI 요약(`enrichment.summary`) 같은 AI 추출 정보는 쓰지 않음 (비어 있는 공고가 많고, 요약을 검색 결과마다 붙이면 LLM이 읽을 양이 크게 늘어남)
     - 테스트 응답은 지어낸 것 (약관)
-    - HTTP 클라이언트는 어댑터에 하나 두고 닫지 않음
+    - HTTP 클라이언트는 어댑터에 하나 두고 `async with`가 끝날 때 닫음
+    - 로컬 실행(`server.py`의 `__main__`)은 출처마다 서버를 만들어 `mount`로 묶음. 도구 이름 앞에 출처가 붙음 (`freehire_search_jobs`)
+    - 배포용 조립(`src/main.py`)에는 freehire를 넣지 않음 (약관)
 - 제안 또는 미정:
     - `JobPosting.published_on`(게시일): 지금은 넣지 않음. "최근 공고만"은 검색 조건(`posted_within_days` 등)으로 거를 수 있음. JMA 앱에 게시일을 보여 주거나 날짜순 정렬이 필요해지면 도메인과 두 어댑터에 같이 추가 (freehire는 `posted_at`, 없으면 `created_at`에서 날짜만)
     - 429(요청 한도 초과) 다시 시도: 지금은 넣지 않음. 한도가 분당 600회라 지금 규모에서는 걸리지 않음
@@ -198,6 +201,6 @@ freehire 약관상 실제 응답은 저장해서 공개 저장소에 올릴 수 
 
 ## 다음 할 일
 
-- [ ] `server.py`의 `__main__`에서 `JOB_SOURCE=freehire`면 `FreehireClient`를 연결
-- [ ] Claude Code에 붙여 "뮌헨 AI 엔지니어"로 `get_usage` → `search_jobs` → `get_job` 확인 (완료 조건)
+- [x] `server.py`의 `__main__`에 `FreehireClient`를 연결
+- [ ] Claude Code에 붙여 "뮌헨 AI 엔지니어"로 `freehire_get_usage` → `freehire_search_jobs` → `freehire_get_job` 확인 (완료 조건)
 - [ ] PR 크기: 코드와 테스트가 400줄을 넘어서 나눌지 정하기

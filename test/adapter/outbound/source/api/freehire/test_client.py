@@ -44,7 +44,19 @@ def fake_api(
 
 
 def search(params: dict) -> list[JobPosting]:
-    return asyncio.run(FreehireClient().search(params))
+    async def main():
+        async with FreehireClient() as source:
+            return await source.search(params)
+
+    return asyncio.run(main())
+
+
+def fetch(posting_id: str) -> JobPosting:
+    async def main():
+        async with FreehireClient() as source:
+            return await source.fetch(posting_id)
+
+    return asyncio.run(main())
 
 
 def test_search_sends_filters_in_the_api_format(monkeypatch):
@@ -156,24 +168,43 @@ def test_search_cuts_a_bad_request_that_is_not_json(monkeypatch):
 
 
 def test_requests_share_one_client(monkeypatch):
-    """요청들은 어댑터를 만들 때 만든 클라이언트 하나를 같이 쓴다.
+    """모든 요청이 async with로 열 때 만든 클라이언트 하나를 같이 쓴다.
 
     목적: 요청마다 클라이언트를 만들고 닫으면 맺어 둔 연결도 버려져서, 매번 새로 연결함.
     기대 결과: 검색을 두 번 해도 처음 만든 클라이언트가 그대로 있고, 닫히지 않음.
     """
     sent = fake_api(monkeypatch, {"data": [], "meta": {"total": 0}})
-    source = FreehireClient()
-    http = source.http
 
     async def main():
-        await source.search({"q": "AI Engineer", "countries": ["de"]})
-        await source.search({"q": "ML Engineer", "countries": ["de"]})
+        async with FreehireClient() as source:
+            http = source.http
+            await source.search({"q": "AI Engineer", "countries": ["de"]})
+            await source.search({"q": "ML Engineer", "countries": ["de"]})
+            assert source.http is http
+            assert not http.is_closed
 
     asyncio.run(main())
 
     assert len(sent) == 2
-    assert source.http is http
-    assert not http.is_closed
+
+
+def test_client_closes_when_the_block_ends_with_an_error(monkeypatch):
+    """async with가 끝나면 도중에 오류가 나도 클라이언트를 닫는다.
+
+    목적: 닫지 않으면 맺어 둔 연결이 프로세스가 끝날 때까지 남음. httpx2 문서도 다 쓰면 닫으라고 함.
+    기대 결과: 블록 안에서 검색이 실패해도 클라이언트가 닫힘.
+    """
+    fake_api(monkeypatch, {"error": "at most 5 OR alternatives"}, status=400)
+    source = FreehireClient()
+
+    async def main():
+        async with source:
+            await source.search({"q": "a OR b OR c OR d OR e OR f", "countries": ["de"]})
+
+    with pytest.raises(ValueError):
+        asyncio.run(main())
+
+    assert source.http.is_closed
 
 
 def test_fetch_escapes_the_id_in_the_path(monkeypatch):
@@ -184,7 +215,7 @@ def test_fetch_escapes_the_id_in_the_path(monkeypatch):
     """
     sent = fake_api(monkeypatch, DETAIL)
 
-    asyncio.run(FreehireClient().fetch("../companies"))
+    fetch("../companies")
 
     assert sent[0].url.raw_path.decode() == "/api/v1/jobs/..%2Fcompanies"
 
@@ -196,7 +227,7 @@ def test_fetch_returns_the_posting_with_its_freehire_page(monkeypatch):
     """
     fake_api(monkeypatch, DETAIL)
 
-    posting = asyncio.run(FreehireClient().fetch("ai-engineer-acme-cambridge"))
+    posting = fetch("ai-engineer-acme-cambridge")
 
     assert posting.url == f"{JOB_PAGE}/ai-engineer-acme-cambridge"
     assert posting.description.startswith("We build agents.")
@@ -211,7 +242,7 @@ def test_fetch_fails_on_unknown_id(monkeypatch):
     fake_api(monkeypatch, {"error": "not found"}, status=404)
 
     with pytest.raises(ValueError, match="no-such-job"):
-        asyncio.run(FreehireClient().fetch("no-such-job"))
+        fetch("no-such-job")
 
 
 def test_fetch_fails_on_closed_posting(monkeypatch):
@@ -224,4 +255,4 @@ def test_fetch_fails_on_closed_posting(monkeypatch):
     fake_api(monkeypatch, {"data": closed})
 
     with pytest.raises(ValueError, match="closed"):
-        asyncio.run(FreehireClient().fetch("ai-engineer-acme-cambridge"))
+        fetch("ai-engineer-acme-cambridge")

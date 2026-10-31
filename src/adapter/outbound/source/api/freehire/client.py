@@ -1,6 +1,6 @@
 """freehire 공고 API 호출."""
 
-from typing import Any
+from typing import Any, Self
 from urllib.parse import quote
 
 import httpx2  # CRUD
@@ -22,12 +22,11 @@ MAX_ERROR_CHARS = 500
 class FreehireClient(JobSource):
     """freehire 공고 API 검색 어댑터."""
 
-    def __init__(self):
-        # 서버가 떠 있는 동안 모든 요청이 이 클라이언트 하나를 같이 씀. 만들 때가 아니라 첫 요청 때 연결을 맺음.
-        # 동시 연결은 10개까지, 쉬는 연결은 2개까지 보관. 넘치는 요청은 연결이 빌 때까지 기다림.
-        # Limits를 넘기면 안 적은 값이 "제한 없음"이 돼서 셋 다 적음
-        # 닫지 않음: 서버 프로세스와 수명이 같아서 끝날 때 운영체제가 닫음.
-        # 서버가 도는 중에 어댑터를 새로 만들게 되면 닫는 코드(lifespan) 필요
+    http: httpx2.AsyncClient  # __aenter__에서 만듦. async with 안에서만 쓸 수 있음
+
+    async def __aenter__(self) -> Self:
+        # 모든 요청이 이 클라이언트 하나를 같이 써서 맺어 둔 연결을 다시 씀
+        # Limits의 max_* 값을 적지 않으면 "제한 없음"이 돼서 둘 다 적음
         self.http = httpx2.AsyncClient(
             headers=HEADERS,
             timeout=30,
@@ -37,6 +36,10 @@ class FreehireClient(JobSource):
                 keepalive_expiry=KEEPALIVE_SECONDS,
             ),
         )
+        return self
+
+    async def __aexit__(self, *exc: object) -> None:
+        await self.http.aclose()
 
     async def usage(self) -> type[FreehireSearchRequestDTO]:
         return FreehireSearchRequestDTO
