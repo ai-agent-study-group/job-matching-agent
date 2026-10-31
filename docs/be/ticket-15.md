@@ -20,6 +20,16 @@ freehire 약관상 키 없이 쓰면 **개인적 · 비상업적 사용**만 됩
 
 ## 주요 내용
 
+### 전체 그림
+
+![헥사고날 폴더 구조 그림에서 #15에서 만들거나 고친 adapter/outbound/source/api/freehire/, port/outbound/source.py만 켠 상태](../assets/be/freehire-hexagon.png)
+
+[BE 설계의 폴더 구조 그림](../structure/be.md)에 `freehire/`를 더하고, 이 티켓에서 만들거나 고친 부분만 켠 상태입니다. 진한 테두리가 만들거나 고친 부분이고, 흐린 부분은 이 티켓 범위 밖입니다. `/mcp`는 아직 만들지 않았습니다. `server.py`는 `__main__`에 로컬 stdio 연결만 추가해서 켜지 않았습니다.
+
+![호출 흐름: LLM이나 테스트가 get_usage로 검색 요청 DTO 형식을 받고, 그 형식대로 search_jobs를 부르고, 고른 공고를 get_job으로 가져오는 14단계](../assets/be/freehire-call-flow.svg)
+
+위 그림의 길을 실제로 부르는 순서입니다. 맨 왼쪽은 실제 LLM(Claude Code 등)이 붙어도 되고, 테스트에서는 가짜(mock)를 붙여도 됩니다. 로컬 서버에서는 도구 이름 앞에 `freehire_`가 붙습니다.
+
 ### 파일 구성
 
 `src/adapter/outbound/source/api/freehire/` 아래에 있습니다.
@@ -56,7 +66,7 @@ freehire 약관상 키 없이 쓰면 **개인적 · 비상업적 사용**만 됩
 3. **`get_job(posting_id)`**
     - `GET /api/v1/jobs/{public_slug}`를 부름
     - 마감된 공고면 오류를 돌려줌
-    - freehire 공고 페이지 링크와, 글자로 바꾼 본문까지 채운 `JobPosting` 하나를 돌려줌
+    - 회사 지원 페이지 링크와, 글자로 바꾼 본문까지 채운 `JobPosting` 하나를 돌려줌
 
 ### `JobPosting` 필드
 
@@ -67,7 +77,7 @@ freehire 약관상 키 없이 쓰면 **개인적 · 비상업적 사용**만 됩
 | `company` | `company` | |
 | `title` | `title` | |
 | `location` | `location` | 공고에 적힌 그대로 |
-| `url` | 없음 (어댑터가 `https://freehire.me/jobs/{public_slug}`를 넣음) | 약관상 보여 주는 공고마다 freehire 링크가 있어야 함. 응답의 `url`은 회사 지원 페이지라 쓰지 않음. `get_job`에서만 채움 |
+| `url` | 공고 하나 조회의 `url` (회사 지원 페이지) | 비어 있으면 `https://freehire.me/jobs/{public_slug}`를 넣음. `get_job`에서만 채움 |
 | `description` | 공고 하나 조회의 `description` | HTML을 글자로 바꿔 넣음. `get_job`에서만 채움 |
 
 freehire 응답에는 이 밖에도 필드가 40개쯤 있습니다. 어떤 필드를 쓰고 어떤 필드를 왜 안 쓰는지는 [#15 댓글의 필드 표](https://github.com/ai-agent-study-group/job-matching-agent/issues/15#issuecomment-6446865785)에 정리했습니다.
@@ -168,12 +178,13 @@ freehire 약관상 실제 응답은 저장해서 공개 저장소에 올릴 수 
 | `test_requests_share_one_client` | 요청들이 처음 만든 클라이언트를 같이 씀 | 요청마다 연결을 새로 맺음 |
 | `test_client_closes_when_the_block_ends_with_an_error` | `async with`가 끝나면 도중에 오류가 나도 닫음 | 맺어 둔 연결이 프로세스가 끝날 때까지 남음 |
 | `test_fetch_escapes_the_id_in_the_path` | id의 `/` 같은 글자를 바꿔 넣음 | id는 LLM이 넘기는 값이라 `../companies` 같은 id로 다른 주소를 부를 수 있음 |
-| `test_fetch_returns_the_posting_with_its_freehire_page` | `url`은 freehire 공고 페이지, 본문은 글자 | 약관상 공고마다 freehire 링크가 필요함 |
+| `test_fetch_returns_the_posting_with_its_company_page` | `url`은 회사 지원 페이지, 본문은 글자 | 사용자가 지원할 페이지로 가지 못함 |
 | `test_fetch_fails_on_unknown_id` | 없는 id면 그 id가 든 오류 | HTTP 설명 링크가 든 오류가 감 |
 | `test_fetch_fails_on_closed_posting` | 마감된 공고면 오류 | LLM이 마감된 공고를 추천할 수 있음 |
 | `test_search_request_needs_a_place` | 도시도 나라도 없으면 거부 | 전 세계를 검색해서 거의 항상 100건을 넘음 |
 | `test_search_request_rejects_unknown_keys` | 모르는 키를 막음 (`extra="forbid"`) | Pydantic 기본값은 모르는 키를 조용히 버림 |
-| `test_to_posting_turns_html_into_text_and_links_the_freehire_page` | 문단은 빈 줄, 목록은 `- `, `&amp;`는 `&` | 본문이 한 줄로 붙거나 태그가 LLM에게 그대로 감 |
+| `test_to_posting_turns_html_into_text_and_links_the_company_page` | 문단은 빈 줄, 목록은 `- `, `&amp;`는 `&`, `url`은 회사 지원 페이지 | 본문이 한 줄로 붙거나 태그가 LLM에게 그대로 감 |
+| `test_to_posting_links_the_freehire_page_without_a_company_page` | 응답의 `url`이 비어 있으면 freehire 공고 페이지 | `url`이 빈 글자로 나가서 지원할 곳을 알 수 없음 |
 | `test_to_summary_is_posting_without_url_and_description` | 검색 결과용(`to_summary`)은 `to_posting`에서 `url` · 본문만 뺀 것 | 검색 결과에 링크 · 미리보기가 섞임 |
 | `test_to_text_drops_script_and_style` | `<script>` · `<style>` 안의 코드는 버림 | `HTMLParser`가 그 코드도 글자로 넘겨서 본문에 JS · CSS가 섞임 |
 
@@ -183,7 +194,7 @@ freehire 약관상 실제 응답은 저장해서 공개 저장소에 올릴 수 
 
 - 확정:
     - 포트에는 열고 닫는 함수(`__aenter__` · `__aexit__`)만 추가함. 공통 클래스는 DB처럼 다른 포트도 열고 닫아야 할 때 만듦
-    - 검색 결과에는 `url` · 본문을 넣지 않고 `get_job`에서만 채움. `url`은 freehire 공고 페이지 (약관)
+    - 검색 결과에는 `url` · 본문을 넣지 않고 `get_job`에서만 채움. `url`은 회사 지원 페이지이고, 없으면 freehire 공고 페이지
     - 검색 결과 상한은 100건 (freehire가 한 번에 주는 최대). 넘으면 범위를 좁히라는 오류. `offset`으로 나눠 받지 않음
     - `q`는 필수, `cities`나 `countries` 중 하나 이상 필수. 나머지는 사용자가 원할 때만 LLM이 채움
     - 도시와 나라를 같이 받으면 도시로 찾고 나라로 거름
@@ -195,7 +206,7 @@ freehire 약관상 실제 응답은 저장해서 공개 저장소에 올릴 수 
     - 배포용 조립(`src/main.py`)에는 freehire를 넣지 않음 (약관)
 - 제안 또는 미정:
     - `JobPosting.published_on`(게시일): 지금은 넣지 않음. "최근 공고만"은 검색 조건(`posted_within_days` 등)으로 거를 수 있음. JMA 앱에 게시일을 보여 주거나 날짜순 정렬이 필요해지면 도메인과 두 어댑터에 같이 추가 (freehire는 `posted_at`, 없으면 `created_at`에서 날짜만)
-    - 429(요청 한도 초과) 다시 시도: 지금은 넣지 않음. 한도가 분당 600회라 지금 규모에서는 걸리지 않음
+    - 429(요청 한도 초과) 다시 시도: 지금은 넣지 않음. 키 없는 한도가 주소마다 분당 120회 · 하루 2,000회라 지금 규모에서는 걸리지 않음
     - 출처가 여러 개가 되면 `search_jobs`가 어떻게 나눠 부를지 (#9)
     - 연방고용청 어댑터의 연결 재사용 (#25)
 

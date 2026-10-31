@@ -88,6 +88,7 @@ class FreehireJobDTO(BaseModel):
     title: str  # 직무명
     company: str  # 회사
     location: str = ""  # 공고에 적힌 근무지 그대로
+    url: str = ""  # 회사 지원 페이지. freehire에서 바로 지원하는 공고는 비어 있음
     description: str | None = None  # 본문 HTML (검색 결과에는 앞부분만)
     countries: list[str] = []  # 나라 코드. 도시 + 나라 검색에서 나라로 거를 때만 씀
     closed_at: datetime | None = None  # 마감 시각 (공고 하나 조회에서만 옴)
@@ -106,8 +107,7 @@ class FreehireJobDTO(BaseModel):
         """The full posting, with url and description. For a single fetched posting."""
         return self.to_summary().model_copy(
             update={
-                # 약관상 보여 주는 공고마다 freehire 링크가 있어야 해서 회사 지원 페이지 대신 씀
-                "url": f"{JOB_PAGE}/{self.public_slug}",
+                "url": self.url or f"{JOB_PAGE}/{self.public_slug}",
                 "description": to_text(self.description) if self.description else None,
             }
         )

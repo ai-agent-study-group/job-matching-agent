@@ -41,18 +41,29 @@ def test_search_request_rejects_unknown_keys():
         FreehireSearchRequestDTO.model_validate({"q": "AI Engineer", "city": ["Berlin"]})
 
 
-def test_to_posting_turns_html_into_text_and_links_the_freehire_page():
-    """공고 하나는 본문 HTML을 글자로 바꾸고, url은 freehire 공고 페이지로 한다.
+def test_to_posting_turns_html_into_text_and_links_the_company_page():
+    """공고 하나는 본문 HTML을 글자로 바꾸고, url은 회사 지원 페이지로 한다.
 
-    목적: 본문은 HTML로 와서 태그가 LLM에게 그대로 감. 약관상 공고마다 freehire 링크가 필요함.
+    목적: 본문은 HTML로 와서 태그가 LLM에게 그대로 감. 사용자는 회사 페이지에서 지원함.
     기대 결과: 문단 사이는 빈 줄, 목록 항목은 한 줄씩 "- "로, br은 줄바꿈, &amp;는 &.
-    HTML 안의 줄바꿈 · 들여쓰기는 한 칸. url은 JOB_PAGE/<public_slug>.
+    HTML 안의 줄바꿈 · 들여쓰기는 한 칸. url은 응답의 url.
     """
     job = FreehireJobDTO.model_validate(DETAIL["data"])
     posting = job.to_posting()
 
     assert posting.description == "We build agents.\n\n- Python & ML\n- LLMs\n\nApply\nnow"
-    assert posting.url == f"{JOB_PAGE}/{job.public_slug}"
+    assert posting.url == DETAIL["data"]["url"]
+
+
+def test_to_posting_links_the_freehire_page_without_a_company_page():
+    """회사 지원 페이지가 없는 공고는 url을 freehire 공고 페이지로 한다.
+
+    목적: freehire에서 바로 지원하는 공고는 응답의 url이 비어 있음 (명세의 direct_apply).
+    기대 결과: url이 ""이면 JOB_PAGE/<public_slug>.
+    """
+    job = FreehireJobDTO.model_validate(DETAIL["data"] | {"url": ""})
+
+    assert job.to_posting().url == f"{JOB_PAGE}/{job.public_slug}"
 
 
 def test_to_summary_is_posting_without_url_and_description():

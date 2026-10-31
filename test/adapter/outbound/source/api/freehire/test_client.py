@@ -17,7 +17,6 @@ from adapter.outbound.source.api.freehire.client import (
     MAX_POSTINGS,
     FreehireClient,
 )
-from adapter.outbound.source.api.freehire.dto import JOB_PAGE
 from domain.job import JobPosting
 
 SEARCH = json.loads((Path(__file__).parent / "search_response.json").read_text())
@@ -220,16 +219,16 @@ def test_fetch_escapes_the_id_in_the_path(monkeypatch):
     assert sent[0].url.raw_path.decode() == "/api/v1/jobs/..%2Fcompanies"
 
 
-def test_fetch_returns_the_posting_with_its_freehire_page(monkeypatch):
-    """fetch가 공고 하나를 freehire 공고 페이지 링크와 본문까지 채워 돌려준다.
+def test_fetch_returns_the_posting_with_its_company_page(monkeypatch):
+    """fetch가 공고 하나를 회사 지원 페이지 링크와 본문까지 채워 돌려준다.
 
-    기대 결과: url이 JOB_PAGE/<id>, 본문은 HTML 태그가 빠진 글자.
+    기대 결과: url이 응답의 회사 지원 페이지, 본문은 HTML 태그가 빠진 글자.
     """
     fake_api(monkeypatch, DETAIL)
 
     posting = fetch("ai-engineer-acme-cambridge")
 
-    assert posting.url == f"{JOB_PAGE}/ai-engineer-acme-cambridge"
+    assert posting.url == DETAIL["data"]["url"]
     assert posting.description.startswith("We build agents.")
 
 
