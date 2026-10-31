@@ -26,15 +26,11 @@ class FreehireClient(JobSource):
 
     async def __aenter__(self) -> Self:
         # 모든 요청이 이 클라이언트 하나를 같이 써서 맺어 둔 연결을 다시 씀
-        # Limits의 max_* 값을 적지 않으면 "제한 없음"이 돼서 둘 다 적음
+        # max_connections를 적지 않으면 "제한 없음"이 돼서 적음
         self.http = httpx2.AsyncClient(
             headers=HEADERS,
             timeout=30,
-            limits=httpx2.Limits(
-                max_connections=10,
-                max_keepalive_connections=2,
-                keepalive_expiry=KEEPALIVE_SECONDS,
-            ),
+            limits=httpx2.Limits(max_connections=10, keepalive_expiry=KEEPALIVE_SECONDS),
         )
         return self
 
