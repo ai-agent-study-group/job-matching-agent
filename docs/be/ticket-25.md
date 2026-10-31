@@ -81,4 +81,3 @@
 ## 다음 할 일
 
 - [ ] 이 브랜치는 `feat/15-freehire` 위에 만들었으므로, PR #28이 머지된 뒤 main 기준으로 옮기기
-- [ ] #25 본문의 `__init__` · FastMCP lifespan 항목을 `__aenter__` · `__aexit__`로 고치기
