@@ -2,7 +2,7 @@
 
 import asyncio
 import base64
-from typing import Any
+from typing import Any, Self
 
 import httpx2  # CRUD
 
@@ -16,10 +16,27 @@ from port.outbound.source import JobSource
 API = "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service"
 HEADERS = {"X-API-Key": "jobboerse-jobsuche"}  # 공개 클라이언트 키 (https://jobsuche.api.bund.dev)
 MAX_POSTINGS = 300
+# 쉬는 연결을 이 시간(초)이 지나면 버림. 연방고용청 서버가 2초 쉰 연결을 끊어서 여유를 둠
+KEEPALIVE_SECONDS = 1
 
 
 class ArbeitsagenturClient(JobSource):
     """연방고용청 공고 API 검색 어댑터."""
+
+    http: httpx2.AsyncClient  # __aenter__에서 만듦. async with 안에서만 쓸 수 있음
+
+    async def __aenter__(self) -> Self:
+        # 모든 요청이 이 클라이언트 하나를 같이 써서 맺어 둔 연결을 다시 씀
+        # max_connections를 적지 않으면 "제한 없음"이 돼서 적음
+        self.http = httpx2.AsyncClient(
+            headers=HEADERS,
+            timeout=30,
+            limits=httpx2.Limits(max_connections=10, keepalive_expiry=KEEPALIVE_SECONDS),
+        )
+        return self
+
+    async def __aexit__(self, *exc: object) -> None:
+        await self.http.aclose()
 
     async def usage(self) -> type[ArbeitsagenturSearchRequestDTO]:
         return ArbeitsagenturSearchRequestDTO
@@ -39,10 +56,7 @@ class ArbeitsagenturClient(JobSource):
         # 성공한 것만 주면 LLM이 빠진 조합(예: 틀린 지명)을 모름. 성공 · 실패를 같이 주려면
         # 반환 모양(list[JobPosting])을 포트 · 서비스 · 도구까지 바꿔야 해서 지금은 하지 않음.
         pairs = [(k, loc) for k in p.keywords for loc in p.locations or [None]]
-        async with httpx2.AsyncClient(headers=HEADERS, timeout=30) as client:
-            pages = await asyncio.gather(
-                *(self._search(client, k, loc, filters) for k, loc in pairs)
-            )
+        pages = await asyncio.gather(*(self._search(k, loc, filters) for k, loc in pairs))
         found = _merge(pages)
         # 상한보다 많으면 보내지 않고 좁히라고 함
         if len(found) > MAX_POSTINGS:
@@ -56,8 +70,7 @@ class ArbeitsagenturClient(JobSource):
         """Return one posting with its description."""
         # 상세 조회는 참조번호를 base64로 넣음
         ref = base64.b64encode(posting_id.encode()).decode()
-        async with httpx2.AsyncClient(headers=HEADERS) as client:
-            response = await client.get(f"{API}/pc/v4/jobdetails/{ref}")
+        response = await self.http.get(f"{API}/pc/v4/jobdetails/{ref}")
         # 없는 참조번호는 404
         if response.status_code == 404:
             raise ValueError(
@@ -67,17 +80,13 @@ class ArbeitsagenturClient(JobSource):
         return ArbeitsagenturJobDTO.model_validate(response.json()).to_posting()
 
     async def _search(
-        self,
-        client: httpx2.AsyncClient,
-        keyword: str,
-        location: str | None,
-        filters: dict[str, Any],
+        self, keyword: str, location: str | None, filters: dict[str, Any]
     ) -> list[ArbeitsagenturJobDTO]:
         # 디폴트는 상한 + 1 건으로 호출해보고, 검색 결과가 이것보다 많으면 범위를 좁히라고 함
         query = {"was": keyword, "size": MAX_POSTINGS + 1, **filters}
         if location:
             query["wo"] = location
-        response = await client.get(f"{API}/pc/v6/jobs", params=query)
+        response = await self.http.get(f"{API}/pc/v6/jobs", params=query)
         response.raise_for_status()
         data = response.json()
         # 모르는 지명(예: Munich)은 오류 없이 0건으로 옴

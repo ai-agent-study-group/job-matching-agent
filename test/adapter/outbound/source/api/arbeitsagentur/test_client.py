@@ -41,6 +41,22 @@ def fake_api(
     return sent
 
 
+def search(params: dict) -> list[JobPosting]:
+    async def main():
+        async with ArbeitsagenturClient() as source:
+            return await source.search(params)
+
+    return asyncio.run(main())
+
+
+def fetch(posting_id: str) -> JobPosting:
+    async def main():
+        async with ArbeitsagenturClient() as source:
+            return await source.fetch(posting_id)
+
+    return asyncio.run(main())
+
+
 def test_search_sends_one_request_per_keyword_and_place(monkeypatch):
     """search가 키워드 × 위치 조합마다 올바른 요청을 하나씩 보낸다.
 
@@ -54,14 +70,12 @@ def test_search_sends_one_request_per_keyword_and_place(monkeypatch):
     """
     sent = fake_api(monkeypatch, SEARCH)
 
-    postings = asyncio.run(
-        ArbeitsagenturClient().search(
-            {
-                "keywords": ["AI Engineer", "ML Engineer"],
-                "locations": ["München", "Berlin"],
-                "arbeitszeit": ["vz", "tz"],
-            }
-        )
+    postings = search(
+        {
+            "keywords": ["AI Engineer", "ML Engineer"],
+            "locations": ["München", "Berlin"],
+            "arbeitszeit": ["vz", "tz"],
+        }
     )
 
     queries = [dict(request.url.params) for request in sent]
@@ -103,11 +117,7 @@ def test_search_merges_places_of_the_same_posting(monkeypatch):
 
     fake_api(monkeypatch, by_place)
 
-    postings = asyncio.run(
-        ArbeitsagenturClient().search(
-            {"keywords": ["AI Engineer"], "locations": ["München", "Berlin"]}
-        )
-    )
+    postings = search({"keywords": ["AI Engineer"], "locations": ["München", "Berlin"]})
 
     assert [p.location for p in postings] == ["München, Berlin"]
 
@@ -125,7 +135,7 @@ def test_search_asks_to_narrow_when_one_search_has_too_many(monkeypatch):
     fake_api(monkeypatch, {"ergebnisliste": jobs})
 
     with pytest.raises(ValueError, match="Narrow the search"):
-        asyncio.run(ArbeitsagenturClient().search({"keywords": ["Softwareentwickler"]}))
+        search({"keywords": ["Softwareentwickler"]})
 
 
 def test_search_asks_to_narrow_when_merged_postings_exceed_limit(monkeypatch):
@@ -147,11 +157,7 @@ def test_search_asks_to_narrow_when_merged_postings_exceed_limit(monkeypatch):
     fake_api(monkeypatch, by_place)
 
     with pytest.raises(ValueError, match="Narrow the search"):
-        asyncio.run(
-            ArbeitsagenturClient().search(
-                {"keywords": ["AI Engineer"], "locations": ["München", "Berlin"]}
-            )
-        )
+        search({"keywords": ["AI Engineer"], "locations": ["München", "Berlin"]})
 
 
 def test_search_fails_on_unknown_place(monkeypatch):
@@ -164,9 +170,47 @@ def test_search_fails_on_unknown_place(monkeypatch):
     fake_api(monkeypatch, {"maxErgebnisse": 0, "woOutput": {"suchmodus": "UNGUELTIG"}})
 
     with pytest.raises(ValueError, match="Munich"):
-        asyncio.run(
-            ArbeitsagenturClient().search({"keywords": ["AI Engineer"], "locations": ["Munich"]})
-        )
+        search({"keywords": ["AI Engineer"], "locations": ["Munich"]})
+
+
+def test_requests_share_one_client(monkeypatch):
+    """모든 요청이 async with로 열 때 만든 클라이언트 하나를 같이 쓴다.
+
+    목적: 요청마다 클라이언트를 만들고 닫으면 맺어 둔 연결도 버려져서, 매번 새로 연결함.
+    기대 결과: 검색과 공고 조회를 해도 처음 만든 클라이언트가 그대로 있고, 닫히지 않음.
+    """
+    sent = fake_api(monkeypatch, DETAIL)
+
+    async def main():
+        async with ArbeitsagenturClient() as source:
+            http = source.http
+            await source.search({"keywords": ["AI Engineer"]})
+            await source.fetch("13509-000021100c7004-S")
+            assert source.http is http
+            assert not http.is_closed
+
+    asyncio.run(main())
+
+    assert len(sent) == 2
+
+
+def test_client_closes_when_the_block_ends_with_an_error(monkeypatch):
+    """async with가 끝나면 도중에 오류가 나도 클라이언트를 닫는다.
+
+    목적: 닫지 않으면 맺어 둔 연결이 프로세스가 끝날 때까지 남음. httpx2 문서도 다 쓰면 닫으라고 함.
+    기대 결과: 블록 안에서 공고 조회가 실패해도 클라이언트가 닫힘.
+    """
+    fake_api(monkeypatch, {}, status=404)
+    source = ArbeitsagenturClient()
+
+    async def main():
+        async with source:
+            await source.fetch("99999-0000000000-S")
+
+    with pytest.raises(ValueError):
+        asyncio.run(main())
+
+    assert source.http.is_closed
 
 
 def test_fetch_sends_reference_number_in_base64(monkeypatch):
@@ -177,7 +221,7 @@ def test_fetch_sends_reference_number_in_base64(monkeypatch):
     """
     sent = fake_api(monkeypatch, DETAIL)
 
-    posting = asyncio.run(ArbeitsagenturClient().fetch("13509-000021100c7004-S"))
+    posting = fetch("13509-000021100c7004-S")
 
     assert sent[0].url.path.endswith("/pc/v4/jobdetails/MTM1MDktMDAwMDIxMTAwYzcwMDQtUw==")
     assert posting.description == DETAIL["stellenangebotsBeschreibung"]
@@ -193,4 +237,4 @@ def test_fetch_fails_on_unknown_id(monkeypatch):
     fake_api(monkeypatch, {}, status=404)
 
     with pytest.raises(ValueError, match="99999-0000000000-S"):
-        asyncio.run(ArbeitsagenturClient().fetch("99999-0000000000-S"))
+        fetch("99999-0000000000-S")
