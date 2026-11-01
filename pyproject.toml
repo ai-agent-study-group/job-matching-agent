@@ -35,3 +35,4 @@ line-length = 100
 [tool.pytest.ini_options]
 testpaths = ["test"]
 addopts = ["--import-mode=importlib"]  # 다른 폴더의 같은 이름 테스트 파일 허용
+pythonpath = ["."]
