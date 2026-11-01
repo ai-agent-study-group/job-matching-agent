@@ -11,7 +11,7 @@ from src.domain.profile import SearchQuery
 # 테스트 1: 이력서 텍스트를 입력하면 SearchQuery 객체가 반환되는지 확인
 @pytest.mark.asyncio
 async def test_extract_profile():
-    agent = create_profile_agent()
+    agent = create_profile_agent(model="test")
 
     # 실제 OpenAI API를 호출하지 않고 TestModel 사용
     with agent.override(model=TestModel()):
@@ -36,7 +36,7 @@ async def test_empty_resume():
 # 테스트 3: LLM 결과가 SearchQuery 필드에 정확히 매핑되는지 확인
 @pytest.mark.asyncio
 async def test_profile_field_mapping():
-    agent = create_profile_agent()
+    agent = create_profile_agent(model="test")
 
     # 테스트에서 LLM이 반환할 가상의 검색 조건
     expected = {
@@ -60,7 +60,7 @@ async def test_profile_field_mapping():
 # 테스트 4: 희망 근무 지역이 없는 경우 빈 문자열을 허용하는지 확인
 @pytest.mark.asyncio
 async def test_missing_location():
-    agent = create_profile_agent()
+    agent = create_profile_agent(model="test")
 
     expected = {
         "keywords": "Python SQL",
