@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from pydantic_ai import Agent
 
-from src.domain.profile import Profile
+from src.domain.profile import SearchQuery
 
 # 프로젝트 루트의 .env 파일에서 환경변수를 불러옴
 # 예: OPENAI_API_KEY, PROFILE_AGENT_MODEL
@@ -53,7 +53,7 @@ def create_profile_agent(model: str | None = None) -> Agent:
 
     return Agent(
         model_name,
-        output_type=Profile,  # LLM 출력을 Profile 모델로 검증
+        output_type=SearchQuery,  # LLM 출력을 Profile 모델로 검증
         instructions=INSTRUCTIONS,  # LLM이 따라야 할 정보 추출 규칙
     )
 
@@ -61,7 +61,7 @@ def create_profile_agent(model: str | None = None) -> Agent:
 async def extract_profile(
     resume_text: str,
     agent: Agent | None = None,
-) -> Profile:
+) -> SearchQuery:
     """
     이력서 텍스트를 분석하여 Profile 객체로 변환하는 함수.
 
@@ -90,4 +90,4 @@ async def extract_profile(
     result = await profile_agent.run(resume_text)
 
     # LLM 결과를 Profile 모델로 검증한 후 반환
-    return Profile.model_validate(result.output)
+    return SearchQuery.model_validate(result.output)
