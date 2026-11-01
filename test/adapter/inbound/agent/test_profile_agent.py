@@ -1,7 +1,7 @@
 import pytest
 from pydantic_ai.models.test import TestModel
 
-from src.adapter.inbound.agent.profile_agent import (
+from src.adapter.inbound.agent.profile import (
     create_profile_agent,
     extract_profile,
 )
