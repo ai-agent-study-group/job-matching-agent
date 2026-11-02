@@ -1,6 +1,6 @@
 from pydantic_ai import Agent
 
-from src.domain.profile import Profile
+from domain.profile import Profile
 
 # LLM에게 전달할 시스템 지시문
 # 이력서의 실제 경력과 기술을 바탕으로 적합한 직무명을 추출
