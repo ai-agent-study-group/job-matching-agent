@@ -20,6 +20,14 @@ class JobSource(ABC):
         pass
 
     @abstractmethod
+    def name(self) -> str:
+        """Name of this source, e.g. arbeitsagentur."""
+
+    @abstractmethod
+    def description(self) -> str:
+        """What postings this source has, for the LLM choosing a source."""
+
+    @abstractmethod
     async def usage(self) -> type[BaseModel]:
         """The DTO class of this source's search parameters."""
 

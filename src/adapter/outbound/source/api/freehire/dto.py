@@ -94,10 +94,10 @@ class FreehireJobDTO(BaseModel):
     cities: list[str] = []  # 근무 도시 전부. location에는 한 곳만 적히거나 비어 있을 때가 있음
     closed_at: datetime | None = None  # 마감 시각 (공고 하나 조회에서만 옴)
 
-    def to_summary(self) -> JobPosting:
+    def to_summary(self, source: str) -> JobPosting:
         """Same as to_posting(), but without url and description. For search results."""
         return JobPosting(
-            source="freehire",
+            source=source,
             id=self.public_slug,
             company=self.company,
             title=self.title,
@@ -105,9 +105,9 @@ class FreehireJobDTO(BaseModel):
             location=", ".join(self.cities) or self.location,
         )
 
-    def to_posting(self) -> JobPosting:
+    def to_posting(self, source: str) -> JobPosting:
         """The full posting, with url and description. For a single fetched posting."""
-        return self.to_summary().model_copy(
+        return self.to_summary(source).model_copy(
             update={
                 "url": self.url or f"{JOB_PAGE}/{self.public_slug}",
                 "description": to_text(self.description) if self.description else None,
