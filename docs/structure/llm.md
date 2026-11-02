@@ -116,9 +116,10 @@ MCP 서버는 외부 클라이언트와 JMA 앱의 우리 agent가 같이 쓰는
 
 | 도구 | 입력 | 출력 | 쓰기 표시 |
 | --- | --- | --- | --- |
-| `search_jobs` | 검색 조건(직무 키워드 · 지역 · 출처 등). 도구가 코드로 거름 | 공고 목록 (JobPosting) | 읽기 전용 |
-| `get_job` | 공고 id | 공고 원문 (JobPosting). 정리된 JD가 저장돼 있으면 함께(추후) | 읽기 전용 |
 | `list_sources` | 없음 | 등록된 출처 이름 목록 | 읽기 전용 |
+| `get_usage` | 출처 이름 | 그 출처의 검색 조건 형식 (JSON 스키마) | 읽기 전용 |
+| `search_jobs` | 출처 이름, 그 출처 형식의 검색 조건. 도구가 코드로 거름 | 공고 목록 (JobPosting) | 읽기 전용 |
+| `get_job` | 출처 이름, 공고 id | 공고 원문 (JobPosting). 정리된 JD가 저장돼 있으면 함께(추후) | 읽기 전용 |
 
 이력을 저장하는 도구(`save_profile` 등)는 추후 DB가 존재할 때 추가함.
 
@@ -138,16 +139,18 @@ class JobServicePort(Protocol):
     def search_jobs(self, query: SearchQuery, limit: int = 20) -> list[JobPosting]: ...
 
 
-# service/job.py — 서비스 포트 구현 (도구 / 서비스 로직). docstring이 곧 도구 설명
+# service/job.py — 서비스 포트 구현 (도구 / 서비스 로직). 출처 하나를 받음
 class JobService:  # JobServicePort 구현
     def search_jobs(self, query: SearchQuery, limit: int = 20) -> list[JobPosting]:
+        return self.source.search(query, limit)  # JobSource 포트
+
+
+# adapter/inbound/mcp/server.py — 도구 정의. docstring이 곧 도구 설명
+def create_server(registry: RegistryServicePort) -> FastMCP:
+    @mcp.tool(annotations={"readOnlyHint": True})
+    def search_jobs(source: str, query: SearchQuery, limit: int = 20) -> list[JobPosting]:
         """조건에 맞는 공고를 찾는다. 호출 전에 이력서에서 query를 채운다."""
-        return [p for s in self.sources for p in s.search(query, limit)]  # JobSource 포트
-
-
-# adapter/inbound/mcp/server.py — 약속만 보고 등록
-def register(mcp: FastMCP, jobs: JobServicePort) -> None:
-    mcp.tool(jobs.search_jobs, annotations={"readOnlyHint": True})
+        return registry.get(source).search_jobs(query, limit)  # 고른 출처의 JobService
 ```
 
 - **조건은 코드로:** 지역 · 직무명처럼 출처가 주는 정보는 도구 입력으로 받아 코드로 필터링
