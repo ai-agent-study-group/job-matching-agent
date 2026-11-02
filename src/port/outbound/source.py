@@ -1,7 +1,7 @@
 """Source outbound 포트 (Source 관련 어댑터와 호환)"""
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Self
 
 from pydantic import BaseModel
 
@@ -10,6 +10,14 @@ from domain.job import JobPosting
 
 class JobSource(ABC):
     """공고 출처 outbound 포트. 어댑터의 source 부분에서 구현."""
+
+    async def __aenter__(self) -> Self:
+        # async with 시작: 기본 동작 없음
+        return self
+
+    async def __aexit__(self, *exc: object) -> None:
+        # async with 종료: 기본 동작 없음
+        pass
 
     @abstractmethod
     async def usage(self) -> type[BaseModel]:
