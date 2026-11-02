@@ -103,8 +103,8 @@ export default function AdminPage() {
           </h2>
           <p className="mt-4 text-sm leading-7 text-slate-600">
             수집 → 매칭·평가 → 리포트·액션의 3단계로 설계합니다. 현재 데모는 이
-            흐름을 규칙 기반 목 데이터로 재현하며, 각 단계를 실제 모델·수집·알림으로
-            확장합니다.
+            흐름을 규칙 기반 목 데이터로 재현하며, 각 단계를 실제
+            모델·수집·알림으로 확장합니다.
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
@@ -184,7 +184,8 @@ export default function AdminPage() {
           {
             route: "/admin",
             title: "내부 안내 페이지",
-            files: "app/admin/page.tsx · components/admin/SourceCollectionGuide.tsx",
+            files:
+              "app/admin/page.tsx · components/admin/SourceCollectionGuide.tsx",
             now: "페이지별 구현 안내와 4주 학습 과정을 모아 직접 주소로 접근합니다.",
             steps: [
               "스터디 질문과 구현 방법을 업데이트합니다.",
@@ -228,8 +229,8 @@ export default function AdminPage() {
         ))}
       </section>
       <p className="mt-5 rounded-xl bg-amber-50 px-5 py-4 text-sm leading-7 text-amber-900">
-        현재 웹은 도구 흐름을 보여주는 규칙 기반 목 데모입니다. 실제 모델을 연결한
-        뒤 ‘모델이 행동을 선택하는 과정’을 실습합니다.
+        현재 웹은 도구 흐름을 보여주는 규칙 기반 목 데모입니다. 실제 모델을
+        연결한 뒤 ‘모델이 행동을 선택하는 과정’을 실습합니다.
       </p>
       <section className="mt-14 space-y-5">
         {weeks.map((w) => (
@@ -264,8 +265,9 @@ export default function AdminPage() {
         <div>
           <h2 className="text-xl font-semibold">개발 경험이 없어도 괜찮아요</h2>
           <p className="mt-4 text-sm leading-8 text-slate-400">
-            실제 구직 조건을 만들고, 공고 원문을 확인하고, 매칭 규칙을 고쳐보세요.
-            개발 경험자와 짝을 이루어 실행과 설정 변경도 직접 해봅니다.
+            실제 구직 조건을 만들고, 공고 원문을 확인하고, 매칭 규칙을
+            고쳐보세요. 개발 경험자와 짝을 이루어 실행과 설정 변경도 직접
+            해봅니다.
           </p>
         </div>
         <div>

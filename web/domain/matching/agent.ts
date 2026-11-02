@@ -1,4 +1,11 @@
-import type { Activity, ChatResult, Domain, Source, SourceHit, Turn } from "./types";
+import type {
+  Activity,
+  ChatResult,
+  Domain,
+  Source,
+  SourceHit,
+  Turn,
+} from "./types";
 import { searchSources, readSource } from "./search";
 
 // 규칙 기반 목(mock) 에이전트. 실제 모델 호출이 없다.
@@ -84,7 +91,15 @@ export const runAgent = async (
     citations: [...new Set(ids)].flatMap((id) => {
       const s = read.get(id);
       return s
-        ? [{ id: s.id, title: s.title, url: s.url, reviewedAt: s.reviewedAt, kind: s.kind }]
+        ? [
+            {
+              id: s.id,
+              title: s.title,
+              url: s.url,
+              reviewedAt: s.reviewedAt,
+              kind: s.kind,
+            },
+          ]
         : [];
     }),
     activities,

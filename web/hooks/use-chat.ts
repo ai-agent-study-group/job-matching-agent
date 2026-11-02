@@ -38,7 +38,12 @@ export function useChat(domain: Domain) {
       const result = await runAgent(domain, turns);
       setMessages([
         ...next,
-        { id: crypto.randomUUID(), role: "assistant", content: result.answer, result },
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: result.answer,
+          result,
+        },
       ]);
     } catch {
       setMessages(prev);

@@ -126,7 +126,8 @@ export const SourceCollectionGuide = () => {
         </pre>
         <p className="mt-4 text-sm leading-7 text-slate-600">
           채용 페이지 → 수집 → 검토 대기 파일 → 사람의 검토·승인 →
-          data/jobs/backend.json 또는 data/jobs/data.json → 매칭의 검색·읽기 도구
+          data/jobs/backend.json 또는 data/jobs/data.json → 매칭의 검색·읽기
+          도구
         </p>
         <p className="mt-3 text-xs leading-6 text-slate-600">
           기본 앱의 공고는 사람이 정리한 요약이고, 위 수집 예제는 채용 사이트
