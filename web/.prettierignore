@@ -1,0 +1,7 @@
+node_modules
+.next
+components/ui
+docs
+skills
+package-lock.json
+*.tsbuildinfo
