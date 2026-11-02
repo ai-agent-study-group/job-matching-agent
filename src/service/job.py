@@ -15,6 +15,12 @@ class JobService(JobServicePort):
     def __init__(self, source: JobSource):
         self.source = source
 
+    def get_name(self) -> str:
+        return self.source.name()
+
+    def get_description(self) -> str:
+        return self.source.description()
+
     async def get_usage(self) -> dict[str, Any]:
         return (await self.source.usage()).model_json_schema()
 

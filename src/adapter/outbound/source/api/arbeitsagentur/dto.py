@@ -66,20 +66,20 @@ class ArbeitsagenturJobDTO(BaseModel):
     externeURL: str | None = None  # 제휴 업체 공고의 원래 링크
     stellenangebotsBeschreibung: str | None = None  # 본문
 
-    def to_summary(self) -> JobPosting:
+    def to_summary(self, source: str) -> JobPosting:
         """Same as to_posting(), but without url and description. For search results."""
         cities = [loc.get("adresse", {}).get("ort") for loc in self.stellenlokationen]
         return JobPosting(
-            source="arbeitsagentur",
+            source=source,
             id=self.referenznummer,
             company=self.firma,
             title=self.stellenangebotsTitel,
             location=", ".join(dict.fromkeys(city for city in cities if city)),
         )
 
-    def to_posting(self) -> JobPosting:
+    def to_posting(self, source: str) -> JobPosting:
         """The full posting, with url and description. For a single fetched posting."""
-        return self.to_summary().model_copy(
+        return self.to_summary(source).model_copy(
             update={
                 # 제휴 업체 공고는 연방고용청 페이지에 요약만 있어서 원래 링크를 우선함
                 "url": self.externeURL or f"{JOB_PAGE}/{self.referenznummer}",
