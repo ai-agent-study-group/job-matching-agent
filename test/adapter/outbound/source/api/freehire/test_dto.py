@@ -77,3 +77,16 @@ def test_to_summary_is_posting_without_url_and_description():
     assert job.to_summary() == job.to_posting().model_copy(
         update={"url": None, "description": None}
     )
+
+
+def test_to_summary_lists_every_city():
+    """근무지는 도시 목록(cities)이 있으면 그것을 쓰고, 없으면 location을 쓴다.
+
+    목적: 근무지가 여러 곳인 공고는 location에 한 곳만 적히거나 비어 있음.
+    기대 결과: cities ["Berlin", "Munich"] → "Berlin, Munich". cities가 없으면 location 그대로.
+    """
+    job = FreehireJobDTO.model_validate(
+        DETAIL["data"] | {"location": "Berlin", "cities": ["Berlin", "Munich"]}
+    )
+    assert job.to_summary().location == "Berlin, Munich"
+    assert FreehireJobDTO.model_validate(DETAIL["data"]).to_summary().location == "Cambridge, UK"

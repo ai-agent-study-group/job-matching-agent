@@ -91,6 +91,7 @@ class FreehireJobDTO(BaseModel):
     url: str = ""  # 회사 지원 페이지. freehire에서 바로 지원하는 공고는 비어 있음
     description: str | None = None  # 본문 HTML (검색 결과에는 앞부분만)
     countries: list[str] = []  # 나라 코드. 도시 + 나라 검색에서 나라로 거를 때만 씀
+    cities: list[str] = []  # 근무 도시 전부. location에는 한 곳만 적히거나 비어 있을 때가 있음
     closed_at: datetime | None = None  # 마감 시각 (공고 하나 조회에서만 옴)
 
     def to_summary(self) -> JobPosting:
@@ -100,7 +101,8 @@ class FreehireJobDTO(BaseModel):
             id=self.public_slug,
             company=self.company,
             title=self.title,
-            location=self.location,
+            # cities가 있으면 받음. 예: location "Berlin", cities ["Berlin", "Munich"] → "Berlin, Munich"
+            location=", ".join(self.cities) or self.location,
         )
 
     def to_posting(self) -> JobPosting:
