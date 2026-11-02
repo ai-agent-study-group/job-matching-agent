@@ -23,14 +23,14 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-| 명령 | 내용 |
-| --- | --- |
-| `npm run dev` | 개발 서버 |
-| `npm run build` | 프로덕션 빌드 |
-| `npm run start` | 빌드 실행 |
-| `npm run lint` | ESLint |
-| `npm run type-check` | `tsc --noEmit` |
-| `npm run format` | Prettier (docs/·skills/·components/ui/ 제외) |
+| 명령                 | 내용                                         |
+| -------------------- | -------------------------------------------- |
+| `npm run dev`        | 개발 서버                                    |
+| `npm run build`      | 프로덕션 빌드                                |
+| `npm run start`      | 빌드 실행                                    |
+| `npm run lint`       | ESLint                                       |
+| `npm run type-check` | `tsc --noEmit`                               |
+| `npm run format`     | Prettier (docs/·skills/·components/ui/ 제외) |
 
 ## 구조
 
