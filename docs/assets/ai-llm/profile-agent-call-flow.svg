@@ -1,5 +1,5 @@
 <!-- 색은 헥사고날 폴더 그림과 같음: 초록 = 어댑터 · 회색 = 바깥 · 노랑 글자 = 도메인(Profile). 실선 = 호출, 점선 = 돌려받는 값 -->
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="650" viewBox="0 0 960 650" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', sans-serif" font-size="12.5" role="img" aria-label="모델 이름으로 프로필 agent를 만들고, 이력서 텍스트를 넣으면 pydantic-ai가 LLM에 지시문 · 이력서 · Profile 형식을 보내고, 돌아온 JSON을 Profile로 검증해 돌려주는 9단계 호출 흐름">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', sans-serif" font-size="12.5" role="img" aria-label="모델 이름으로 프로필 agent를 만들고, 부르는 쪽이 agent.run에 이력서 텍스트를 넣으면 pydantic-ai가 LLM에 지시문 · 이력서 · Profile 형식을 보내고, 돌아온 JSON을 Profile로 검증해 돌려주는 7단계 호출 흐름">
   <defs>
     <marker id="cf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0 0L10 5L0 10z" fill="#59626e"/>
@@ -26,10 +26,10 @@
   </g>
 
   <g id="lifelines" stroke="#c9ccd1" stroke-width="1.2" stroke-dasharray="4 4">
-    <path d="M100 134V630"/>
-    <path d="M340 134V630"/>
-    <path d="M580 134V630"/>
-    <path d="M840 134V630"/>
+    <path d="M100 134V520"/>
+    <path d="M340 134V520"/>
+    <path d="M580 134V520"/>
+    <path d="M840 134V520"/>
   </g>
 
   <g id="lanes">
@@ -65,32 +65,21 @@
 
   <!-- 2. Profile 뽑기 -->
   <g class="num"><circle cx="114" cy="348" r="9"/><text x="114" y="352">4</text></g>
-  <path class="call" d="M126 348H332" marker-end="url(#cf-arrow)"/>
-  <text class="lbl mono" x="229" y="341" text-anchor="middle" font-size="11">extract_profile(agent, text)</text>
+  <path class="call" d="M126 348H572" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="349" y="341" text-anchor="middle" font-size="11">agent.run(text)</text>
 
-  <rect x="250" y="362" width="180" height="30" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
-  <text x="340" y="382" text-anchor="middle" font-size="12" fill="#1f2328">빈 이력서면 <tspan class="mono">ValueError</tspan></text>
+  <g class="num"><circle cx="594" cy="382" r="9"/><text x="594" y="386">5</text></g>
+  <path class="call" d="M606 382H832" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="719" y="375" text-anchor="middle">지시문 · 이력서 · <tspan class="mono">Profile</tspan> 형식</text>
 
-  <g class="num"><circle cx="354" cy="420" r="9"/><text x="354" y="424">5</text></g>
-  <path class="call" d="M366 420H572" marker-end="url(#cf-arrow)"/>
-  <text class="lbl mono" x="469" y="413" text-anchor="middle" font-size="11">agent.run(resume_text)</text>
+  <g class="num"><circle cx="826" cy="416" r="9"/><text x="826" y="420">6</text></g>
+  <path class="ret" d="M814 416H588" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="701" y="409" text-anchor="middle">JSON</text>
 
-  <g class="num"><circle cx="594" cy="454" r="9"/><text x="594" y="458">6</text></g>
-  <path class="call" d="M606 454H832" marker-end="url(#cf-arrow)"/>
-  <text class="lbl" x="719" y="447" text-anchor="middle">지시문 · 이력서 · <tspan class="mono">Profile</tspan> 형식</text>
+  <rect x="490" y="430" width="180" height="30" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
+  <text x="580" y="450" text-anchor="middle" font-size="12" fill="#1f2328"><tspan class="mono">Profile</tspan>로 검증</text>
 
-  <g class="num"><circle cx="826" cy="488" r="9"/><text x="826" y="492">7</text></g>
-  <path class="ret" d="M814 488H588" marker-end="url(#cf-arrow)"/>
-  <text class="lbl" x="701" y="481" text-anchor="middle">JSON</text>
-
-  <rect x="490" y="502" width="180" height="30" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
-  <text x="580" y="522" text-anchor="middle" font-size="12" fill="#1f2328"><tspan class="mono">Profile</tspan>로 검증</text>
-
-  <g class="num"><circle cx="566" cy="566" r="9"/><text x="566" y="570">8</text></g>
-  <path class="ret" d="M554 566H348" marker-end="url(#cf-arrow)"/>
-  <text class="lbl mono" x="451" y="559" text-anchor="middle" font-size="11">result.output</text>
-
-  <g class="num"><circle cx="326" cy="600" r="9"/><text x="326" y="604">9</text></g>
-  <path class="ret" d="M314 600H108" marker-end="url(#cf-arrow)"/>
-  <text class="lbl mono dom" x="211" y="593" text-anchor="middle" font-size="11">Profile</text>
+  <g class="num"><circle cx="566" cy="494" r="9"/><text x="566" y="498">7</text></g>
+  <path class="ret" d="M554 494H108" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="331" y="487" text-anchor="middle"><tspan class="mono" font-size="11">result.output</tspan> · <tspan class="mono dom" font-size="11">Profile</tspan></text>
 </svg>
