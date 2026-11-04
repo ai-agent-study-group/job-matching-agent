@@ -1,6 +1,7 @@
 node_modules
 .next
 components/ui
+lib/api-types
 docs
 skills
 package-lock.json
