@@ -29,8 +29,8 @@ def test_to_posting_links_partner_postings_to_the_original():
     """
     partner, own = (ArbeitsagenturJobDTO.model_validate(j) for j in SEARCH["ergebnisliste"])
 
-    assert partner.to_posting().url == partner.externeURL
-    assert own.to_posting().url == f"{JOB_PAGE}/{own.referenznummer}"
+    assert partner.to_posting("arbeitsagentur").url == partner.externeURL
+    assert own.to_posting("arbeitsagentur").url == f"{JOB_PAGE}/{own.referenznummer}"
 
 
 def test_to_posting_joins_each_city_once():
@@ -50,7 +50,7 @@ def test_to_posting_joins_each_city_once():
         ],
     )
 
-    assert job.to_posting().location == "München, Berlin"
+    assert job.to_posting("arbeitsagentur").location == "München, Berlin"
 
 
 def test_search_request_rejects_unknown_keys():
@@ -89,7 +89,7 @@ def test_to_summary_is_posting_without_url_and_description():
     기대 결과: 상세 응답 → to_posting은 url · description이 채워지고, to_summary는 그 둘만 None.
     """
     job = ArbeitsagenturJobDTO.model_validate(DETAIL)
-    full, summary = job.to_posting(), job.to_summary()
+    full, summary = job.to_posting("arbeitsagentur"), job.to_summary("arbeitsagentur")
 
     assert full.url == f"{JOB_PAGE}/{DETAIL['referenznummer']}"
     assert full.description == DETAIL["stellenangebotsBeschreibung"]

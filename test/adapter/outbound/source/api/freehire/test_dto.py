@@ -49,7 +49,7 @@ def test_to_posting_turns_html_into_text_and_links_the_company_page():
     HTML 안의 줄바꿈 · 들여쓰기는 한 칸. url은 응답의 url.
     """
     job = FreehireJobDTO.model_validate(DETAIL["data"])
-    posting = job.to_posting()
+    posting = job.to_posting("freehire")
 
     assert posting.description == "We build agents.\n\n- Python & ML\n- LLMs\n\nApply\nnow"
     assert posting.url == DETAIL["data"]["url"]
@@ -63,7 +63,7 @@ def test_to_posting_links_the_freehire_page_without_a_company_page():
     """
     job = FreehireJobDTO.model_validate(DETAIL["data"] | {"url": ""})
 
-    assert job.to_posting().url == f"{JOB_PAGE}/{job.public_slug}"
+    assert job.to_posting("freehire").url == f"{JOB_PAGE}/{job.public_slug}"
 
 
 def test_to_summary_is_posting_without_url_and_description():
@@ -74,7 +74,7 @@ def test_to_summary_is_posting_without_url_and_description():
     """
     job = FreehireJobDTO.model_validate(DETAIL["data"])
 
-    assert job.to_summary() == job.to_posting().model_copy(
+    assert job.to_summary("freehire") == job.to_posting("freehire").model_copy(
         update={"url": None, "description": None}
     )
 
@@ -88,5 +88,8 @@ def test_to_summary_lists_every_city():
     job = FreehireJobDTO.model_validate(
         DETAIL["data"] | {"location": "Berlin", "cities": ["Berlin", "Munich"]}
     )
-    assert job.to_summary().location == "Berlin, Munich"
-    assert FreehireJobDTO.model_validate(DETAIL["data"]).to_summary().location == "Cambridge, UK"
+    assert job.to_summary("freehire").location == "Berlin, Munich"
+    assert (
+        FreehireJobDTO.model_validate(DETAIL["data"]).to_summary("freehire").location
+        == "Cambridge, UK"
+    )

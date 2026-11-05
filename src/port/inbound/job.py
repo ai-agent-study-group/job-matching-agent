@@ -10,6 +10,14 @@ class JobServicePort(ABC):
     """MCP 서버 · JMA 앱에 제공하는 기능 목록."""
 
     @abstractmethod
+    def get_name(self) -> str:
+        """Name of the source."""
+
+    @abstractmethod
+    def get_description(self) -> str:
+        """What postings the source has."""
+
+    @abstractmethod
     async def get_usage(self) -> dict[str, Any]:
         """JSON schema of the search_jobs parameters."""
 
