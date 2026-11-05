@@ -1,8 +1,8 @@
 """JobService: get_usage · search_jobs · get_job (JobServicePort 구현)."""
 
-from typing import Annotated, Any
+from typing import Any
 
-from pydantic import Field, ValidationError
+from pydantic import ValidationError
 
 from domain.job import JobPosting
 from port.inbound.job import JobServicePort
@@ -10,25 +10,15 @@ from port.outbound.source import JobSource
 
 
 class JobService(JobServicePort):
-    """출처(JobSource)를 받아 JobServicePort의 기능을 구현."""
+    """출처(JobSource) 하나를 받아 JobServicePort의 기능을 구현."""
 
     def __init__(self, source: JobSource):
         self.source = source
 
     async def get_usage(self) -> dict[str, Any]:
-        """Return the parameters search_jobs accepts, as a JSON schema.
-
-        Call this before search_jobs.
-        """
         return (await self.source.usage()).model_json_schema()
 
-    async def search_jobs(
-        self,
-        params: Annotated[
-            dict[str, Any], Field(description="Search parameters exactly as described by get_usage")
-        ],
-    ) -> list[JobPosting]:
-        """Search job postings."""
+    async def search_jobs(self, params: dict[str, Any]) -> list[JobPosting]:
         try:
             return await self.source.search(params)
         except ValidationError as e:
@@ -37,11 +27,5 @@ class JobService(JobServicePort):
                 f"{e}\nCall get_usage first to see the params search_jobs accepts."
             ) from e
 
-    async def get_job(
-        self,
-        posting_id: Annotated[
-            str, Field(description="The id of a posting returned by search_jobs")
-        ],
-    ) -> JobPosting:
-        """Return one posting with its full description."""
+    async def get_job(self, posting_id: str) -> JobPosting:
         return await self.source.fetch(posting_id)

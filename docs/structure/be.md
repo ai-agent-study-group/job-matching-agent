@@ -44,13 +44,13 @@ job-matching-agent/
 │  ├─ port/
 │  │  ├─ inbound/                # 서비스 포트: 입구(mcp · api)가 부르는 약속
 │  │  │  ├─ job.py               #   JobServicePort (search_jobs · get_job)
-│  │  │  └─ source.py            #   SourceServicePort (list_sources)
+│  │  │  └─ registry.py          #   RegistryServicePort (list_sources · get)
 │  │  └─ outbound/               # service가 부르는 바깥 약속
 │  │     ├─ source.py            #   JobSource (domain 형식으로 주고받음)
 │  │     └─ repository.py        #   Repository (추후)
 │  ├─ service/                   # 서비스 포트 구현 · 도구 / 서비스 로직
-│  │  ├─ job.py                  #   JobService: search_jobs · get_job (출처는 SourceService에서 받음)
-│  │  └─ source.py               #   SourceService: 출처 불러오기 · list_sources
+│  │  ├─ job.py                  #   JobService: search_jobs · get_job (출처 하나를 받음)
+│  │  └─ registry.py             #   RegistryService: 출처별 JobService 목록 · list_sources
 │  ├─ adapter/
 │  │  ├─ inbound/                # 들어오는 쪽
 │  │  │  ├─ api/                 #   FE용 /api: route.py · dto.py
@@ -87,13 +87,18 @@ job-matching-agent/
 
 같은 주제를 다루는 파일이면 폴더가 달라도 파일 이름을 똑같이 붙임.
 
+- **출처 목록** (registry)
+
+  | 파일 | 하는 일 |
+  | --- | --- |
+  | `port/inbound/registry.py` | "출처 목록을 달라", "이 이름의 출처를 달라"는 약속 (`RegistryServicePort`) |
+  | `service/registry.py` | 그 약속을 실제로 처리 (`list_sources` · `get`). 조립할 때 받은 출처별 `JobService`를 이름으로 들고 있음 |
+
 - **공고 출처** (source)
 
   | 파일 | 하는 일 |
   | --- | --- |
-  | `port/inbound/source.py` | "출처 목록을 달라"는 약속 (`SourceServicePort`) |
-  | `service/source.py` | 그 약속을 실제로 처리 (`list_sources`). 설정에서 출처를 불러와 들고 있음 |
-  | `port/outbound/source.py` | "출처에서 공고를 가져온다"는 약속 (`JobSource`) |
+  | `port/outbound/source.py` | "출처에서 공고를 가져온다"는 약속 (`JobSource`). `JobService`가 씀 |
   | `adapter/outbound/source/` | 출처별 실제 구현 (greenhouse, arbeitsagentur) |
 
 - **공고** (job)
@@ -102,7 +107,7 @@ job-matching-agent/
   | --- | --- |
   | `domain/job.py` | 공고 데이터 형식 (`JobPosting` · `JD`) |
   | `port/inbound/job.py` | "공고를 찾아 달라"는 약속 (`JobServicePort`) |
-  | `service/job.py` | 그 약속을 실제로 처리 (`search_jobs` · `get_job`). 출처는 `SourceService`에서 받아 씀 |
+  | `service/job.py` | 그 약속을 실제로 처리 (`search_jobs` · `get_job`). 출처 하나를 받아 씀 |
   | `adapter/inbound/agent/job.py` | 공고 정리 agent |
 
 - **좋은 점:** "공고 관련 코드가 어디 있지?" 싶으면 각 폴더에서 `job.py`만 찾으면 되고, 새 파일 이름을 따로 고민하지 않아도 됨
@@ -114,7 +119,7 @@ job-matching-agent/
 ### 그 밖의 규칙
 
 - <mark><strong>도메인 · DTO 위치:</strong> 안쪽 공용어는 <code>domain/</code>. 포트도 domain 형식(<code>JobPosting</code> 등)으로 주고받음. 바깥과 주고받는 DTO는 그 어댑터 폴더의 <code>dto.py</code>(외부 API 응답, /api 응답 껍데기). 우리가 정한 모양은 domain을 그대로 씀 (BE-3)</mark>
-- **service와 MCP:** service가 `port/inbound/`의 약속(서비스 포트)을 구현함(도구 / 서비스 로직). `mcp/server.py`는 그 약속만 보고 `mcp.tool(jobs.search_jobs)`처럼 등록하고, 읽기 전용 표시 같은 MCP 설정도 거기서만 함
+- **service와 MCP:** service가 `port/inbound/`의 약속(서비스 포트)을 구현함(도구 / 서비스 로직). `mcp/server.py`는 그 약속만 보고 도구를 정의하고, LLM이 보낸 출처 이름으로 `RegistryService`에서 서비스를 받아 부름. LLM이 읽는 도구 설명과 읽기 전용 표시 같은 MCP 설정도 거기서만 함
 - **import 방향:** `adapter/inbound/` → `port/inbound/` ← `service/` → `port/outbound/` ← `adapter/outbound/`. `domain/`은 아무것도 import하지 않음
 - **추후:** 저장소(`repository`)는 자리만 잡아 둠(PostgreSQL, 공고 원문은 MongoDB일 수도 있음). 추후 agent · 입구, `eval/`, Dockerfile · CI 설정은 필요할 때 추가
 - <mark>가급적 헥사고날 아키텍처를 따라가는것을 권고하지만 개발에 방해가 된다면 아키텍처를 맞추지 않고 설계 해도 됨 (추후 @seung-gu 가 아키텍처에 맞게 수정)</mark>
