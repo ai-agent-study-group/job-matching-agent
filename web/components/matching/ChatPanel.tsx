@@ -10,6 +10,11 @@ import {
   Compass,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Textarea } from "@/components/ui/textarea";
 import { useChat } from "@/hooks/use-chat";
 import { jobFields } from "@/domain/matching/jobs";
@@ -17,7 +22,7 @@ import type { Domain } from "@/domain/matching/types";
 
 export const ChatPanel = ({ domain }: { domain: Domain }) => {
   const config = jobFields[domain];
-  const { messages, busy, error, send, reset } = useChat(domain);
+  const { messages, busy, error, send, retry, reset } = useChat(domain);
   const [input, setInput] = useState("");
   const end = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -77,13 +82,15 @@ export const ChatPanel = ({ domain }: { domain: Domain }) => {
             </p>
             <div className="mt-6 flex flex-col gap-2">
               {config.examples.map((q) => (
-                <button
+                <Button
                   key={q}
+                  variant="outline"
                   onClick={() => void send(q)}
-                  className="rounded-xl border border-slate-200 px-4 py-3 text-left text-sm text-slate-600 transition hover:border-blue-300 hover:bg-blue-50"
+                  className="h-auto w-full justify-between whitespace-normal rounded-xl px-4 py-3 text-left text-sm font-normal text-slate-600 hover:border-blue-300 hover:bg-blue-50"
                 >
-                  {q} <span className="float-right text-slate-500">↗</span>
-                </button>
+                  <span>{q}</span>
+                  <span className="text-slate-500">↗</span>
+                </Button>
               ))}
             </div>
           </div>
@@ -129,30 +136,32 @@ export const ChatPanel = ({ domain }: { domain: Domain }) => {
                     </a>
                   ))}
                 </div>
-                <details className="mt-4 rounded-xl border border-dashed border-slate-200 p-3">
-                  <summary className="flex cursor-pointer items-center gap-2 text-xs text-slate-500">
+                <Collapsible className="mt-4 rounded-xl border border-dashed border-slate-200 p-3">
+                  <CollapsibleTrigger className="flex w-full cursor-pointer items-center gap-2 text-xs text-slate-500">
                     <Search size={13} />
                     활동 기록 {message.result.activities.length}개
                     <ChevronDown size={13} />
-                  </summary>
-                  <ol className="mt-4 space-y-3">
-                    {message.result.activities.map((activity, i) => (
-                      <li key={i} className="flex gap-3">
-                        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[10px] text-slate-500">
-                          {i + 1}
-                        </span>
-                        <div>
-                          <p className="text-xs font-medium text-slate-700">
-                            {activity.label}
-                          </p>
-                          <p className="mt-1 break-words text-xs leading-5 text-slate-500">
-                            {activity.detail}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </details>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <ol className="mt-4 space-y-3">
+                      {message.result.activities.map((activity, i) => (
+                        <li key={i} className="flex gap-3">
+                          <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[10px] text-slate-500">
+                            {i + 1}
+                          </span>
+                          <div>
+                            <p className="text-xs font-medium text-slate-700">
+                              {activity.label}
+                            </p>
+                            <p className="mt-1 break-words text-xs leading-5 text-slate-500">
+                              {activity.detail}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
+                  </CollapsibleContent>
+                </Collapsible>
               </>
             )}
           </article>
@@ -166,9 +175,20 @@ export const ChatPanel = ({ domain }: { domain: Domain }) => {
       </div>
       <div className="border-t border-slate-100 p-5 sm:p-6">
         {error && (
-          <p role="alert" className="mb-3 text-sm text-red-600">
-            {error}
-          </p>
+          <div role="alert" className="mb-3 flex items-center gap-3 text-sm">
+            <span className="text-red-600">{error}</span>
+            {messages.at(-1)?.role === "user" && (
+              <Button
+                type="button"
+                variant="link"
+                onClick={retry}
+                disabled={busy}
+                className="h-auto p-0 text-sm font-medium"
+              >
+                다시 시도
+              </Button>
+            )}
+          </div>
         )}
         <form
           onSubmit={(event) => {

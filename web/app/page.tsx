@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   Server,
@@ -30,12 +32,14 @@ export default function HomePage() {
             채용공고를 찾아 이력서와 비교하고, 강점과 보완할 점을 확인하세요.
             관련 공고의 요건과 원문 출처를 함께 안내합니다.
           </p>
-          <Link
-            href="/backend"
-            className="mt-7 inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-medium text-white"
+          <Button
+            asChild
+            className="mt-7 h-auto rounded-full bg-slate-900 px-6 py-3 text-sm hover:bg-slate-900/90"
           >
-            매칭 시작하기 <ArrowRight size={16} />
-          </Link>
+            <Link href="/backend">
+              매칭 시작하기 <ArrowRight size={16} />
+            </Link>
+          </Button>
           <p className="mt-4 text-xs text-slate-500">
             현재는 AI API 없이 실행하는 학습용 데모입니다.
           </p>
@@ -142,12 +146,12 @@ export default function HomePage() {
             <div className="mt-4 flex flex-wrap gap-2">
               {["Java", "Spring Boot", "REST API", "MySQL", "Docker"].map(
                 (s) => (
-                  <span
+                  <Badge
                     key={s}
-                    className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600"
+                    className="rounded-full bg-blue-50 px-3 py-1 text-blue-600"
                   >
                     {s}
-                  </span>
+                  </Badge>
                 ),
               )}
             </div>

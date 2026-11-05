@@ -29,5 +29,5 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "resume-match-agent-main"]
+  "exclude": ["node_modules"]
 }

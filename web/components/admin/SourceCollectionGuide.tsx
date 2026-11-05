@@ -1,5 +1,10 @@
 import sources from "@/data/jobs/sources.json";
 import { ExternalLink } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const notes: Record<
   string,
@@ -93,16 +98,16 @@ export const SourceCollectionGuide = () => {
                   </dd>
                 </div>
               </dl>
-              <details className="mt-4 border-t border-slate-100 pt-3">
-                <summary className="cursor-pointer text-xs font-medium text-slate-600">
+              <Collapsible className="mt-4 border-t border-slate-100 pt-3">
+                <CollapsibleTrigger className="cursor-pointer text-xs font-medium text-slate-600">
                   개발자용: 본문 위치와 설정
-                </summary>
-                <p className="mt-3 text-xs leading-6 text-slate-600">
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-3 text-xs leading-6 text-slate-600">
                   본문 위치(selector)는 <code>{source.selector}</code>입니다.
                   페이지 안에서 공고 목록에 붙은 이름을 이용해 해당 부분만
                   선택합니다. 수집 대상은 data/jobs/sources.json에서 지정합니다.
-                </p>
-              </details>
+                </CollapsibleContent>
+              </Collapsible>
             </article>
           );
         })}

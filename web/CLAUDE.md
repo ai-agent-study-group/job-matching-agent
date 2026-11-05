@@ -62,14 +62,9 @@ app·components  →  domain  →  data·constants  →  utils·lib
 
 `app/globals.css`가 단일 출처다. 디자인 팔레트를 shadcn 시맨틱 토큰(`--background`·`--primary`…) + 브랜드 액센트 + 라이트/다크 블록으로 구현한다. 색·radius 변경은 여기 한 곳에서.
 
-## shadcn 컴포넌트 추가 (알려진 함정)
+## shadcn 컴포넌트 추가
 
-`components.json`의 `aliases.utils`가 `@/utils/style`(TECH.md가 cn을 거기 두라고 강제)이라, `npx shadcn@latest add <comp>` 실행 시 생성 파일이 `import { cn } from "cn"`로 깨지고 엉뚱한 `cn` npm 패키지를 추가한다. add 후 항상:
-
-```bash
-sed -i '' 's|from "cn"|from "@/utils/style"|g' components/ui/*.tsx
-npm uninstall cn   # 가짜 패키지 들어왔으면
-```
+`components.json`의 `aliases.utils`는 `@/lib/utils`이고, `web/lib/utils.ts`가 cn 본체(`utils/style.ts`)를 재노출하는 shim이다. TECH.md 규칙(cn 본체는 `utils/style.ts`)을 지키면서 shadcn이 `import { cn } from "@/lib/utils"`로 정상 생성되게 한다. 과거엔 utils 별칭이 `@/utils/style`이라 add 시 `import { cn } from "cn"`로 깨지고 가짜 `cn` npm 패키지가 설치돼 매번 sed·uninstall이 필요했는데, shim으로 해결됨.
 
 shadcn이 생성한 `hooks/use-mobile.ts`는 next의 strict 룰에 걸려 `eslint.config.mjs`의 ignore에 들어있다(생성물이라 수정 안 함).
 
