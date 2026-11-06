@@ -34,11 +34,12 @@ BE는 루트의 Python 프로젝트 하나(`pyproject.toml`, `src/`), FE는 `web
 
 ## 로컬 실행
 
-필요: [uv](https://docs.astral.sh/uv/)
+필요: [uv](https://docs.astral.sh/uv/), [Node.js](https://nodejs.org/) 20 이상
 
 ```bash
 uv sync                         # BE 의존성 + 개발 도구 설치 (.venv 자동 생성)
 uv run pre-commit install       # 커밋 전 ruff 검사 · 포맷 hook 설치 (clone 후 한 번)
+(cd web && npm ci)              # FE 타입 생성 hook이 쓰는 도구 설치 (clone 후 한 번)
 uv run uvicorn main:app --reload
 # http://localhost:8000/health
 ```

@@ -12,3 +12,10 @@ repos:
         entry: uv run ruff format
         language: system
         types: [python]
+      # /api 응답 모델이 바뀌면 FE용 OpenAPI 스펙 · TS 타입을 다시 만듦 (web/에서 npm ci 필요)
+      - id: api-types
+        name: OpenAPI → TS 타입
+        entry: npm --prefix web run generate:types
+        language: system
+        files: ^src/(main\.py|adapter/inbound/api/|domain/)
+        pass_filenames: false
