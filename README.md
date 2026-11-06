@@ -88,13 +88,14 @@ docs/           설계 문서, 작업 메모, 회의 기록
 
 ## 로컬 실행
 
-백엔드는 [uv](https://docs.astral.sh/uv/), 프론트엔드는 Node.js 20 이상이 필요합니다.
+[uv](https://docs.astral.sh/uv/)와 [Node.js](https://nodejs.org/) 20 이상이 필요합니다. Node.js는 프론트엔드 실행과, 커밋할 때 FE 타입을 만드는 hook에 씁니다.
 
 ### 백엔드
 
 ```bash
 uv sync                            # 의존성과 개발 도구 설치
-uv run pre-commit install          # 커밋 전 ruff 검사 hook 설치 (clone 후 한 번)
+uv run pre-commit install          # 커밋 전 ruff 검사 · FE 타입 생성 hook 설치 (clone 후 한 번)
+(cd web && npm ci)                 # FE 타입 생성 hook이 쓰는 도구 설치 (clone 후 한 번)
 ```
 
 앱을 띄우기 전에 저장소 루트의 `.env`에 LLM 모델과 API 키를 적습니다. `LLM_MODEL`이 없으면 앱이 시작되지 않습니다. `.env`는 git에 올라가지 않습니다.
