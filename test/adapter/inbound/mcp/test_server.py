@@ -1,7 +1,7 @@
 """MCP 서버: 등록한 도구와 부른 결과.
 
 서버를 띄우지 않고 메모리 안 클라이언트(fastmcp.Client)로 바로 붙음.
-출처는 정해 둔 공고만 돌려주는 FakeSource라서 네트워크를 쓰지 않음.
+출처는 정해 둔 공고만 돌려주는 가짜 두 개(FakeSource · OtherSource)라서 네트워크를 쓰지 않음.
 """
 
 import asyncio
@@ -14,6 +14,7 @@ from adapter.inbound.mcp.server import create_server
 from domain.job import JobPosting
 from port.outbound.source import JobSource
 from service.job import JobService
+from service.registry import RegistryService
 
 POSTING = JobPosting(
     source="fake",
@@ -23,6 +24,8 @@ POSTING = JobPosting(
     location="München",
     url="https://example.com/1",
 )
+# 다른 출처의 공고. id가 POSTING과 같음
+OTHER_POSTING = POSTING.model_copy(update={"source": "other", "company": "Globex"})
 
 
 class FakeRequestDTO(BaseModel):
@@ -47,26 +50,108 @@ class FakeSource(JobSource):
         return POSTING
 
 
+class OtherRequestDTO(BaseModel):
+    """다른 출처의 검색 조건 형식."""
+
+    q: str
+
+
+class OtherSource(FakeSource):
+    """검색 조건과 공고가 FakeSource와 다른 출처."""
+
+    async def usage(self) -> type[BaseModel]:
+        return OtherRequestDTO
+
+    async def fetch(self, posting_id: str) -> JobPosting:
+        return OTHER_POSTING
+
+
 def run(check):
-    """FakeSource를 넣은 서버에 클라이언트를 붙여 check(client)를 돌린다."""
+    """가짜 출처 두 개를 넣은 서버에 클라이언트를 붙여 check(client)를 돌린다."""
 
     async def main():
-        async with Client(create_server(JobService(FakeSource()))) as client:
+        registry = RegistryService(
+            {"fake": JobService(FakeSource()), "other": JobService(OtherSource())}
+        )
+        async with Client(create_server(registry)) as client:
             return await check(client)
 
     return asyncio.run(main())
 
 
-def test_three_tools_registered_read_only():
-    """도구 세 개가 읽기 전용으로 등록된다.
+def test_four_tools_registered_read_only():
+    """도구 네 개가 읽기 전용으로 등록된다.
 
-    목적: MCP 클라이언트는 서버가 알려 준 도구 목록만 보고 부름.
-    기대 결과: get_usage · search_jobs · get_job이 있고, 모두 readOnlyHint가 True.
+    목적: MCP 클라이언트는 서버가 알려 준 도구 목록만 보고 부름. 출처가 늘어도 도구는 그대로임.
+    기대 결과: list_sources · get_usage · search_jobs · get_job이 있고, 모두 readOnlyHint가 True.
     """
     tools = run(lambda client: client.list_tools())
 
-    assert {t.name for t in tools} == {"get_usage", "search_jobs", "get_job"}
+    assert {t.name for t in tools} == {"list_sources", "get_usage", "search_jobs", "get_job"}
     assert all(t.annotations.read_only_hint for t in tools)
+
+
+def test_list_sources_returns_the_names():
+    """list_sources가 조립할 때 받은 출처 이름을 돌려준다.
+
+    목적: LLM은 이 이름을 보고 출처를 골라 다른 도구에 넘김.
+    기대 결과: 가짜 출처 두 개의 이름.
+    """
+    result = run(lambda client: client.call_tool("list_sources", {}))
+
+    assert result.structured_content == {"result": ["fake", "other"]}
+
+
+def test_get_usage_returns_the_format_of_the_chosen_source():
+    """get_usage가 고른 출처의 검색 조건 형식을 돌려준다.
+
+    목적: 출처마다 검색 조건이 달라서, 다른 출처의 형식이 가면 LLM이 틀린 params를 보냄.
+    기대 결과: fake는 keywords, other는 q.
+    """
+    fake = run(lambda client: client.call_tool("get_usage", {"source": "fake"}))
+    other = run(lambda client: client.call_tool("get_usage", {"source": "other"}))
+
+    assert "keywords" in fake.structured_content["properties"]
+    assert "q" in other.structured_content["properties"]
+
+
+def test_get_job_with_the_same_id_goes_to_the_chosen_source():
+    """id가 같아도 get_job은 고른 출처의 공고를 돌려준다.
+
+    목적: 공고 id는 출처마다 따로 발급해서, 출처가 달라도 같을 수 있음.
+    기대 결과: 같은 id "1"로 fake는 POSTING, other는 OTHER_POSTING.
+    """
+
+    def get(source):
+        args = {"source": source, "posting_id": "1"}
+        return run(lambda client: client.call_tool("get_job", args)).structured_content
+
+    assert get("fake") == POSTING.model_dump()
+    assert get("other") == OTHER_POSTING.model_dump()
+
+
+@pytest.mark.parametrize(
+    ("tool", "args"),
+    [
+        pytest.param("get_usage", {}, id="get_usage"),
+        pytest.param("search_jobs", {"params": {}}, id="search_jobs"),
+        pytest.param("get_job", {"posting_id": "1"}, id="get_job"),
+    ],
+)
+def test_unknown_source_tells_the_names(tool, args):
+    """없는 출처 이름이면 고를 수 있는 이름이 오류로 온다.
+
+    목적: LLM이 이름을 지어내도 오류를 보고 스스로 고치게 함.
+    기대 결과: 오류이고, 메시지에 틀린 이름과 fake · other가 들어 있음.
+    """
+    result = run(
+        lambda client: client.call_tool(tool, args | {"source": "nope"}, raise_on_error=False)
+    )
+    text = result.content[0].text
+
+    assert result.is_error
+    assert "nope" in text
+    assert "fake, other" in text
 
 
 def test_search_jobs_returns_postings():
@@ -75,10 +160,9 @@ def test_search_jobs_returns_postings():
     목적: 서버 · 서비스를 거치면서 공고가 바뀌거나 빠지지 않는지 확인.
     기대 결과: 결과가 {"result": [POSTING]}과 같음.
     """
-    # call_tool(도구 이름, 도구 인자 {인자 이름: 값}). search_jobs의 인자는 params 하나
-    result = run(
-        lambda client: client.call_tool("search_jobs", {"params": {"keywords": ["AI Engineer"]}})
-    )
+    # call_tool(도구 이름, 도구 인자 {인자 이름: 값}). search_jobs의 인자는 source와 params
+    args = {"source": "fake", "params": {"keywords": ["AI Engineer"]}}
+    result = run(lambda client: client.call_tool("search_jobs", args))
 
     assert result.structured_content == {"result": [POSTING.model_dump()]}
 
@@ -99,9 +183,8 @@ def test_search_jobs_bad_params_tells_wrong_key_and_get_usage(params, wrong_key)
     목적: LLM이 params를 지어내거나 잘못 보내도 무엇이 틀렸는지 보고 스스로 고치게 함.
     기대 결과: 오류이고, 메시지에 틀린 키 이름과 "get_usage"가 들어 있음.
     """
-    result = run(
-        lambda client: client.call_tool("search_jobs", {"params": params}, raise_on_error=False)
-    )
+    args = {"source": "fake", "params": params}
+    result = run(lambda client: client.call_tool("search_jobs", args, raise_on_error=False))
     text = result.content[0].text
 
     assert result.is_error
