@@ -9,11 +9,14 @@ class RegistryService(RegistryServicePort):
     """조립할 때 받은 JobService들을 출처 이름으로 들고 있음."""
 
     def __init__(self, services: list[JobServicePort]):
-        self.services = {service.get_name(): service for service in services}
+        names = [service.get_name() for service in services]
         # 이름이 겹치면 딕셔너리에 뒤의 것만 남아 한 출처가 조용히 사라짐
-        if len(self.services) < len(services):
-            names = ", ".join(service.get_name() for service in services)
-            raise ValueError(f"Each source needs its own name, got: {names}.")
+        duplicates = sorted({name for name in names if names.count(name) > 1})
+        if duplicates:
+            raise ValueError(
+                f"Each source needs its own name, duplicated: {', '.join(duplicates)}."
+            )
+        self.services = dict(zip(names, services))
 
     async def list_sources(self) -> list[Source]:
         return [

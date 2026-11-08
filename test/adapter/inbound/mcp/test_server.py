@@ -121,10 +121,13 @@ def test_sources_with_the_same_name_fail_at_assembly():
     """이름이 같은 출처를 둘 넣으면 조립할 때 오류가 난다.
 
     목적: 이름으로 출처를 찾아서, 겹치면 한 출처가 목록에서 조용히 사라짐.
-    기대 결과: RegistryService를 만들 때 ValueError이고, 메시지에 겹친 이름이 들어 있음.
+    기대 결과: RegistryService를 만들 때 ValueError이고, 메시지에 겹친 이름 fake만 들어 있음.
     """
-    with pytest.raises(ValueError, match="fake, fake"):
-        RegistryService([JobService(FakeSource()), JobService(FakeSource())])
+    sources = [FakeSource(), OtherSource(), FakeSource()]
+    with pytest.raises(ValueError) as error:
+        RegistryService([JobService(source) for source in sources])
+
+    assert str(error.value).endswith("duplicated: fake.")
 
 
 def test_get_usage_returns_the_format_of_the_chosen_source():
