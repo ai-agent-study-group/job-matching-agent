@@ -3,8 +3,8 @@
 from pydantic_ai import Agent
 from pydantic_ai.mcp import MCPToolset
 from pydantic_ai.messages import ToolReturnPart
-from domain.job import JobPosting
 
+from domain.job import JobPosting
 
 SEARCH_PROMPT = """
 You are a job search agent.
@@ -35,7 +35,7 @@ def create_search_agent(
         toolsets=[mcp_toolset.filtered(lambda ctx, tool: tool.name != "get_job")],
         instructions=SEARCH_PROMPT,
         output_type=str,
-        retries={"tools": 5}
+        retries={"tools": 5},
     )
 
 
