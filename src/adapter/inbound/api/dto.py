@@ -5,7 +5,7 @@ from typing import Annotated
 from pydantic import BaseModel, StringConstraints
 
 
-class SearchRequest(BaseModel):
+class SearchRequestDTO(BaseModel):
     """Request body for searching jobs from resume text."""
 
     resume_text: Annotated[

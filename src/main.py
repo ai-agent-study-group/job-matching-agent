@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
         registry = RegistryService({"arbeitsagentur": JobService(arbeitsagentur)})
 
         mcp_toolset = MCPToolset(create_server(registry))
-
+        #route.py에서 사용
         app.state.profile_agent = create_profile_agent(model)
         app.state.search_agent = create_search_agent(model, mcp_toolset)
 
