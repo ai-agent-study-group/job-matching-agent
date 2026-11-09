@@ -40,8 +40,8 @@ def create_search_agent(
 
 
 def extract_jobs(result) -> list[JobPosting]:
-    jobs = []
-    seen = set()
+    """Extract unique job postings from search_jobs tool responses."""
+    jobs: dict[tuple[str, str], JobPosting] = {}
 
     for message in result.all_messages():
         for part in message.parts:
@@ -56,13 +56,8 @@ def extract_jobs(result) -> list[JobPosting]:
 
             for item in part.content:
                 job = JobPosting.model_validate(item)
-
                 key = (job.source, job.id)
 
-                if key in seen:
-                    continue
+                jobs.setdefault(key, job)
 
-                seen.add(key)
-                jobs.append(job)
-
-    return jobs
+    return list(jobs.values())
