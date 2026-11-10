@@ -134,6 +134,6 @@ return extract_jobs(result)
 - [x] FastAPI 검색 API 연결
 - [x] 검색 결과 추출 및 중복 제거
 - [x] 통합 테스트 작성
-- [ ] README.md에 LLM 환경변수 설정 방법 추가
-- [ ] GitHub Actions 전체 검사 통과 확인
+- [x] README.md에 LLM 환경변수 설정 방법 추가
+- [x] GitHub Actions 전체 검사 통과 확인
 - [ ] #51: 공고 정리 Agent 구현 (`get_job` → 구조화된 JD 추출)
