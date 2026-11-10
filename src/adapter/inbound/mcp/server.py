@@ -65,7 +65,7 @@ if __name__ == "__main__":
     from service.job import JobService
     from service.registry import RegistryService
 
-    # freehire는 약관상 개인 사용만 무료라 배포용 조립(src/main.py)에는 넣지 않음
+    # freehire는 약관상 개인 사용만 무료. src/main.py에는 시험용으로만 넣어 둠
     async def main() -> None:
         async with ArbeitsagenturClient() as arbeitsagentur, FreehireClient() as freehire:
             registry = RegistryService([JobService(arbeitsagentur), JobService(freehire)])
