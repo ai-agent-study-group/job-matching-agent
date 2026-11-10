@@ -38,6 +38,15 @@ class ArbeitsagenturClient(JobSource):
     async def __aexit__(self, *exc: object) -> None:
         await self.http.aclose()
 
+    def name(self) -> str:
+        return "arbeitsagentur"
+
+    def description(self) -> str:
+        return (
+            "Germany's Federal Employment Agency (Bundesagentur für Arbeit): "
+            "job postings across Germany in all industries, mostly written in German."
+        )
+
     async def usage(self) -> type[ArbeitsagenturSearchRequestDTO]:
         return ArbeitsagenturSearchRequestDTO
 
@@ -64,7 +73,7 @@ class ArbeitsagenturClient(JobSource):
                 f"More than {MAX_POSTINGS} postings match. Narrow the search, e.g. with "
                 "veroeffentlichtseit, arbeitszeit, befristung, umkreis or more specific keywords."
             )
-        return [job.to_summary() for job in found]
+        return [job.to_summary(self.name()) for job in found]
 
     async def fetch(self, posting_id: str) -> JobPosting:
         """Return one posting with its description."""
@@ -77,7 +86,7 @@ class ArbeitsagenturClient(JobSource):
                 f"No posting with id '{posting_id}'. Use an id from the search results."
             )
         response.raise_for_status()
-        return ArbeitsagenturJobDTO.model_validate(response.json()).to_posting()
+        return ArbeitsagenturJobDTO.model_validate(response.json()).to_posting(self.name())
 
     async def _search(
         self, keyword: str, location: str | None, filters: dict[str, Any]

@@ -37,6 +37,12 @@ class FreehireClient(JobSource):
     async def __aexit__(self, *exc: object) -> None:
         await self.http.aclose()
 
+    def name(self) -> str:
+        return "freehire"
+
+    def description(self) -> str:
+        return "freehire.me: job postings collected from company career pages, worldwide."
+
     async def usage(self) -> type[FreehireSearchRequestDTO]:
         return FreehireSearchRequestDTO
 
@@ -47,7 +53,7 @@ class FreehireClient(JobSource):
         # 도시와 나라를 같이 받았으면 도시로 찾은 공고 중 그 나라 공고만 남김 (_to_query 참고)
         if request.cities and request.countries:
             jobs = [j for j in jobs if set(request.countries) & set(j.countries)]
-        return [job.to_summary() for job in jobs]
+        return [job.to_summary(self.name()) for job in jobs]
 
     async def fetch(self, posting_id: str) -> JobPosting:
         """Return one posting with its description."""
@@ -63,7 +69,7 @@ class FreehireClient(JobSource):
         # 공고 하나 조회는 마감된 공고도 돌려줌
         if job.closed_at:
             raise ValueError(f"Posting '{posting_id}' is closed.")
-        return job.to_posting()
+        return job.to_posting(self.name())
 
     async def _search(self, query: dict[str, Any]) -> list[FreehireJobDTO]:
         response = await self.http.get(f"{API}/jobs/search", params=query | {"limit": MAX_POSTINGS})

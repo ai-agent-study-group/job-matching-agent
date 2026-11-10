@@ -40,7 +40,8 @@ job-matching-agent/
 │  ├─ domain/                    # 안쪽 공용어 (BE-3)
 │  │  ├─ profile.py              #   Profile · SearchQuery (이력 · 검색 조건)
 │  │  ├─ job.py                  #   JobPosting (공고 원문) · JD (정리본)
-│  │  └─ match.py                #   MatchResult (매칭 결과)
+│  │  ├─ match.py                #   MatchResult (매칭 결과)
+│  │  └─ source.py               #   Source (출처 이름 · 설명)
 │  ├─ port/
 │  │  ├─ inbound/                # 서비스 포트: 입구(mcp · api)가 부르는 약속
 │  │  │  ├─ job.py               #   JobServicePort (search_jobs · get_job)
@@ -92,13 +93,14 @@ job-matching-agent/
   | 파일 | 하는 일 |
   | --- | --- |
   | `port/inbound/registry.py` | "출처 목록을 달라", "이 이름의 출처를 달라"는 약속 (`RegistryServicePort`) |
-  | `service/registry.py` | 그 약속을 실제로 처리 (`list_sources` · `get`). 조립할 때 받은 출처별 `JobService`를 이름으로 들고 있음 |
+  | `service/registry.py` | 그 약속을 실제로 처리 (`list_sources` · `get`). 조립할 때 받은 `JobService`들을 출처 이름으로 들고, 이름 · 설명을 `Source`로 묶어 돌려줌 |
 
 - **공고 출처** (source)
 
   | 파일 | 하는 일 |
   | --- | --- |
-  | `port/outbound/source.py` | "출처에서 공고를 가져온다"는 약속 (`JobSource`). `JobService`가 씀 |
+  | `domain/source.py` | 출처 정보 형식 (`Source`: 이름 · 설명). `list_sources`가 돌려줌 |
+  | `port/outbound/source.py` | "출처의 이름 · 설명을 알려 주고 공고를 가져온다"는 약속 (`JobSource`). `JobService`가 씀 |
   | `adapter/outbound/source/` | 출처별 실제 구현 (greenhouse, arbeitsagentur) |
 
 - **공고** (job)
@@ -142,7 +144,7 @@ job-matching-agent/
 
 ## 3. 도메인
 
-도구 · API · agent가 안쪽에서 같이 쓰는 데이터. BE-1의 `domain/` 파일 3개에 도메인 5개를 둠. 바깥과 데이터를 주고받는 그릇인 DTO는 어댑터 안에만 있음(아래 DTO). BE와 LLM이 나눠 만들고 서로 붙이는 지점이라 도메인부터 먼저 맞춤.
+도구 · API · agent가 안쪽에서 같이 쓰는 데이터. BE-1의 `domain/` 파일 3개에 도메인 5개를 두고, #33에서 출처 정보(`Source`)를 더함. 바깥과 데이터를 주고받는 그릇인 DTO는 어댑터 안에만 있음(아래 DTO). BE와 LLM이 나눠 만들고 서로 붙이는 지점이라 도메인부터 먼저 맞춤.
 
 ![데이터 흐름 · 두 채널이 쓰는 도메인 5개](../assets/structure/be-data-flow.svg)
 *데이터 흐름 · 두 채널이 쓰는 도메인 5개*
@@ -154,6 +156,7 @@ job-matching-agent/
 | `JobPosting` (공고 원문) | `job.py` | 출처 어댑터 | `search_jobs` · `get_job` 응답, 공고 정리 agent | 출처, 공고 id, 회사, 직무명, 원문 링크, 근무지, 본문 |
 | `JD` (정리본) | `job.py` | 공고 정리 agent | 매칭 agent | 필수 요건, 우대 요건, 기술 스택, 언어, 최소 연차 |
 | `MatchResult` (매칭 결과) | `match.py` | 매칭 agent + 점수 코드 | FE 화면 (저장 여부는 DevOps-6) | 요건별 판정(충족 · 부분 충족 · 미충족)과 근거 이력 항목, 점수, 언어 · 근무지 · 연차 필터 결과 |
+| `Source` (출처 정보) | `source.py` | `RegistryService` (이름 · 설명은 출처 어댑터가 정함) | `list_sources` 응답 | 출처 이름, 어떤 공고를 다루는지 설명 |
 
 항목은 초안. 같이 정할 것: 협업 성향 같은 소프트 요건을 따로 나눌지, 점수를 퍼센트로 보여줄지 등.
 

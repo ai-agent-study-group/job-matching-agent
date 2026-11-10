@@ -39,6 +39,12 @@ class FakeRequestDTO(BaseModel):
 class FakeSource(JobSource):
     """HTTP 없이 POSTING만 돌려주는 출처."""
 
+    def name(self) -> str:
+        return "fake"
+
+    def description(self) -> str:
+        return "Fake postings"
+
     async def usage(self) -> type[BaseModel]:
         return FakeRequestDTO
 
@@ -59,6 +65,12 @@ class OtherRequestDTO(BaseModel):
 class OtherSource(FakeSource):
     """검색 조건과 공고가 FakeSource와 다른 출처."""
 
+    def name(self) -> str:
+        return "other"
+
+    def description(self) -> str:
+        return "Other postings"
+
     async def usage(self) -> type[BaseModel]:
         return OtherRequestDTO
 
@@ -70,9 +82,7 @@ def run(check):
     """가짜 출처 두 개를 넣은 서버에 클라이언트를 붙여 check(client)를 돌린다."""
 
     async def main():
-        registry = RegistryService(
-            {"fake": JobService(FakeSource()), "other": JobService(OtherSource())}
-        )
+        registry = RegistryService([JobService(FakeSource()), JobService(OtherSource())])
         async with Client(create_server(registry)) as client:
             return await check(client)
 
@@ -91,15 +101,33 @@ def test_four_tools_registered_read_only():
     assert all(t.annotations.read_only_hint for t in tools)
 
 
-def test_list_sources_returns_the_names():
-    """list_sources가 조립할 때 받은 출처 이름을 돌려준다.
+def test_list_sources_returns_names_and_descriptions():
+    """list_sources가 출처 어댑터에 적힌 이름과 설명을 돌려준다.
 
-    목적: LLM은 이 이름을 보고 출처를 골라 다른 도구에 넘김.
-    기대 결과: 가짜 출처 두 개의 이름.
+    목적: LLM은 설명을 보고 요청에 맞는 출처를 골라, 그 이름을 다른 도구에 넘김.
+    기대 결과: 가짜 출처 두 개의 이름과 설명.
     """
     result = run(lambda client: client.call_tool("list_sources", {}))
 
-    assert result.structured_content == {"result": ["fake", "other"]}
+    assert result.structured_content == {
+        "result": [
+            {"name": "fake", "description": "Fake postings"},
+            {"name": "other", "description": "Other postings"},
+        ]
+    }
+
+
+def test_sources_with_the_same_name_fail_at_assembly():
+    """이름이 같은 출처를 둘 넣으면 조립할 때 오류가 난다.
+
+    목적: 이름으로 출처를 찾아서, 겹치면 한 출처가 목록에서 조용히 사라짐.
+    기대 결과: RegistryService를 만들 때 ValueError이고, 메시지에 겹친 이름 fake만 들어 있음.
+    """
+    sources = [FakeSource(), OtherSource(), FakeSource()]
+    with pytest.raises(ValueError) as error:
+        RegistryService([JobService(source) for source in sources])
+
+    assert str(error.value).endswith("duplicated: fake.")
 
 
 def test_get_usage_returns_the_format_of_the_chosen_source():
