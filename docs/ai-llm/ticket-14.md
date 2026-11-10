@@ -52,11 +52,7 @@
 def create_search_agent(model: str, mcp_toolset: MCPToolset) -> Agent:
     return Agent(
         model,
-        toolsets=[
-            mcp_toolset.filtered(
-                lambda ctx, tool: tool.name != "get_job"
-            )
-        ],
+        toolsets=[mcp_toolset.filtered(lambda ctx, tool: tool.name != "get_job")],
         instructions=SEARCH_PROMPT,
         output_type=str,
         retries={"tools": 5},
