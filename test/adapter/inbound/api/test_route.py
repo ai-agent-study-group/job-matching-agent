@@ -77,7 +77,7 @@ def search_twice(messages, info):
 
 
 def test_search_returns_postings_from_search_jobs(monkeypatch):
-    registry = RegistryService({"fake": JobService(FakeSource())})
+    registry = RegistryService([JobService(FakeSource())])
 
     search_agent = create_search_agent(
         FunctionModel(search_twice),
