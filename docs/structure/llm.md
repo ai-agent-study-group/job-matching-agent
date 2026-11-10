@@ -105,7 +105,7 @@ MCP 서버는 외부 클라이언트와 JMA 앱의 우리 agent가 같이 쓰는
 ![MCP 서버 · 커넥터와 우리 agent가 같이 씀](../assets/structure/llm-mcp.svg)
 *MCP 서버 · 커넥터와 우리 agent가 같이 씀*
 
-- **전송 방식:** 원격 Streamable HTTP. claude.ai 커넥터와 ChatGPT(개발자 모드)는 원격 서버만 붙음. Claude Code · Codex도 같은 원격 주소로 붙고, stdio는 로컬 개발용
+- **전송 방식:** 원격 Streamable HTTP. claude.ai 커넥터와 ChatGPT(개발자 모드)는 원격 서버에만 연결할 수 있음. Claude Code · Codex도 같은 원격 주소에 연결함. 내 컴퓨터에서 개발할 때도 stdio는 쓰지 않음: `uvicorn`으로 앱을 띄우고, MCP 클라이언트에 `http://localhost:8000/mcp` 주소를 등록해서 씀 (#38)
 - **같은 앱:** MCP 엔드포인트를 API와 같은 FastAPI 앱에 붙여 한 서비스로 배포함
 - **쓰기 표시:** ChatGPT는 `readOnlyHint` 표시가 없는 도구를 쓰기 도구로 보고 실행 전에 사용자 확인을 받음. 조회 도구에는 이 표시를 붙임
 - **시간 제한:** 데이터 도구는 LLM을 부르지 않아 바로 응답함. 오래 걸리는 매칭은 JMA 앱에서 작업 ID로 나눔(BE-2)
