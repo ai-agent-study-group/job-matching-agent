@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
     model = os.environ["LLM_MODEL"]
 
     async with ArbeitsagenturClient() as arbeitsagentur:
-        registry = RegistryService({"arbeitsagentur": JobService(arbeitsagentur)})
+        registry = RegistryService([JobService(arbeitsagentur)])
 
         mcp_toolset = MCPToolset(create_server(registry))
         # route.py에서 사용
