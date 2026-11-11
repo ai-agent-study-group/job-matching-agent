@@ -7,8 +7,11 @@
   "paths": {
     "/health": {
       "get": {
-        "summary": "Health",
-        "operationId": "health_health_get",
+        "tags": [
+          "system"
+        ],
+        "summary": "Health check",
+        "operationId": "health",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -19,7 +22,7 @@
                     "type": "string"
                   },
                   "type": "object",
-                  "title": "Response Health Health Get"
+                  "title": "Response Health"
                 }
               }
             }
@@ -29,8 +32,12 @@
     },
     "/api/search": {
       "post": {
-        "summary": "Search",
-        "operationId": "search_api_search_post",
+        "tags": [
+          "search"
+        ],
+        "summary": "Search job postings for a resume",
+        "description": "Extract job titles and preferred locations from the resume text,\nthen search the job sources through the MCP tools and return the postings found.",
+        "operationId": "search",
         "requestBody": {
           "content": {
             "application/json": {
@@ -51,7 +58,7 @@
                     "$ref": "#/components/schemas/JobPosting"
                   },
                   "type": "array",
-                  "title": "Response Search Api Search Post"
+                  "title": "Response Search"
                 }
               }
             }
@@ -155,7 +162,11 @@
           "resume_text": {
             "type": "string",
             "minLength": 1,
-            "title": "Resume Text"
+            "title": "Resume Text",
+            "description": "Resume as plain text",
+            "examples": [
+              "Data analyst, 3 years of Python and SQL. Looking for a full-time job in Berlin."
+            ]
           }
         },
         "type": "object",

@@ -11,8 +11,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Health */
-        get: operations["health_health_get"];
+        /** Health check */
+        get: operations["health"];
         put?: never;
         post?: never;
         delete?: never;
@@ -30,8 +30,12 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Search */
-        post: operations["search_api_search_post"];
+        /**
+         * Search job postings for a resume
+         * @description Extract job titles and preferred locations from the resume text,
+         *     then search the job sources through the MCP tools and return the postings found.
+         */
+        post: operations["search"];
         delete?: never;
         options?: never;
         head?: never;
@@ -93,7 +97,11 @@ export interface components {
          * @description Request body for searching jobs from resume text.
          */
         SearchRequestDTO: {
-            /** Resume Text */
+            /**
+             * Resume Text
+             * @description Resume as plain text
+             * @example Data analyst, 3 years of Python and SQL. Looking for a full-time job in Berlin.
+             */
             resume_text: string;
         };
         /** ValidationError */
@@ -118,7 +126,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    health_health_get: {
+    health: {
         parameters: {
             query?: never;
             header?: never;
@@ -140,7 +148,7 @@ export interface operations {
             };
         };
     };
-    search_api_search_post: {
+    search: {
         parameters: {
             query?: never;
             header?: never;
