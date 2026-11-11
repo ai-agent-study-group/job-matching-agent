@@ -15,8 +15,8 @@ import pytest
 from adapter.outbound.source.api.arbeitsagentur.client import MAX_POSTINGS, ArbeitsagenturClient
 from domain.job import JobPosting
 
-SEARCH = json.loads((Path(__file__).parent / "search_response.json").read_text())
-DETAIL = json.loads((Path(__file__).parent / "detail_response.json").read_text())
+SEARCH = json.loads((Path(__file__).parent / "search_response.json").read_text(encoding="utf-8"))
+DETAIL = json.loads((Path(__file__).parent / "detail_response.json").read_text(encoding="utf-8"))
 
 
 def fake_api(

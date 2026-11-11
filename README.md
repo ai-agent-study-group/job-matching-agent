@@ -95,7 +95,19 @@ docs/           설계 문서, 작업 메모, 회의 기록
 ```bash
 uv sync                            # 의존성과 개발 도구 설치
 uv run pre-commit install          # 커밋 전 ruff 검사 hook 설치 (clone 후 한 번)
-uv run uvicorn main:app --reload   # http://localhost:8000/health
+```
+
+앱을 띄우기 전에 저장소 루트의 `.env`에 LLM 모델과 API 키를 적습니다. `LLM_MODEL`이 없으면 앱이 시작되지 않습니다. `.env`는 git에 올라가지 않습니다.
+
+```env
+LLM_MODEL=openai:gpt-4.1-mini
+OPENAI_API_KEY=<API 키>
+```
+
+Anthropic 모델을 쓰려면 `LLM_MODEL=anthropic:claude-haiku-5-5`와 `ANTHROPIC_API_KEY`를 적습니다.
+
+```bash
+uv run --env-file .env uvicorn main:app --reload   # http://localhost:8000/health
 ```
 
 로컬에서는 MCP 서버를 stdio로 띄워 도구 목록을 보거나 도구 하나를 불러 볼 수 있습니다.
