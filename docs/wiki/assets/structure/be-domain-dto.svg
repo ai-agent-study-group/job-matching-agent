@@ -1,0 +1,99 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 600" role="img" aria-label="코어 안은 도메인만, DTO는 어댑터가 바깥과 맞닿는 곳에만 있음" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="dom-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#2a78d6"/>
+    </marker>
+    <marker id="dto-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#fab219"/>
+    </marker>
+  </defs>
+  <text x="24" y="30" font-size="15" font-weight="600" fill="#141413">코어 안은 도메인만, DTO는 어댑터가 바깥과 맞닿는 곳에만 있음</text>
+  <g id="legend">
+    <rect x="24" y="46" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.14" stroke="#2a78d6" stroke-width="1.25"/>
+    <text x="48" y="56" font-size="11.5" fill="#52514e">도메인 (domain/)</text>
+    <rect x="160" y="46" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="184" y="56" font-size="11.5" fill="#52514e">DTO (dto.py)</text>
+    <path d="M280 52H304" stroke="#2a78d6" stroke-width="2"/>
+    <text x="312" y="56" font-size="11.5" fill="#52514e">도메인이 오감</text>
+    <path d="M408 52H432" stroke="#fab219" stroke-width="2"/>
+    <text x="440" y="56" font-size="11.5" fill="#52514e">DTO가 오감</text>
+    <rect x="520" y="46" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="544" y="56" font-size="11.5" fill="#52514e">바깥</text>
+  </g>
+  <g id="hex-adapter">
+    <polygon points="380,70 680,170 680,490 380,590 80,490 80,170" fill="#ededec" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="380" y="104" text-anchor="middle" font-size="12" font-weight="600" fill="#52514e">어댑터 · 바깥과 맞닿는 층</text>
+    <text x="380" y="528" text-anchor="middle" font-size="11.5" fill="#52514e">남이 정한 모양만 DTO로 받고, 우리가 정한 모양은 도메인 그대로</text>
+  </g>
+  <g id="hex-core">
+    <polygon points="380,170 510,235 510,425 380,490 250,425 250,235" fill="#2a78d6" fill-opacity="0.06" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="380" y="212" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">코어 · 도메인만</text>
+    <rect x="274" y="246" width="100" height="24" rx="6" fill="#2a78d6" fill-opacity="0.14" stroke="#2a78d6" stroke-width="1.25"/>
+    <text x="324" y="262" text-anchor="middle" font-size="11.5" font-weight="600" fill="#141413">Profile</text>
+    <rect x="386" y="246" width="100" height="24" rx="6" fill="#2a78d6" fill-opacity="0.14" stroke="#2a78d6" stroke-width="1.25"/>
+    <text x="436" y="262" text-anchor="middle" font-size="11.5" font-weight="600" fill="#141413">SearchQuery</text>
+    <rect x="274" y="278" width="100" height="24" rx="6" fill="#2a78d6" fill-opacity="0.14" stroke="#2a78d6" stroke-width="1.25"/>
+    <text x="324" y="294" text-anchor="middle" font-size="11.5" font-weight="600" fill="#141413">JobPosting</text>
+    <rect x="386" y="278" width="100" height="24" rx="6" fill="#2a78d6" fill-opacity="0.14" stroke="#2a78d6" stroke-width="1.25"/>
+    <text x="436" y="294" text-anchor="middle" font-size="11.5" font-weight="600" fill="#141413">JD</text>
+    <rect x="330" y="310" width="100" height="24" rx="6" fill="#2a78d6" fill-opacity="0.14" stroke="#2a78d6" stroke-width="1.25"/>
+    <text x="380" y="326" text-anchor="middle" font-size="11.5" font-weight="600" fill="#141413">MatchResult</text>
+    <text x="380" y="362" text-anchor="middle" font-size="11" fill="#52514e">포트 · service도 도메인만 주고받음</text>
+    <text x="380" y="378" text-anchor="middle" font-size="10.5" fill="#52514e">port/inbound · service · port/outbound</text>
+  </g>
+  <g id="flows-domain" fill="none" stroke="#2a78d6" stroke-width="1.75">
+    <path d="M72 250H250" marker-start="url(#dom-arrow)" marker-end="url(#dom-arrow)"/>
+    <path d="M72 320H250" marker-start="url(#dom-arrow)" marker-end="url(#dom-arrow)"/>
+    <path d="M212 400H250" marker-start="url(#dom-arrow)" marker-end="url(#dom-arrow)"/>
+    <path d="M540 256H510" marker-end="url(#dom-arrow)"/>
+    <path d="M540 292H510" marker-end="url(#dom-arrow)"/>
+    <path d="M540 400H510" stroke-dasharray="4 3" marker-end="url(#dom-arrow)"/>
+  </g>
+  <g id="flows-dto" fill="none" stroke="#fab219" stroke-width="1.75">
+    <path d="M72 400H92" marker-start="url(#dto-arrow)" marker-end="url(#dto-arrow)"/>
+    <path d="M688 256H670" marker-end="url(#dto-arrow)"/>
+    <path d="M688 292H670" marker-end="url(#dto-arrow)"/>
+    <path d="M688 400H670" stroke-dasharray="4 3" marker-end="url(#dto-arrow)"/>
+  </g>
+  <g id="in-mcp">
+    <rect x="4" y="236" width="68" height="28" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="38" y="254" text-anchor="middle" font-size="11.5" fill="#141413">AI 앱</text>
+    <text x="165" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">mcp/</text>
+    <text x="165" y="266" text-anchor="middle" font-size="10.5" fill="#52514e">DTO 없이 도메인 그대로</text>
+  </g>
+  <g id="in-agent">
+    <rect x="4" y="306" width="68" height="28" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="38" y="324" text-anchor="middle" font-size="11.5" fill="#141413">LLM</text>
+    <text x="165" y="312" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">agent/</text>
+    <text x="165" y="336" text-anchor="middle" font-size="10.5" fill="#52514e">output_type = 도메인</text>
+  </g>
+  <g id="in-api">
+    <rect x="4" y="386" width="68" height="28" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="38" y="404" text-anchor="middle" font-size="11.5" fill="#141413">FE 화면</text>
+    <text x="152" y="381" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">api/</text>
+    <rect x="92" y="388" width="120" height="24" rx="6" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5" stroke-dasharray="none"/>
+    <text x="152" y="404" text-anchor="middle" font-size="10.5" font-weight="600" fill="#141413">MatchResponseDTO</text>
+    <text x="152" y="428" text-anchor="middle" font-size="10.5" fill="#52514e">안에 MatchResult를 담음</text>
+  </g>
+  <g id="out-source">
+    <text x="605" y="236" text-anchor="middle" font-size="12" font-weight="600" fill="#141413">source/</text>
+    <rect x="540" y="244" width="130" height="24" rx="6" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5" stroke-dasharray="none"/>
+    <text x="605" y="260" text-anchor="middle" font-size="10.5" font-weight="600" fill="#141413">GreenhouseJobDTO</text>
+    <rect x="540" y="280" width="130" height="24" rx="6" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5" stroke-dasharray="none"/>
+    <text x="605" y="296" text-anchor="middle" font-size="10.5" font-weight="600" fill="#141413">ArbeitsagenturJobDTO</text>
+    <text x="605" y="324" text-anchor="middle" font-size="10.5" fill="#52514e">to_posting() → JobPosting</text>
+    <rect x="688" y="242" width="68" height="28" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="722" y="260" text-anchor="middle" font-size="11" fill="#141413">Greenhouse</text>
+    <rect x="688" y="278" width="68" height="28" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="722" y="296" text-anchor="middle" font-size="11" fill="#141413">연방고용청</text>
+  </g>
+  <g id="out-repo">
+    <text x="605" y="381" text-anchor="middle" font-size="11.5" font-weight="600" fill="#141413">repository/ (추후)</text>
+    <rect x="540" y="388" width="130" height="24" rx="6" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="605" y="404" text-anchor="middle" font-size="10.5" font-weight="600" fill="#141413">DB 엔티티</text>
+    <rect x="688" y="386" width="68" height="28" rx="6" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="4 3"/>
+    <text x="722" y="404" text-anchor="middle" font-size="11" fill="#141413">DB</text>
+  </g>
+</svg>

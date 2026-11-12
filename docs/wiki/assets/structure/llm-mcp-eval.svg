@@ -1,0 +1,77 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="432" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 432" role="img" aria-label="클라이언트가 매칭하면 기준이 매번 달라지고, 우리 agent는 기준이 고정돼 평가 셋으로 잼" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="eval-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">클라이언트가 매칭하면 기준이 매번 달라지고, 우리 agent는 기준이 고정돼 평가 셋으로 잼</text>
+  <g id="legend">
+    <rect x="24" y="46" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="48" y="56" font-size="11.5" fill="#52514e">클라이언트</text>
+    <rect x="126" y="46" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="150" y="56" font-size="11.5" fill="#52514e">우리 agent</text>
+    <rect x="228" y="46" width="16" height="12" rx="3" fill="#ededec"/>
+    <text x="252" y="56" font-size="11.5" fill="#52514e">우리 코드 · 데이터</text>
+  </g>
+  <g id="client-side">
+    <rect x="24" y="72" width="344" height="344" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="40" y="96" font-weight="600" fill="#141413">A. 클라이언트가 매칭할 때</text>
+    <rect x="96" y="112" width="200" height="28" rx="8" fill="#ededec"/>
+    <text x="196" y="130" text-anchor="middle" fill="#141413">같은 이력서 + 같은 공고</text>
+    <rect x="34" y="172" width="100" height="36" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="84" y="194" text-anchor="middle" font-size="12.5" fill="#141413">Claude</text>
+    <rect x="146" y="172" width="100" height="36" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="196" y="194" text-anchor="middle" font-size="12.5" fill="#141413">ChatGPT</text>
+    <rect x="258" y="172" width="100" height="36" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="308" y="194" text-anchor="middle" font-size="12.5" fill="#141413">다음 날 Claude</text>
+    <rect x="34" y="240" width="100" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="84" y="259" text-anchor="middle" font-size="12.5" fill="#141413">판정 ①</text>
+    <text x="84" y="275" text-anchor="middle" font-size="11" fill="#52514e">자기 기준</text>
+    <rect x="146" y="240" width="100" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="196" y="259" text-anchor="middle" font-size="12.5" fill="#141413">판정 ②</text>
+    <text x="196" y="275" text-anchor="middle" font-size="11" fill="#52514e">자기 기준</text>
+    <rect x="258" y="240" width="100" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="308" y="259" text-anchor="middle" font-size="12.5" fill="#141413">판정 ③</text>
+    <text x="308" y="275" text-anchor="middle" font-size="11" fill="#52514e">자기 기준</text>
+    <text x="196" y="308" text-anchor="middle" font-size="11.5" fill="#52514e">서로 다를 수 있음</text>
+    <text x="40" y="372" font-size="11.5" fill="#141413">기준이 모델 · 버전 · 앞선 대화마다 다름</text>
+    <text x="40" y="390" font-size="11.5" fill="#52514e">평가 셋을 같은 조건으로 반복해 돌릴 수 없음</text>
+  </g>
+  <g id="agent-side">
+    <rect x="392" y="72" width="344" height="344" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="408" y="96" font-weight="600" fill="#141413">B. 우리 agent가 매칭할 때</text>
+    <rect x="464" y="112" width="200" height="28" rx="8" fill="#ededec"/>
+    <text x="564" y="130" text-anchor="middle" fill="#141413">같은 이력서 + 같은 공고</text>
+    <rect x="402" y="172" width="100" height="36" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="452" y="194" text-anchor="middle" font-size="12.5" fill="#141413">Claude</text>
+    <rect x="514" y="172" width="100" height="36" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="564" y="194" text-anchor="middle" font-size="12.5" fill="#141413">ChatGPT</text>
+    <rect x="626" y="172" width="100" height="36" rx="8" fill="#ededec" stroke="none" stroke-width="1.25"/>
+    <text x="676" y="194" text-anchor="middle" font-size="12.5" fill="#141413">평가 스크립트</text>
+    <rect x="414" y="240" width="300" height="48" rx="8" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.75"/>
+    <text x="564" y="259" text-anchor="middle" font-weight="600" fill="#141413">매칭 agent (MCP 도구)</text>
+    <text x="564" y="277" text-anchor="middle" font-size="11.5" fill="#52514e">고정: 지시문 · 출력 형식 · 모델 · 설정</text>
+    <rect x="454" y="312" width="220" height="40" rx="8" fill="#ededec"/>
+    <text x="564" y="329" text-anchor="middle" font-size="12.5" fill="#141413">같은 기준의 판정 + 근거</text>
+    <text x="564" y="345" text-anchor="middle" font-size="11" fill="#52514e">요건별 충족 · 부분 충족 · 미충족</text>
+    <text x="408" y="372" font-size="11.5" fill="#141413">Claude · ChatGPT · 평가 스크립트가 같은 agent를 부름</text>
+    <text x="408" y="390" font-size="11.5" fill="#52514e">평가 셋으로 바꾸기 전후 점수를 비교함</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M196 140V156H84V172" marker-end="url(#eval-arrow)"/>
+    <path d="M196 156V172" marker-end="url(#eval-arrow)"/>
+    <path d="M196 156H308V172" marker-end="url(#eval-arrow)"/>
+    <path d="M84 208V240" marker-end="url(#eval-arrow)"/>
+    <path d="M196 208V240" marker-end="url(#eval-arrow)"/>
+    <path d="M308 208V240" marker-end="url(#eval-arrow)"/>
+    <path d="M564 140V156H452V172" marker-end="url(#eval-arrow)"/>
+    <path d="M564 156V172" marker-end="url(#eval-arrow)"/>
+    <path d="M564 156H676V172" marker-end="url(#eval-arrow)"/>
+    <path d="M452 208V240" marker-end="url(#eval-arrow)"/>
+    <path d="M564 208V240" marker-end="url(#eval-arrow)"/>
+    <path d="M676 208V240" marker-end="url(#eval-arrow)"/>
+    <path d="M564 288V312" marker-end="url(#eval-arrow)"/>
+  </g>
+</svg>

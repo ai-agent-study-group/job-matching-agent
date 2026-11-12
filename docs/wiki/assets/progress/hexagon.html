@@ -1,0 +1,713 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>폴더 구조 헥사고날</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root {
+  --page: #f5f5f2; --card: #ffffff; --ink: #1f2328; --muted: #68717c; --line: #e3e3de;
+  --dom-fill: #fff5d8; --dom-stroke: #dcaa2c; --dom-chip: #fffdf5; --dom-chip-stroke: #e6c262; --dom-ink: #684800;
+  --svc-fill: #ecf2ff; --svc-stroke: #6d95d6; --svc-chip: #f7faff; --svc-chip-stroke: #a8c1ea; --svc-ink: #21488a;
+  --port-fill: #f3ecff; --port-stroke: #7e57c2; --port-ink: #4a2d8c;
+  --adp-fill: #edf7f1; --adp-stroke: #58a67e; --adp-chip: #f7fbf9; --adp-chip-stroke: #a6d3bb; --adp-ink: #1d6145;
+  --ext-fill: #f3f4f6; --ext-stroke: #8c95a0; --ext-ink: #2b2f36;
+  --later: #c98228; --later-fill: #fff6ea; --call: #59626e; --impl: #7e57c2; --sel: #ff5a36;
+  --surface: #ffffff; --on-ink: #ffffff; --dom-on: #ffe7a6; --sel-soft: #ffefe9; --sel-ink: #b8381a;
+  --control-border: #c9ccd1; --control-hover: #f0f1f3; --danger-border: #e3a093;
+  --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Segoe UI", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --page: #141619; --card: #1b1e22; --ink: #e6e8eb; --muted: #9aa3ad; --line: #2c3036;
+  --dom-fill: #362c14; --dom-stroke: #c99a2e; --dom-chip: #2a2414; --dom-chip-stroke: #8a6d22; --dom-ink: #f0d58a;
+  --svc-fill: #16233a; --svc-stroke: #5a86c9; --svc-chip: #1b2a42; --svc-chip-stroke: #3f5f92; --svc-ink: #a9c6f5;
+  --port-fill: #2a2140; --port-stroke: #9a7ae0; --port-ink: #d2c2ff;
+  --adp-fill: #14281e; --adp-stroke: #4f9a74; --adp-chip: #193026; --adp-chip-stroke: #3a6f55; --adp-ink: #9fdcbc;
+  --ext-fill: #262a30; --ext-stroke: #6f7883; --ext-ink: #e1e4e8;
+  --later: #e09a3e; --later-fill: #33281a; --call: #a3acb7; --impl: #a487e6; --sel: #ff7a57;
+  --surface: #22262b; --on-ink: #141619; --dom-on: #5a4613; --sel-soft: #3a1f17; --sel-ink: #ff9b7d;
+  --control-border: #3a3f46; --control-hover: #2a2e34; --danger-border: #7a3a2c;
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --page: #141619; --card: #1b1e22; --ink: #e6e8eb; --muted: #9aa3ad; --line: #2c3036;
+  --dom-fill: #362c14; --dom-stroke: #c99a2e; --dom-chip: #2a2414; --dom-chip-stroke: #8a6d22; --dom-ink: #f0d58a;
+  --svc-fill: #16233a; --svc-stroke: #5a86c9; --svc-chip: #1b2a42; --svc-chip-stroke: #3f5f92; --svc-ink: #a9c6f5;
+  --port-fill: #2a2140; --port-stroke: #9a7ae0; --port-ink: #d2c2ff;
+  --adp-fill: #14281e; --adp-stroke: #4f9a74; --adp-chip: #193026; --adp-chip-stroke: #3a6f55; --adp-ink: #9fdcbc;
+  --ext-fill: #262a30; --ext-stroke: #6f7883; --ext-ink: #e1e4e8;
+  --later: #e09a3e; --later-fill: #33281a; --call: #a3acb7; --impl: #a487e6; --sel: #ff7a57;
+  --surface: #22262b; --on-ink: #141619; --dom-on: #5a4613; --sel-soft: #3a1f17; --sel-ink: #ff9b7d;
+  --control-border: #3a3f46; --control-hover: #2a2e34; --danger-border: #7a3a2c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--sans); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 24px 12px; max-width: 1960px; margin: 0 auto; }
+h1 { margin: 0 0 6px; font-size: 22px; }
+.lead { margin: 0; color: var(--muted); font-size: 14px; }
+.lead code { font-family: var(--mono); font-size: 13px; color: var(--ink); }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; }
+button { font: inherit; font-size: 14px; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--control-border); background: var(--surface); color: var(--ink); cursor: pointer; }
+button:hover { background: var(--control-hover); }
+button.primary { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+button.on { background: var(--sel-soft); border-color: var(--sel); color: var(--sel-ink); }
+.edit-only { display: none !important; }
+body.editing .edit-only { display: revert !important; }
+.help { max-width: 1960px; margin: 0 auto; padding-block: 0 10px; color: var(--sel-ink); font-size: 13px; }
+.wrap { display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 1960px; margin: 0 auto; }
+body.editing .wrap { grid-template-columns: 1fr 300px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px; min-width: 0; overflow-x: auto; }
+svg#dia { display: block; width: 100%; min-width: 960px; height: auto; user-select: none; }
+#panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; font-size: 13px; align-self: start; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+#panel h3 { margin: 0 0 10px; font-size: 14px; }
+#panel h4 { margin: 14px 0 6px; font-size: 13px; color: var(--muted); }
+#panel label { display: grid; grid-template-columns: 76px 1fr; align-items: center; gap: 8px; margin-bottom: 7px; }
+#panel input, #panel select { font: inherit; font-size: 13px; padding: 4px 6px; border: 1px solid var(--control-border); border-radius: 6px; background: var(--surface); color: var(--ink); width: 100%; min-width: 0; }
+#panel input[type=checkbox] { width: auto; justify-self: start; }
+#panel .row3 { display: grid; grid-template-columns: 56px repeat(3, 1fr); gap: 6px; align-items: center; margin-bottom: 6px; }
+#panel .hint { color: var(--muted); line-height: 1.5; margin: 8px 0 0; }
+#panel .danger { margin-top: 10px; border-color: var(--danger-border); color: var(--sel-ink); }
+.legend { max-width: 1960px; margin: 14px auto 32px; display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 18px; height: 12px; border-radius: 3px; border: 1.5px solid; display: inline-block; }
+.ln { width: 26px; height: 0; border-top: 2px solid; display: inline-block; }
+.legend .note { flex-basis: 100%; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--on-ink); padding: 8px 14px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.toast.show { opacity: 1; }
+
+/* 그림 안 */
+.hex { stroke-width: 1.6; stroke-linejoin: round; }
+.hex-adapter { fill: var(--adp-fill); stroke: var(--adp-stroke); }
+.hex-service { fill: var(--svc-fill); stroke: var(--svc-stroke); }
+.hex-domain { fill: var(--dom-fill); stroke: var(--dom-stroke); }
+.node { transition: opacity .15s; }
+.node rect { stroke-width: 1.4; }
+.node.later rect.box { stroke-dasharray: 5 4; }
+.t-mono { font-family: var(--mono); }
+.t-sans { font-family: var(--sans); }
+.edge { fill: none; stroke-width: 1.7; transition: opacity .15s; }
+.edge.call { stroke: var(--call); }
+.edge.impl { stroke: var(--impl); stroke-dasharray: 1 5; stroke-linecap: round; stroke-width: 2.2; }
+.edge.later { stroke: var(--later); stroke-dasharray: 6 5; stroke-linecap: butt; stroke-width: 1.7; }
+.elabel { font-family: var(--sans); font-size: 12.5px; fill: var(--muted); paint-order: stroke; stroke: var(--card); stroke-width: 5px; stroke-linejoin: round; transition: opacity .15s; }
+.tag rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.3; }
+.tag text { font-family: var(--mono); font-size: 13px; font-weight: 700; fill: var(--ink); }
+.dim { opacity: .18; }
+.node.on rect.box { fill: var(--dom-on); stroke: var(--dom-stroke); stroke-width: 2.4; }
+.edge.dim, .elabel.dim, .tag.dim { opacity: .08; }
+body.editing .node { cursor: move; }
+body.editing .hit { cursor: pointer; }
+.tools { display: none !important; }
+</style>
+<header class="top">
+  <div>
+    <h1>폴더 구조 × 헥사고날</h1>
+    <p class="lead"><code>src/</code>의 폴더와 파일을 층마다 놓은 그림 · 상자에 마우스를 올리면 그 상자에서 이어지는 호출 흐름만 보임 · import 방향: <code>adapter/inbound</code> → <code>port/inbound</code> ← <code>service</code> → <code>port/outbound</code> ← <code>adapter/outbound</code></p>
+  </div>
+  <div class="tools">
+    <button id="btn-edit">편집</button>
+    <button id="btn-add" class="edit-only">상자 추가</button>
+    <button id="btn-undo" class="edit-only">되돌리기</button>
+    <button id="btn-save" class="edit-only primary">HTML 저장</button>
+  </div>
+</header>
+<div class="help edit-only">끌어서 이동(안에 든 상자도 같이) · 더블클릭하면 글자 수정 · Shift+클릭으로 두 상자를 차례로 누르면 연결 · 선택하고 Delete로 삭제 · 방향키로 미세 이동 · ⌘/Ctrl+Z 되돌리기 · 다 고치면 HTML 저장</div>
+<main class="wrap">
+  <div class="card"><svg id="dia" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="src 폴더와 파일을 도메인, 애플리케이션, 어댑터 층에 놓은 헥사고날 그림"></svg></div>
+  <aside id="panel" class="edit-only"></aside>
+</main>
+<section class="legend">
+  <span><i class="sw" style="background:var(--dom-fill);border-color:var(--dom-stroke)"></i>도메인: 데이터 형식</span>
+  <span><i class="sw" style="background:var(--svc-fill);border-color:var(--svc-stroke)"></i>애플리케이션: 서비스 포트 구현 (도구 / 서비스 로직)</span>
+  <span><i class="sw" style="background:var(--port-fill);border-color:var(--port-stroke);border-radius:8px"></i>포트: 들어오는 · 나가는 쪽 약속</span>
+  <span><i class="sw" style="background:var(--adp-fill);border-color:var(--adp-stroke)"></i>어댑터: 바깥과 연결</span>
+  <span><i class="sw" style="background:var(--ext-fill);border-color:var(--ext-stroke)"></i>바깥 서비스</span>
+  <span><i class="sw" style="background:var(--later-fill);border-color:var(--later);border-style:dashed"></i>추후</span>
+  <span><i class="ln" style="border-color:var(--call)"></i>호출 (양방향: 요청 · 응답)</span>
+  <span><i class="ln" style="border-color:var(--impl);border-top-style:dotted;border-top-width:3px"></i>구현 (service · 어댑터가 포트를 채움)</span>
+  <span><i class="ln" style="border-color:var(--later);border-top-style:dashed"></i>추후 연결</span>
+  <span class="note">domain은 여러 층이 import해서 화살표 대신 불로 표시함: 상자에 마우스를 올리면 그 흐름에서 쓰는 domain 파일이 켜짐(추후 부분 제외). domain은 바깥을 모르므로 domain 파일에 올리면 자기만 켜짐 ·main.py는 조립만 함 · test/는 src와 같은 구조라 그림에 없음 · web/은 FE 서비스라 바깥에 둠</span>
+</section>
+<div class="toast" id="toast"></div>
+
+<script id="diagram-data" type="application/json">
+{"canvas": {"x": 0, "y": 72, "w": 1900, "h": 1036}, "hexes": [{"id": "hx-adapter", "layer": "adapter", "cx": 950, "cy": 560, "W": 700, "h": 300, "H": 470}, {"id": "hx-service", "layer": "service", "cx": 950, "cy": 560, "W": 320, "h": 210, "H": 360}, {"id": "hx-domain", "layer": "domain", "cx": 950, "cy": 585, "W": 140, "h": 110, "H": 180}], "nodes": [{"id": "l-adapter", "kind": "label", "layer": "adapter", "x": 950, "y": 140, "title": "어댑터", "size": 14, "role": true}, {"id": "l-service", "kind": "label", "layer": "service", "x": 950, "y": 258, "title": "애플리케이션", "size": 14, "role": true}, {"id": "l-domain", "kind": "label", "layer": "domain", "x": 950, "y": 438, "title": "도메인", "size": 14, "role": true}, {"id": "l-domain-dir", "kind": "label", "layer": "domain", "x": 950, "y": 462, "title": "domain/", "size": 14, "mono": true}, {"id": "l-domain-note", "kind": "label", "layer": "domain", "x": 950, "y": 722, "title": "모든 층이 import", "size": 12}, {"id": "l-port-dir", "kind": "label", "layer": "port", "x": 1270, "y": 385, "title": "port/outbound/", "size": 13, "mono": true}, {"id": "l-in", "kind": "label", "layer": "adapter", "x": 414, "y": 276, "title": "들어오는 쪽 · inbound", "size": 13}, {"id": "l-out", "kind": "label", "layer": "adapter", "x": 1509, "y": 290, "title": "나가는 쪽 · outbound", "size": 13}, {"id": "g-service", "kind": "group", "layer": "service", "x": 775, "y": 286, "w": 350, "h": 92, "title": "service/", "sub": "서비스 포트 구현 · 도구 / 서비스 로직"}, {"id": "s-job", "kind": "chip", "layer": "service", "parent": "g-service", "x": 788, "y": 316, "w": 160, "h": 50, "title": "job.py", "sub": "search_jobs · get_job", "uses": ["d-profile", "d-job"]}, {"id": "s-source", "kind": "chip", "layer": "service", "parent": "g-service", "x": 984, "y": 316, "w": 130, "h": 50, "title": "registry.py", "sub": "JobService 목록"}, {"id": "d-profile", "kind": "chip", "layer": "domain", "x": 845, "y": 480, "w": 210, "h": 48, "title": "profile.py", "sub": "Profile"}, {"id": "d-job", "kind": "chip", "layer": "domain", "x": 845, "y": 534, "w": 210, "h": 48, "title": "job.py", "sub": "JobPosting"}, {"id": "d-match", "kind": "chip", "layer": "domain", "x": 845, "y": 588, "w": 210, "h": 48, "title": "match.py", "sub": "MatchResult"}, {"id": "d-source", "kind": "chip", "layer": "domain", "x": 845, "y": 642, "w": 210, "h": 48, "title": "source.py", "sub": "Source"}, {"id": "l-port-in-dir", "kind": "label", "layer": "port", "x": 680, "y": 280, "title": "port/inbound/", "size": 13, "mono": true}, {"id": "p-in-source", "kind": "port", "layer": "port", "x": 610, "y": 290, "w": 140, "h": 44, "title": "registry.py", "sub": "RegistryServicePort"}, {"id": "p-in-job", "kind": "port", "layer": "port", "x": 610, "y": 342, "w": 140, "h": 44, "title": "job.py", "sub": "JobServicePort", "uses": ["d-profile", "d-job"]}, {"id": "p-source", "kind": "port", "layer": "port", "x": 1195, "y": 396, "w": 150, "h": 48, "title": "source.py", "sub": "JobSource", "uses": ["d-profile", "d-job"]}, {"id": "p-repo", "kind": "port", "layer": "port", "x": 1195, "y": 656, "w": 150, "h": 48, "title": "repository.py", "sub": "Repository", "later": true, "uses": ["d-job", "d-match"]}, {"id": "g-mcp", "kind": "group", "layer": "adapter", "x": 270, "y": 290, "w": 288, "h": 84, "title": "adapter/inbound/mcp/"}, {"id": "i-server", "kind": "chip", "layer": "adapter", "parent": "g-mcp", "x": 286, "y": 318, "w": 256, "h": 44, "title": "server.py", "sub": "출처별 JobService를 골라 부르는 도구 4개", "uses": ["d-profile", "d-job"]}, {"id": "g-agent", "kind": "group", "layer": "adapter", "x": 270, "y": 420, "w": 288, "h": 154, "title": "adapter/inbound/agent/", "sub": "pydantic-ai"}, {"id": "a-profile", "kind": "chip", "layer": "adapter", "parent": "g-agent", "x": 286, "y": 450, "w": 128, "h": 50, "title": "profile.py", "sub": "프로필 agent", "uses": ["d-profile"]}, {"id": "a-job", "kind": "chip", "layer": "adapter", "parent": "g-agent", "x": 422, "y": 450, "w": 128, "h": 50, "title": "job.py", "sub": "공고 정리 agent", "uses": ["d-job"]}, {"id": "a-match", "kind": "chip", "layer": "adapter", "parent": "g-agent", "x": 286, "y": 510, "w": 128, "h": 50, "title": "match.py", "sub": "매칭 agent", "uses": ["d-profile", "d-job", "d-match"]}, {"id": "a-schema", "kind": "chip", "layer": "adapter", "parent": "g-agent", "x": 422, "y": 510, "w": 128, "h": 50, "title": "dto.py", "sub": "필요할 때만"}, {"id": "g-api", "kind": "group", "layer": "adapter", "x": 270, "y": 630, "w": 288, "h": 84, "title": "adapter/inbound/api/"}, {"id": "i-route", "kind": "chip", "layer": "adapter", "parent": "g-api", "x": 286, "y": 658, "w": 128, "h": 44, "title": "route.py", "sub": "/health만 있음", "uses": ["d-profile", "d-match"]}, {"id": "i-schema", "kind": "chip", "layer": "adapter", "parent": "g-api", "x": 422, "y": 658, "w": 128, "h": 44, "title": "dto.py", "sub": "응답 DTO"}, {"id": "g-source", "kind": "group", "layer": "adapter", "x": 1380, "y": 302, "w": 262, "h": 290, "title": "adapter/outbound/source/"}, {"id": "g-src-api", "kind": "group", "layer": "adapter", "parent": "g-source", "x": 1392, "y": 330, "w": 234, "h": 190, "title": "api/"}, {"id": "o-gh", "kind": "chip", "layer": "adapter", "parent": "g-src-api", "x": 1404, "y": 356, "w": 210, "h": 48, "title": "greenhouse/", "sub": "client · dto", "uses": ["d-profile", "d-job"]}, {"id": "o-ba", "kind": "chip", "layer": "adapter", "parent": "g-src-api", "x": 1404, "y": 410, "w": 210, "h": 48, "title": "arbeitsagentur/", "sub": "client · dto", "uses": ["d-profile", "d-job"]}, {"id": "o-fh", "kind": "chip", "layer": "adapter", "parent": "g-src-api", "x": 1404, "y": 464, "w": 210, "h": 48, "title": "freehire/", "sub": "client · dto · text_parser", "uses": ["d-profile", "d-job"]}, {"id": "o-scrape", "kind": "chip", "layer": "adapter", "parent": "g-source", "x": 1392, "y": 532, "w": 234, "h": 46, "title": "scrape/", "sub": "스크래퍼", "later": true, "uses": ["d-profile", "d-job"]}, {"id": "g-repo", "kind": "group", "layer": "adapter", "x": 1380, "y": 606, "w": 262, "h": 148, "title": "adapter/outbound/repository/", "later": true}, {"id": "o-pg", "kind": "chip", "layer": "adapter", "parent": "g-repo", "x": 1392, "y": 636, "w": 234, "h": 48, "title": "postgres/", "sub": "JD · 매칭 결과", "uses": ["d-job", "d-match"]}, {"id": "o-mongo", "kind": "chip", "layer": "adapter", "parent": "g-repo", "x": 1392, "y": 692, "w": 234, "h": 48, "title": "mongo/", "sub": "공고 원문", "uses": ["d-job"]}, {"id": "x-ai", "kind": "ext", "layer": "external", "x": 30, "y": 301, "w": 180, "h": 62, "title": "AI 앱", "sub": "Claude · ChatGPT · Codex"}, {"id": "x-llm", "kind": "ext", "layer": "external", "x": 30, "y": 466, "w": 180, "h": 62, "title": "LLM 제공사", "sub": "agent가 부름"}, {"id": "x-fe", "kind": "ext", "layer": "external", "x": 30, "y": 641, "w": 180, "h": 62, "title": "FE 화면", "sub": "web/ · 별도 서비스"}, {"id": "x-gh", "kind": "ext", "layer": "external", "x": 1700, "y": 356, "w": 170, "h": 48, "title": "Greenhouse API"}, {"id": "x-ba", "kind": "ext", "layer": "external", "x": 1700, "y": 410, "w": 170, "h": 48, "title": "연방고용청 API"}, {"id": "x-fh", "kind": "ext", "layer": "external", "x": 1700, "y": 464, "w": 170, "h": 48, "title": "freehire API"}, {"id": "x-sites", "kind": "ext", "layer": "external", "x": 1700, "y": 532, "w": 170, "h": 46, "title": "공고 사이트", "later": true}, {"id": "x-pg", "kind": "ext", "layer": "external", "x": 1700, "y": 636, "w": 170, "h": 48, "title": "PostgreSQL", "later": true}, {"id": "x-mongo", "kind": "ext", "layer": "external", "x": 1700, "y": 692, "w": 170, "h": 48, "title": "MongoDB", "sub": "미정", "later": true}, {"id": "m-main", "kind": "main", "layer": "external", "x": 650, "y": 1046, "w": 600, "h": 50, "title": "main.py", "sub": "조립: /api를 FastAPI 앱에 올림 · /mcp는 아직 (#38)"}], "edges": [{"id": "e-ai-mcp", "from": "x-ai", "to": "g-mcp", "fromSide": "r", "toSide": "l", "kind": "call", "label": "stdio", "tag": true, "lx": 240}, {"id": "e-fe-api", "from": "x-fe", "to": "g-api", "fromSide": "r", "toSide": "l", "kind": "call", "label": "/api", "tag": true, "lx": 240}, {"id": "e-api-agent", "from": "g-api", "to": "g-agent", "fromSide": "t", "toSide": "b", "kind": "call", "label": "agent 실행"}, {"id": "e-agent-mcp", "from": "g-agent", "to": "g-mcp", "fromSide": "t", "toSide": "b", "kind": "call", "label": "MCP 도구 호출"}, {"id": "e-agent-llm", "from": "g-agent", "to": "x-llm", "fromSide": "l", "toSide": "r", "kind": "call"}, {"id": "e-mcp-in-source", "from": "g-mcp", "to": "p-in-source", "fromSide": "r", "toSide": "l", "fromAt": 0.2619, "kind": "call", "label": "도구 호출", "ldy": -2}, {"id": "e-mcp-in-job", "from": "g-mcp", "to": "p-in-job", "fromSide": "r", "toSide": "l", "fromAt": 0.881, "kind": "call"}, {"id": "e-svc-job-source", "from": "s-job", "to": "s-source", "fromSide": "r", "toSide": "l", "kind": "call"}, {"id": "e-svc-impl-source", "from": "g-service", "file": "s-source", "to": "p-in-source", "fromSide": "l", "toSide": "r", "fromAt": 0.2826, "kind": "impl"}, {"id": "e-svc-impl-job", "from": "g-service", "file": "s-job", "to": "p-in-job", "fromSide": "l", "toSide": "r", "fromAt": 0.8478, "kind": "impl"}, {"id": "e-api-in-job", "from": "g-api", "to": "p-in-job", "fromSide": "r", "toSide": "b", "kind": "call", "later": true, "label": "직접 조회 (추후)"}, {"id": "e-service-source", "from": "g-service", "file": "s-job", "to": "p-source", "fromSide": "r", "toSide": "l", "fromAt": 0.3, "via": 1170, "kind": "call"}, {"id": "e-service-repo", "from": "g-service", "file": "s-job", "to": "p-repo", "fromSide": "r", "toSide": "l", "fromAt": 0.7, "via": 1150, "kind": "call", "later": true}, {"id": "e-source-impl", "from": "g-source", "to": "p-source", "fromSide": "l", "toSide": "r", "kind": "impl", "label": "구현"}, {"id": "e-repo-impl", "from": "g-repo", "to": "p-repo", "fromSide": "l", "toSide": "r", "kind": "impl", "label": "구현"}, {"id": "e-gh", "from": "o-gh", "to": "x-gh", "fromSide": "r", "toSide": "l", "kind": "call"}, {"id": "e-ba", "from": "o-ba", "to": "x-ba", "fromSide": "r", "toSide": "l", "kind": "call"}, {"id": "e-scrape", "from": "o-scrape", "to": "x-sites", "fromSide": "r", "toSide": "l", "kind": "call", "later": true}, {"id": "e-pg", "from": "o-pg", "to": "x-pg", "fromSide": "r", "toSide": "l", "kind": "call", "later": true}, {"id": "e-mongo", "from": "o-mongo", "to": "x-mongo", "fromSide": "r", "toSide": "l", "kind": "call", "later": true}, {"id": "e-fh", "from": "o-fh", "to": "x-fh", "fromSide": "r", "toSide": "l", "kind": "call"}]}
+</script>
+<script>
+(() => {
+  // 저장할 때 쓸 원본 (그리기 전 상태)
+  const PRISTINE = '<!doctype html>\n' + document.documentElement.outerHTML;
+  const DATA_OPEN = '<script id="diagram-data" type="application/json">';
+  const FILE_NAME = 'architecture-folders.html';
+  const NS = 'http://www.w3.org/2000/svg';
+  const GRID = 5;
+
+  let data = JSON.parse(document.getElementById('diagram-data').textContent);
+  let byId = {};
+  let editing = false, sel = null, pendingFrom = null, drag = null;
+  let undoStack = [], committed = JSON.stringify(data);
+
+  const svg = document.getElementById('dia');
+  const panel = document.getElementById('panel');
+
+  const LAYER = {
+    domain:   {chip: 'var(--dom-chip)', chipStroke: 'var(--dom-chip-stroke)', stroke: 'var(--dom-stroke)', ink: 'var(--dom-ink)'},
+    service:  {chip: 'var(--svc-chip)', chipStroke: 'var(--svc-chip-stroke)', stroke: 'var(--svc-stroke)', ink: 'var(--svc-ink)'},
+    port:     {chip: 'var(--port-fill)', chipStroke: 'var(--port-stroke)', stroke: 'var(--port-stroke)', ink: 'var(--port-ink)'},
+    adapter:  {chip: 'var(--adp-chip)', chipStroke: 'var(--adp-chip-stroke)', stroke: 'var(--adp-stroke)', ink: 'var(--adp-ink)'},
+    external: {chip: 'var(--ext-fill)', chipStroke: 'var(--ext-stroke)', stroke: 'var(--ext-stroke)', ink: 'var(--ext-ink)'}
+  };
+
+  // ---------- 도우미 ----------
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) if (attrs[k] !== undefined && attrs[k] !== null) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function text(parent, x, y, s, attrs) {
+    const t = el('text', Object.assign({x, y}, attrs), parent);
+    t.textContent = s;
+    return t;
+  }
+  function index() { byId = {}; data.nodes.forEach(n => { byId[n.id] = n; }); }
+  function ancestors(id) { const out = []; let n = byId[id]; while (n && n.parent && byId[n.parent]) { out.push(n.parent); n = byId[n.parent]; } return out; }
+  function descendants(id) { const out = []; const walk = p => data.nodes.forEach(n => { if (n.parent === p) { out.push(n.id); walk(n.id); } }); walk(id); return out; }
+  function depth(n) { return ancestors(n.id).length; }
+  const snap = v => Math.round(v / GRID) * GRID;
+
+  // ---------- 선 경로 ----------
+  function anchor(n, side, at) {
+    if (side === 'l') return [n.x, n.y + n.h * at];
+    if (side === 'r') return [n.x + n.w, n.y + n.h * at];
+    if (side === 't') return [n.x + n.w * at, n.y];
+    return [n.x + n.w * at, n.y + n.h];
+  }
+  function route(e) {
+    const a = byId[e.from], b = byId[e.to];
+    const [x1, y1] = anchor(a, e.fromSide, e.fromAt ?? 0.5);
+    const [x2, y2] = anchor(b, e.toSide, e.toAt ?? 0.5);
+    const hA = e.fromSide === 'l' || e.fromSide === 'r';
+    const hB = e.toSide === 'l' || e.toSide === 'r';
+    let pts;
+    if (hA && hB) { const mx = e.via ?? (x1 + x2) / 2; pts = [[x1, y1], [mx, y1], [mx, y2], [x2, y2]]; }
+    else if (!hA && !hB) { const my = e.via ?? (y1 + y2) / 2; pts = [[x1, y1], [x1, my], [x2, my], [x2, y2]]; }
+    else if (hA) pts = [[x1, y1], [x2, y1], [x2, y2]];
+    else pts = [[x1, y1], [x1, y2], [x2, y2]];
+    return clean(pts);
+  }
+  function clean(pts) {
+    const out = [pts[0]];
+    for (let i = 1; i < pts.length; i++) {
+      const p = pts[i], q = out[out.length - 1];
+      if (Math.hypot(p[0] - q[0], p[1] - q[1]) < 0.5) continue;
+      if (out.length >= 2) {
+        const o = out[out.length - 2];
+        const cross = (q[0] - o[0]) * (p[1] - q[1]) - (q[1] - o[1]) * (p[0] - q[0]);
+        if (Math.abs(cross) < 0.5) { out[out.length - 1] = p; continue; }
+      }
+      out.push(p);
+    }
+    return out;
+  }
+  function pathD(pts, r) {
+    let d = `M${pts[0][0]} ${pts[0][1]}`;
+    for (let i = 1; i < pts.length - 1; i++) {
+      const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], [x2, y2] = pts[i + 1];
+      const l1 = Math.hypot(x1 - x0, y1 - y0), l2 = Math.hypot(x2 - x1, y2 - y1);
+      const rr = Math.min(r, l1 / 2, l2 / 2);
+      d += ` L${x1 - (x1 - x0) / l1 * rr} ${y1 - (y1 - y0) / l1 * rr} Q${x1} ${y1} ${x1 + (x2 - x1) / l2 * rr} ${y1 + (y2 - y1) / l2 * rr}`;
+    }
+    const last = pts[pts.length - 1];
+    return d + ` L${last[0]} ${last[1]}`;
+  }
+  function longestSegment(pts) {
+    let best = 0, len = -1;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const l = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]);
+      if (l > len) { len = l; best = i; }
+    }
+    return [pts[best], pts[best + 1]];
+  }
+
+  // ---------- 그리기 ----------
+  function hexPoints(h) {
+    return [[h.cx, h.cy - h.H], [h.cx + h.W, h.cy - h.h], [h.cx + h.W, h.cy + h.h],
+            [h.cx, h.cy + h.H], [h.cx - h.W, h.cy + h.h], [h.cx - h.W, h.cy - h.h]].map(p => p.join(',')).join(' ');
+  }
+
+  function drawNode(n, layerG) {
+    const L = LAYER[n.layer] || LAYER.external;
+    const g = el('g', {class: `node kind-${n.kind}${n.later ? ' later' : ''}`, 'data-id': n.id}, layerG);
+    if (n.kind === 'label') {
+      const attrs = {'text-anchor': 'middle', 'font-size': n.size || 13, fill: n.role ? L.stroke : (n.mono ? L.ink : 'var(--muted)'),
+                     class: n.mono ? 't-mono' : 't-sans', 'font-weight': (n.role || n.mono) ? 700 : 400};
+      if (n.role) attrs['letter-spacing'] = '0.08em';
+      text(g, n.x, n.y, n.title, attrs);
+      return g;
+    }
+    const later = n.later;
+    let fill, stroke, rx = 8, sw = 1.4, ink = L.ink;
+    if (n.kind === 'group') { fill = 'var(--surface)'; stroke = L.stroke; rx = 10; sw = 1.6; }
+    else if (n.kind === 'port') { fill = L.chip; stroke = L.stroke; rx = n.h / 2; sw = 1.8; }
+    else if (n.kind === 'ext') { fill = 'var(--ext-fill)'; stroke = 'var(--ext-stroke)'; rx = 10; ink = 'var(--ext-ink)'; }
+    else if (n.kind === 'main') { fill = 'var(--surface)'; stroke = 'var(--ink)'; rx = 10; ink = 'var(--ink)'; }
+    else { fill = L.chip; stroke = L.chipStroke; }
+    if (later) { stroke = 'var(--later)'; if (n.kind !== 'group') fill = 'var(--later-fill)'; }
+    el('rect', {class: 'box', x: n.x, y: n.y, width: n.w, height: n.h, rx, fill, stroke, 'stroke-width': sw}, g);
+
+    if (n.kind === 'group') {
+      text(g, n.x + 12, n.y + 20, n.title, {class: 't-mono', 'font-size': 12.5, 'font-weight': 700, fill: later ? 'var(--later)' : ink});
+      if (n.sub) text(g, n.x + n.w - 12, n.y + 20, n.sub, {class: 't-sans', 'font-size': 12, fill: 'var(--muted)', 'text-anchor': 'end'});
+    } else {
+      const cx = n.x + n.w / 2;
+      const mono = n.kind !== 'ext';
+      const titleSize = n.kind === 'ext' ? 14.5 : 14;
+      if (n.sub) {
+        text(g, cx, n.y + n.h / 2 - 3, n.title, {class: mono ? 't-mono' : 't-sans', 'font-size': titleSize, 'font-weight': 700, fill: ink, 'text-anchor': 'middle'});
+        text(g, cx, n.y + n.h / 2 + 14, n.sub, {class: 't-sans', 'font-size': 12.5, fill: 'var(--muted)', 'text-anchor': 'middle'});
+      } else {
+        text(g, cx, n.y + n.h / 2 + 5, n.title, {class: mono ? 't-mono' : 't-sans', 'font-size': titleSize, 'font-weight': 700, fill: ink, 'text-anchor': 'middle'});
+      }
+    }
+    if (later) {
+      const bx = n.x + n.w - 38, by = n.y - 9;
+      el('rect', {x: bx, y: by, width: 32, height: 18, rx: 9, fill: 'var(--surface)', stroke: 'var(--later)', 'stroke-width': 1.2}, g);
+      text(g, bx + 16, by + 13, '추후', {class: 't-sans', 'font-size': 11, 'font-weight': 700, fill: 'var(--later)', 'text-anchor': 'middle'});
+    }
+    return g;
+  }
+
+  function render() {
+    index();
+    const c = data.canvas;
+    svg.setAttribute('viewBox', `${c.x} ${c.y} ${c.w} ${c.h}`);
+    svg.textContent = '';
+    const defs = el('defs', {}, svg);
+    [['call', 'var(--call)'], ['impl', 'var(--impl)'], ['later', 'var(--later)'], ['sel', 'var(--sel)']].forEach(([k, color]) => {
+      const m = el('marker', {id: `arrow-${k}`, viewBox: '0 0 10 10', refX: 9.5, refY: 5, markerWidth: 9, markerHeight: 9, markerUnits: 'userSpaceOnUse', orient: 'auto-start-reverse'}, defs);
+      el('path', {d: 'M0 0.8L10 5L0 9.2z', fill: color}, m);
+    });
+    el('rect', {class: 'bg', x: c.x, y: c.y, width: c.w, height: c.h, fill: 'transparent'}, svg);
+
+    const hexG = el('g', {}, svg);
+    data.hexes.forEach(h => el('polygon', {class: `hex hex-${h.layer}`, points: hexPoints(h), 'data-hex': h.id}, hexG));
+
+    const nodeG = el('g', {}, svg);
+    const order = data.nodes.slice().sort((a, b) => {
+      const rank = n => n.kind === 'label' ? 100 : n.kind === 'group' ? depth(n) : 50;
+      return rank(a) - rank(b);
+    });
+    order.forEach(n => drawNode(n, nodeG));
+
+    const edgeG = el('g', {}, svg), labelG = el('g', {}, svg);
+    data.edges.forEach(e => {
+      if (!byId[e.from] || !byId[e.to]) return;
+      const pts = route(e);
+      const cls = e.later ? 'later' : e.kind;
+      const isSel = sel && sel.type === 'edge' && sel.id === e.id;
+      // 호출은 요청과 응답이 오가므로 양쪽에 화살표. 구현(impl)은 한쪽만
+      const marker = `url(#arrow-${isSel ? 'sel' : cls})`;
+      el('path', {class: `edge ${cls}`, d: pathD(pts, 10), 'marker-end': marker, 'marker-start': e.kind === 'call' ? marker : null, 'data-edge': e.id,
+                  style: isSel ? 'stroke: var(--sel)' : null}, edgeG);
+      el('path', {class: 'hit', d: pathD(pts, 10), fill: 'none', stroke: 'transparent', 'stroke-width': 14, 'data-edge': e.id}, edgeG);
+      if (e.label) {
+        const [p, q] = longestSegment(pts);
+        const horiz = Math.abs(q[1] - p[1]) < Math.abs(q[0] - p[0]);
+        if (e.tag) {
+          // 선 위쪽에 올려서 양쪽 화살표를 가리지 않게 함
+          const x = e.lx ?? (p[0] + q[0]) / 2, y = (p[1] + q[1]) / 2 - 18;
+          const tg = el('g', {class: 'tag', 'data-edge': e.id}, labelG);
+          const r = el('rect', {}, tg);
+          const t = text(tg, x, y + 4.5, e.label, {'text-anchor': 'middle'});
+          const w = t.getComputedTextLength() + 14;
+          r.setAttribute('x', x - w / 2); r.setAttribute('y', y - 11); r.setAttribute('width', w); r.setAttribute('height', 22); r.setAttribute('rx', 6);
+        } else if (horiz) {
+          text(labelG, (p[0] + q[0]) / 2 + (e.ldx || 0), p[1] - 8 + (e.ldy || 0), e.label, {class: 'elabel', 'text-anchor': 'middle', 'data-edge': e.id});
+        } else {
+          text(labelG, p[0] + 9 + (e.ldx || 0), (p[1] + q[1]) / 2 + 4 + (e.ldy || 0), e.label, {class: 'elabel', 'data-edge': e.id});
+        }
+      }
+    });
+
+    // 선택 표시
+    const marks = el('g', {'pointer-events': 'none'}, svg);
+    [sel && sel.type === 'node' ? sel.id : null, pendingFrom].forEach((id, i) => {
+      const n = id && byId[id];
+      if (!n) return;
+      if (n.kind === 'label') {
+        el('rect', {x: n.x - 60, y: n.y - 18, width: 120, height: 26, rx: 6, fill: 'none', stroke: 'var(--sel)', 'stroke-width': 2, 'stroke-dasharray': i ? '2 3' : '5 4'}, marks);
+      } else {
+        el('rect', {x: n.x - 5, y: n.y - 5, width: n.w + 10, height: n.h + 10, rx: 10, fill: 'none', stroke: 'var(--sel)', 'stroke-width': 2, 'stroke-dasharray': i ? '2 3' : '5 4'}, marks);
+      }
+    });
+  }
+
+  // ---------- 마우스를 올리면 연결만 보이기 ----------
+  function isLater(id) { return !!byId[id].later || ancestors(id).some(a => byId[a].later); }
+  // 호출 방향으로 따라감: call은 from → to, impl(구현)은 포트 → 어댑터
+  function walk(id, dir) {
+    const ns = new Set(), es = new Set(), q = [];
+    const push = x => { if (!ns.has(x)) { ns.add(x); q.push(x); } };
+    push(id);
+    if (dir === 'down') descendants(id).forEach(push);
+    ancestors(id).forEach(push);
+    while (q.length) {
+      const x = q.shift();
+      data.edges.forEach(e => {
+        // 폴더 상자에 그린 선은 그 선을 실제로 쓰는 파일(file) 기준으로 따라감
+        const end = v => (e.file && byId[e.file] && v === byId[e.file].parent ? e.file : v);
+        const [src, dst] = e.kind === 'impl' ? [end(e.to), end(e.from)] : [end(e.from), end(e.to)];
+        const next = dir === 'down' ? (src === x ? dst : null) : (dst === x ? src : null);
+        if (next == null || !byId[next]) return;
+        es.add(e.id);
+        push(next);
+        if (dir === 'down') descendants(next).forEach(push);
+        ancestors(next).forEach(push);
+      });
+    }
+    return {ns, es};
+  }
+
+  function highlight(id) {
+    const nodesEl = svg.querySelectorAll('.node'), edgesEl = svg.querySelectorAll('[data-edge]');
+    if (!id || editing) {
+      nodesEl.forEach(g => g.classList.remove('dim', 'on'));
+      edgesEl.forEach(g => g.classList.remove('dim'));
+      return;
+    }
+    const ns = new Set(), es = new Set();
+    if (byId[id].layer === 'domain') {
+      // domain 파일: domain은 바깥을 모르므로 자기만 켬
+      ns.add(id);
+    } else {
+      // 이 상자에서 이어지는 호출 흐름만 켬. 바깥 서비스는 부르는 곳이 없어서 거꾸로(누가 부르는지)
+      let flow = walk(id, 'down');
+      if (!flow.es.size && byId[id].layer === 'external') flow = walk(id, 'up');
+      flow.ns.forEach(x => ns.add(x));
+      flow.es.forEach(x => es.add(x));
+      // 흐름에서 쓰는 domain 파일을 켬 (추후 부분은 빼되, 올린 상자 자신은 넣음)
+      const own = new Set([id, ...descendants(id)]);
+      flow.ns.forEach(x => { if (own.has(x) || !isLater(x)) (byId[x].uses || []).forEach(u => ns.add(u)); });
+    }
+    nodesEl.forEach(g => {
+      const n = byId[g.dataset.id];
+      const lit = ns.has(n.id);
+      g.classList.toggle('dim', n.kind !== 'label' && !lit);
+      g.classList.toggle('on', lit && n.layer === 'domain' && n.kind !== 'label');
+    });
+    edgesEl.forEach(g => g.classList.toggle('dim', !es.has(g.dataset.edge)));
+  }
+  svg.addEventListener('pointerover', ev => {
+    if (editing || drag) return;
+    const g = ev.target.closest('.node');
+    highlight(g && byId[g.dataset.id].kind !== 'label' ? g.dataset.id : null);
+  });
+  svg.addEventListener('pointerleave', () => highlight(null));
+
+  // ---------- 편집 ----------
+  function svgPoint(ev) {
+    const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY;
+    return p.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function commit() {
+    const now = JSON.stringify(data);
+    if (now === committed) return;
+    undoStack.push(committed);
+    if (undoStack.length > 200) undoStack.shift();
+    committed = now;
+  }
+  function undo() {
+    if (!undoStack.length) return toast('되돌릴 것이 없음');
+    committed = undoStack.pop();
+    data = JSON.parse(committed);
+    if (sel && sel.type === 'node' && !data.nodes.some(n => n.id === sel.id)) sel = null;
+    if (sel && sel.type === 'edge' && !data.edges.some(e => e.id === sel.id)) sel = null;
+    render(); buildPanel();
+  }
+  function select(s) { sel = s; render(); buildPanel(); }
+  function newId(prefix) { return prefix + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+  function autoSides(a, b) {
+    const dx = (b.x + (b.w || 0) / 2) - (a.x + (a.w || 0) / 2), dy = (b.y + (b.h || 0) / 2) - (a.y + (a.h || 0) / 2);
+    if (Math.abs(dx) >= Math.abs(dy)) return dx > 0 ? ['r', 'l'] : ['l', 'r'];
+    return dy > 0 ? ['b', 't'] : ['t', 'b'];
+  }
+
+  svg.addEventListener('pointerdown', ev => {
+    if (!editing) return;
+    const edgeEl = ev.target.closest('[data-edge]');
+    const nodeEl = ev.target.closest('.node');
+    if (nodeEl) {
+      const id = nodeEl.dataset.id, n = byId[id];
+      if (ev.shiftKey && n.kind !== 'label') {
+        if (!pendingFrom) { pendingFrom = id; render(); toast('연결할 두 번째 상자를 Shift+클릭'); return; }
+        if (pendingFrom !== id) {
+          const [fromSide, toSide] = autoSides(byId[pendingFrom], n);
+          const e = {id: newId('e'), from: pendingFrom, to: id, fromSide, toSide, kind: 'call'};
+          data.edges.push(e); pendingFrom = null; commit(); select({type: 'edge', id: e.id});
+        }
+        return;
+      }
+      pendingFrom = null;
+      const p = svgPoint(ev);
+      const ids = [id, ...descendants(id)];
+      drag = {sx: p.x, sy: p.y, moved: false, orig: ids.map(i => [i, byId[i].x, byId[i].y])};
+      select({type: 'node', id});
+      ev.preventDefault();
+      return;
+    }
+    if (edgeEl) { pendingFrom = null; select({type: 'edge', id: edgeEl.dataset.edge}); return; }
+    pendingFrom = null; select(null);
+  });
+  window.addEventListener('pointermove', ev => {
+    if (!drag) return;
+    const p = svgPoint(ev);
+    const dx = snap(p.x - drag.sx), dy = snap(p.y - drag.sy);
+    if (!dx && !dy && !drag.moved) return;
+    drag.moved = true;
+    drag.orig.forEach(([i, x, y]) => { byId[i].x = x + dx; byId[i].y = y + dy; });
+    render();
+  });
+  window.addEventListener('pointerup', () => {
+    if (!drag) return;
+    if (drag.moved) { commit(); buildPanel(); }
+    drag = null;
+  });
+  svg.addEventListener('dblclick', ev => {
+    if (!editing) return;
+    const nodeEl = ev.target.closest('.node'), edgeEl = ev.target.closest('[data-edge]');
+    if (!nodeEl && !edgeEl) return;
+    const f = panel.querySelector(nodeEl ? '[data-f="title"]' : '[data-f="label"]');
+    if (f) { f.focus(); f.select(); }
+  });
+
+  window.addEventListener('keydown', ev => {
+    if (!editing) return;
+    const typing = ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName);
+    if ((ev.metaKey || ev.ctrlKey) && ev.key.toLowerCase() === 'z' && !typing) { ev.preventDefault(); undo(); return; }
+    if (typing) return;
+    if (ev.key === 'Escape') { pendingFrom = null; select(null); return; }
+    if ((ev.key === 'Delete' || ev.key === 'Backspace') && sel) { ev.preventDefault(); removeSelected(); return; }
+    const arrows = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]};
+    if (arrows[ev.key] && sel && sel.type === 'node') {
+      ev.preventDefault();
+      const step = ev.shiftKey ? 1 : GRID, [ax, ay] = arrows[ev.key];
+      [sel.id, ...descendants(sel.id)].forEach(i => { byId[i].x += ax * step; byId[i].y += ay * step; });
+      commit(); render(); buildPanel();
+    }
+  });
+
+  function removeSelected() {
+    if (!sel) return;
+    if (sel.type === 'node') {
+      const gone = new Set([sel.id, ...descendants(sel.id)]);
+      data.nodes = data.nodes.filter(n => !gone.has(n.id));
+      data.edges = data.edges.filter(e => !gone.has(e.from) && !gone.has(e.to));
+    } else {
+      data.edges = data.edges.filter(e => e.id !== sel.id);
+    }
+    commit(); select(null);
+  }
+
+  // ---------- 오른쪽 패널 ----------
+  const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  const opt = (v, cur, label) => `<option value="${v}"${v === cur ? ' selected' : ''}>${label || v}</option>`;
+  function field(f, label, value, type) {
+    if (type === 'check') return `<label>${label}<input type="checkbox" data-f="${f}"${value ? ' checked' : ''}></label>`;
+    return `<label>${label}<input type="${type || 'text'}" data-f="${f}" value="${esc(value)}"></label>`;
+  }
+  function buildPanel() {
+    if (!editing) return;
+    if (!sel) {
+      panel.innerHTML = `<h3>육각형 크기</h3>
+        <div class="row3"><span></span><b>W</b><b>h</b><b>H</b></div>
+        ${data.hexes.map((h, i) => `<div class="row3"><span>${{adapter: '어댑터', service: '서비스', domain: '도메인'}[h.layer] || h.layer}</span>
+          <input type="number" data-hex="${i}" data-k="W" value="${h.W}"><input type="number" data-hex="${i}" data-k="h" value="${h.h}"><input type="number" data-hex="${i}" data-k="H" value="${h.H}"></div>`).join('')}
+        <p class="hint">W: 가운데에서 옆 꼭짓점까지 · h: 옆 변 길이의 절반 · H: 가운데에서 위 꼭짓점까지</p>
+        <p class="hint">상자를 누르면 글자 · 색(층) · 크기를 고칠 수 있음. 선을 누르면 라벨 · 종류 · 붙는 면을 고칠 수 있음.</p>`;
+      panel.querySelectorAll('[data-hex]').forEach(inp => {
+        inp.addEventListener('input', () => { const v = parseFloat(inp.value); if (!isNaN(v)) { data.hexes[+inp.dataset.hex][inp.dataset.k] = v; render(); } });
+        inp.addEventListener('change', commit);
+      });
+      return;
+    }
+    if (sel.type === 'node') {
+      const n = byId[sel.id];
+      if (!n) { panel.innerHTML = ''; return; }
+      const groups = data.nodes.filter(g => g.kind === 'group' && g.id !== n.id && !descendants(n.id).includes(g.id));
+      const isLabel = n.kind === 'label';
+      panel.innerHTML = `<h3>상자</h3>
+        ${field('title', '제목', n.title)}
+        ${isLabel ? '' : field('sub', '설명', n.sub)}
+        <label>층(색)<select data-f="layer">${['domain', 'service', 'port', 'adapter', 'external'].map(v => opt(v, n.layer, {domain: '도메인', service: '애플리케이션', port: '포트', adapter: '어댑터', external: '바깥'}[v])).join('')}</select></label>
+        <label>종류<select data-f="kind">${['chip', 'group', 'port', 'ext', 'main', 'label'].map(v => opt(v, n.kind, {chip: '파일', group: '폴더(묶음)', port: '포트', ext: '바깥 서비스', main: '조립(main)', label: '글자만'}[v])).join('')}</select></label>
+        ${isLabel ? '' : field('later', '추후', n.later, 'check')}
+        ${isLabel ? '' : `<label>들어 있는 곳<select data-f="parent">${opt('', n.parent || '', '없음')}${groups.map(g => opt(g.id, n.parent || '', g.title)).join('')}</select></label>`}
+        ${isLabel || n.layer === 'domain' ? '' : `<h4>쓰는 domain (마우스를 올리면 켜짐)</h4>${data.nodes.filter(d => d.layer === 'domain' && d.kind !== 'label').map(d =>
+          `<label>${esc(d.title)}<input type="checkbox" data-use="${d.id}"${(n.uses || []).includes(d.id) ? ' checked' : ''}></label>`).join('')}`}
+        <h4>위치 · 크기</h4>
+        ${field('x', 'x', n.x, 'number')}${field('y', 'y', n.y, 'number')}
+        ${isLabel ? field('size', '글자 크기', n.size || 13, 'number') : field('w', '너비', n.w, 'number') + field('h', '높이', n.h, 'number')}
+        <button class="danger" id="del">이 상자 삭제</button>
+        <p class="hint">폴더(묶음)를 끌면 들어 있는 상자도 같이 움직임.</p>`;
+    } else {
+      const e = data.edges.find(x => x.id === sel.id);
+      if (!e) { panel.innerHTML = ''; return; }
+      const side = cur => ['l', 'r', 't', 'b'].map(v => opt(v, cur, {l: '왼쪽', r: '오른쪽', t: '위', b: '아래'}[v])).join('');
+      panel.innerHTML = `<h3>선</h3>
+        <p class="hint" style="margin:0 0 10px">${esc(byId[e.from]?.title)} → ${esc(byId[e.to]?.title)}</p>
+        ${field('label', '라벨', e.label)}
+        <label>종류<select data-f="kind">${opt('call', e.kind, '호출')}${opt('impl', e.kind, '구현')}</select></label>
+        ${field('later', '추후', e.later, 'check')}
+        ${field('tag', '경계 라벨', e.tag, 'check')}
+        <h4>붙는 곳</h4>
+        <label>시작 면<select data-f="fromSide">${side(e.fromSide)}</select></label>
+        <label>끝 면<select data-f="toSide">${side(e.toSide)}</select></label>
+        ${field('fromAt', '시작 위치', e.fromAt ?? '', 'number')}
+        ${field('toAt', '끝 위치', e.toAt ?? '', 'number')}
+        ${field('via', '꺾는 지점', e.via ?? '', 'number')}
+        <button class="danger" id="del">이 선 삭제</button>
+        <p class="hint">위치는 0~1 (0.5가 가운데) · 꺾는 지점은 선이 꺾이는 x(또는 y) 좌표, 비우면 자동</p>`;
+    }
+    panel.querySelectorAll('[data-f]').forEach(inp => {
+      inp.addEventListener(inp.tagName === 'SELECT' || inp.type === 'checkbox' ? 'change' : 'input', () => { applyField(inp); render(); if (inp.tagName === 'SELECT') { commit(); buildPanel(); } });
+      inp.addEventListener('change', commit);
+    });
+    panel.querySelectorAll('[data-use]').forEach(inp => inp.addEventListener('change', () => {
+      const n = byId[sel.id], u = new Set(n.uses || []);
+      if (inp.checked) u.add(inp.dataset.use); else u.delete(inp.dataset.use);
+      if (u.size) n.uses = [...u]; else delete n.uses;
+      commit();
+    }));
+    const del = panel.querySelector('#del');
+    if (del) del.addEventListener('click', removeSelected);
+  }
+  function applyField(inp) {
+    const target = sel.type === 'node' ? byId[sel.id] : data.edges.find(x => x.id === sel.id);
+    const f = inp.dataset.f;
+    if (inp.type === 'checkbox') { if (inp.checked) target[f] = true; else delete target[f]; return; }
+    if (inp.type === 'number') {
+      const v = parseFloat(inp.value);
+      if (isNaN(v)) delete target[f]; else target[f] = v;
+      return;
+    }
+    if (inp.value === '' && (f === 'sub' || f === 'label' || f === 'parent')) delete target[f]; else target[f] = inp.value;
+    if (f === 'kind' && sel.type === 'node' && inp.value !== 'label') { target.w = target.w || 160; target.h = target.h || 46; }
+  }
+
+  // ---------- 버튼 ----------
+  document.getElementById('btn-edit').addEventListener('click', () => {
+    editing = !editing;
+    document.body.classList.toggle('editing', editing);
+    document.getElementById('btn-edit').classList.toggle('on', editing);
+    document.getElementById('btn-edit').textContent = editing ? '편집 끝내기' : '편집';
+    sel = null; pendingFrom = null; highlight(null); render(); buildPanel();
+  });
+  document.getElementById('btn-add').addEventListener('click', () => {
+    const c = data.canvas;
+    const n = {id: newId('n'), kind: 'chip', layer: 'adapter', x: snap(c.x + c.w / 2 - 80), y: snap(c.y + c.h - 140), w: 160, h: 46, title: 'new.py', sub: '설명'};
+    data.nodes.push(n); commit(); select({type: 'node', id: n.id});
+  });
+  document.getElementById('btn-undo').addEventListener('click', undo);
+  document.getElementById('btn-save').addEventListener('click', save);
+
+  function toJson(d) {
+    const line = o => '    ' + JSON.stringify(o);
+    return '{\n  "canvas": ' + JSON.stringify(d.canvas) +
+      ',\n  "hexes": [\n' + d.hexes.map(line).join(',\n') +
+      '\n  ],\n  "nodes": [\n' + d.nodes.map(line).join(',\n') +
+      '\n  ],\n  "edges": [\n' + d.edges.map(line).join(',\n') + '\n  ]\n}';
+  }
+  function buildHtml() {
+    const i = PRISTINE.indexOf(DATA_OPEN), j = PRISTINE.indexOf('</' + 'script>', i);
+    const json = toJson(data).replace(/</g, '\\u003c');
+    return PRISTINE.slice(0, i + DATA_OPEN.length) + '\n' + json + '\n' + PRISTINE.slice(j);
+  }
+  async function save() {
+    const html = buildHtml();
+    if (window.showSaveFilePicker) {
+      try {
+        const handle = await window.showSaveFilePicker({suggestedName: FILE_NAME, types: [{description: 'HTML', accept: {'text/html': ['.html']}}]});
+        const w = await handle.createWritable(); await w.write(html); await w.close();
+        return toast('저장함: ' + handle.name);
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([html], {type: 'text/html'}));
+    a.download = FILE_NAME; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast('다운로드 폴더에 저장함 · docs/에 덮어쓰면 됨');
+  }
+  let toastTimer;
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  render();
+})();
+</script>
+
+
+
+<style>
+.top, .help { display: none !important; }
+.wrap { padding-top: 16px; }
+svg#dia { pointer-events: none; }
+.dim { opacity: .3 !important; }
+.edge.dim, .elabel.dim, .tag.dim { opacity: .22 !important; }
+.tk rect { stroke-width: 1.3; }
+.tk.done rect { fill: #2f7d57; stroke: #2f7d57; }
+.tk.done text { fill: #ffffff; }
+.tk.open rect { fill: #ffffff; stroke: #59626e; stroke-dasharray: 3 2; }
+.tk.open text { fill: #1f2328; }
+.tk text { font-family: var(--mono); font-size: 11.5px; font-weight: 700; }
+.legend .status-note { flex-basis: 100%; color: var(--ink); font-weight: 600; }
+.legend .tk-sample { display: inline-block; font-family: var(--mono); font-size: 11.5px; font-weight: 700; padding: 0 7px; border-radius: 9px; line-height: 17px; }
+</style>
+<script>
+(() => {
+  document.documentElement.setAttribute('data-theme', 'light');
+  const NS = 'http://www.w3.org/2000/svg';
+  const data = JSON.parse(document.getElementById('diagram-data').textContent);
+  const byId = Object.fromEntries(data.nodes.map(n => [n.id, n]));
+  const svg = document.getElementById('dia');
+  const built = new Set(["g-service", "s-job", "s-source", "p-in-source", "p-in-job", "p-source", "d-profile", "d-job", "g-mcp", "i-server", "g-agent", "a-profile", "g-api", "g-source", "g-src-api", "o-ba", "o-fh", "x-ai", "x-llm", "x-fe", "x-ba", "x-fh", "m-main"]);
+  const builtEdges = new Set(["e-ai-mcp", "e-mcp-in-source", "e-mcp-in-job", "e-svc-impl-source", "e-svc-impl-job", "e-service-source", "e-source-impl", "e-ba", "e-fh", "e-agent-llm"]);
+  const tickets = {"d-profile": ["done", "#13"], "d-job": ["done", "#11"], "d-source": ["open", "#33"], "p-in-source": ["done", "#9"], "p-in-job": ["done", "#12"], "p-source": ["done", "#11"], "s-job": ["done", "#12"], "s-source": ["done", "#9"], "i-server": ["done", "#12 · #9"], "g-mcp": ["open", "/mcp #38 · #39"], "a-profile": ["done", "#13"], "g-api": ["open", "#14 · #44"], "o-ba": ["done", "#11 · #25"], "o-fh": ["done", "#15 · #36"], "x-fe": ["open", "#7"]};
+  svg.querySelectorAll('.node').forEach(g => {
+    const n = byId[g.dataset.id];
+    if (n.kind !== 'label' && !built.has(n.id)) g.classList.add('dim');
+  });
+  svg.querySelectorAll('[data-edge]').forEach(g => { if (!builtEdges.has(g.dataset.edge)) g.classList.add('dim'); });
+  // 티켓 번호는 흐린 상자 위에서도 읽히게 맨 위 층에 따로 그림
+  const layer = document.createElementNS(NS, 'g');
+  svg.appendChild(layer);
+  Object.entries(tickets).forEach(([id, [state, label]]) => {
+    const n = byId[id];
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'tk ' + state);
+    layer.appendChild(g);
+    const r = document.createElementNS(NS, 'rect');
+    const t = document.createElementNS(NS, 'text');
+    g.appendChild(r); g.appendChild(t);
+    t.textContent = label;
+    const w = t.getComputedTextLength() + 14;
+    const x = n.x + n.w - w - 6, y = n.y - 9;
+    r.setAttribute('x', x); r.setAttribute('y', y); r.setAttribute('width', w); r.setAttribute('height', 18); r.setAttribute('rx', 9);
+    t.setAttribute('x', x + w / 2); t.setAttribute('y', y + 13); t.setAttribute('text-anchor', 'middle');
+  });
+  const legend = document.querySelector('.legend');
+  const samples = document.createElement('span');
+  samples.innerHTML = '<i class="tk-sample" style="background:#2f7d57;color:#fff">#12</i> 닫힌 티켓 '
+    + '<i class="tk-sample" style="border:1.3px dashed #59626e;color:#1f2328">#14</i> 열린 티켓';
+  legend.prepend(samples);
+  const note = document.createElement('span');
+  note.className = 'status-note';
+  note.textContent = "11/08 main 기준 · 진하게 그린 곳 = 구현됨 · 흐리게 그린 곳 = 아직 구현 안 됨 · AI 앱은 /mcp가 아직 없어서 stdio로 연결";
+  legend.prepend(note);
+})();
+</script>
+</body></html>

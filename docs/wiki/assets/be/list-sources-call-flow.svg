@@ -1,0 +1,144 @@
+<!-- 색은 헥사고날 폴더 그림과 같음: 파랑 = 애플리케이션(service) · 초록 = 어댑터 · 회색 = 바깥 · 노랑 글자 = 도메인(JobPosting). 실선 = 호출, 점선 = 돌려받는 값 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="962" viewBox="0 0 960 962" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', sans-serif" font-size="12.5" role="img" aria-label="LLM이 list_sources로 출처를 고르고 그 이름을 도구마다 넘기면, MCP 서버가 RegistryService에서 이름으로 JobService를 받아 부르고 JobService가 자기 어댑터를 부르는 19단계 호출 흐름">
+  <defs>
+    <marker id="cf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#59626e"/>
+    </marker>
+    <style>
+      .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+      .lbl { paint-order: stroke; stroke: #ffffff; stroke-width: 5px; stroke-linejoin: round; fill: #1f2328; }
+      .call { stroke: #59626e; stroke-width: 1.6; fill: none; }
+      .ret { stroke: #59626e; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+      .num circle { fill: #1f2328; }
+      .num text { fill: #ffffff; font-size: 11px; font-weight: 700; text-anchor: middle; }
+      .dom { fill: #684800; font-weight: 700; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" rx="10" fill="#ffffff"/>
+  <text x="24" y="34" font-size="15" font-weight="700" fill="#1f2328">호출 흐름: 출처를 고르면 → MCP 서버가 그 이름으로 서비스를 받고 → 서비스는 자기 출처만 부름</text>
+  <text x="24" y="56" font-size="12" fill="#68717c">실선 화살표 = 호출 · 점선 화살표 = 돌려받는 값 · 숫자 = 순서 · 점선 상자 = 이 티켓에서 고치지 않은 부분 · 3번 뒤로는 이름으로 찾는 단계를 생략</text>
+
+  <g id="phases">
+    <rect x="16" y="144" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="161" font-size="13" font-weight="700" fill="#1f2328">1. 출처 고르기</text>
+    <rect x="16" y="244" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="261" font-size="13" font-weight="700" fill="#1f2328">2. 그 출처의 사용법 읽기</text>
+    <rect x="16" y="548" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="565" font-size="13" font-weight="700" fill="#1f2328">3. 그 출처에서 검색</text>
+    <rect x="16" y="750" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="767" font-size="13" font-weight="700" fill="#1f2328">4. 본문 가져오기</text>
+  </g>
+
+  <g id="lifelines" stroke="#c9ccd1" stroke-width="1.2" stroke-dasharray="4 4">
+    <path d="M100 134V950"/>
+    <path d="M330 134V950"/>
+    <path d="M510 134V950"/>
+    <path d="M680 134V950"/>
+    <path d="M860 134V950"/>
+  </g>
+
+  <g id="lanes">
+    <rect x="24" y="76" width="152" height="58" rx="10" fill="#f3f4f6" stroke="#8c95a0" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="100" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2f36">LLM 또는 테스트</text>
+    <text x="100" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">Claude Code · mock</text>
+
+    <rect x="250" y="76" width="160" height="58" rx="10" fill="#edf7f1" stroke="#58a67e" stroke-width="1.6"/>
+    <text x="330" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#1d6145">MCP 서버</text>
+    <text x="330" y="119" text-anchor="middle" font-size="11.5" fill="#68717c"><tspan class="mono">server.py</tspan> · 도구 네 개</text>
+
+    <rect x="435" y="76" width="150" height="58" rx="10" fill="#ecf2ff" stroke="#6d95d6" stroke-width="1.6"/>
+    <text x="510" y="99" text-anchor="middle" font-size="13.5" font-weight="700" fill="#21488a" class="mono">RegistryService</text>
+    <text x="510" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">JobService 목록</text>
+
+    <rect x="605" y="76" width="150" height="58" rx="10" fill="#ecf2ff" stroke="#6d95d6" stroke-width="1.6"/>
+    <text x="680" y="99" text-anchor="middle" font-size="13.5" font-weight="700" fill="#21488a" class="mono">JobService</text>
+    <text x="680" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">freehire용 · 출처 하나</text>
+
+    <rect x="780" y="76" width="160" height="58" rx="10" fill="#edf7f1" stroke="#58a67e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <text x="860" y="99" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d6145" class="mono">FreehireClient</text>
+    <text x="860" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">출처 어댑터</text>
+  </g>
+
+  <!-- 1. 출처 고르기 -->
+  <g class="num"><circle cx="114" cy="192" r="9"/><text x="114" y="196">1</text></g>
+  <path class="call" d="M126 192H502" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="314" y="185" text-anchor="middle">list_sources()</text>
+
+  <g class="num"><circle cx="496" cy="226" r="9"/><text x="496" y="230">2</text></g>
+  <path class="ret" d="M484 226H108" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="296" y="219" text-anchor="middle">["arbeitsagentur", "freehire"]</text>
+
+  <!-- 2. 그 출처의 사용법 읽기 -->
+  <g class="num"><circle cx="114" cy="292" r="9"/><text x="114" y="296">3</text></g>
+  <path class="call" d="M126 292H322" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="224" y="285" text-anchor="middle" font-size="11">get_usage("freehire")</text>
+
+  <g class="num"><circle cx="344" cy="326" r="9"/><text x="344" y="330">4</text></g>
+  <path class="call" d="M356 326H502" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="429" y="319" text-anchor="middle" font-size="11">get("freehire")</text>
+
+  <g class="num"><circle cx="496" cy="360" r="9"/><text x="496" y="364">5</text></g>
+  <path class="ret" d="M484 360H338" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="411" y="353" text-anchor="middle">freehire용 <tspan class="mono" font-size="11">JobService</tspan></text>
+
+  <rect x="390" y="374" width="240" height="32" rx="8" fill="#ffffff" stroke="#6d95d6" stroke-width="1.2"/>
+  <text x="510" y="395" text-anchor="middle" font-size="12" fill="#1f2328">없는 이름이면 고를 수 있는 이름을 오류로</text>
+
+  <g class="num"><circle cx="344" cy="428" r="9"/><text x="344" y="432">6</text></g>
+  <path class="call" d="M356 428H672" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="514" y="421" text-anchor="middle">get_usage()</text>
+
+  <g class="num"><circle cx="694" cy="462" r="9"/><text x="694" y="466">7</text></g>
+  <path class="call" d="M706 462H852" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="779" y="455" text-anchor="middle">usage()</text>
+
+  <g class="num"><circle cx="846" cy="496" r="9"/><text x="846" y="500">8</text></g>
+  <path class="ret" d="M834 496H688" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="761" y="489" text-anchor="middle" font-size="11">RequestDTO</text>
+
+  <g class="num"><circle cx="666" cy="530" r="9"/><text x="666" y="534">9</text></g>
+  <path class="ret" d="M654 530H108" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="381" y="523" text-anchor="middle">JSON 스키마</text>
+
+  <!-- 3. 그 출처에서 검색 -->
+  <g class="num"><circle cx="114" cy="596" r="9"/><text x="114" y="600">10</text></g>
+  <path class="call" d="M126 596H322" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="224" y="589" text-anchor="middle" font-size="10.5">search_jobs("freehire", params)</text>
+
+  <g class="num"><circle cx="344" cy="630" r="9"/><text x="344" y="634">11</text></g>
+  <path class="call" d="M356 630H672" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="514" y="623" text-anchor="middle">search_jobs(params)</text>
+
+  <g class="num"><circle cx="694" cy="664" r="9"/><text x="694" y="668">12</text></g>
+  <path class="call" d="M706 664H852" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="779" y="657" text-anchor="middle">search(params)</text>
+
+  <g class="num"><circle cx="846" cy="698" r="9"/><text x="846" y="702">13</text></g>
+  <path class="ret" d="M834 698H688" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono dom" x="761" y="691" text-anchor="middle" font-size="11">list[JobPosting]</text>
+
+  <g class="num"><circle cx="666" cy="732" r="9"/><text x="666" y="736">14</text></g>
+  <path class="ret" d="M654 732H108" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="381" y="725" text-anchor="middle"><tspan class="mono dom">list[JobPosting]</tspan> source · id 포함</text>
+
+  <!-- 4. 본문 가져오기 -->
+  <g class="num"><circle cx="114" cy="798" r="9"/><text x="114" y="802">15</text></g>
+  <path class="call" d="M126 798H322" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="224" y="791" text-anchor="middle" font-size="11">get_job("freehire", id)</text>
+
+  <g class="num"><circle cx="344" cy="832" r="9"/><text x="344" y="836">16</text></g>
+  <path class="call" d="M356 832H672" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="514" y="825" text-anchor="middle">get_job(id)</text>
+
+  <g class="num"><circle cx="694" cy="866" r="9"/><text x="694" y="870">17</text></g>
+  <path class="call" d="M706 866H852" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="779" y="859" text-anchor="middle">fetch(id)</text>
+
+  <g class="num"><circle cx="846" cy="900" r="9"/><text x="846" y="904">18</text></g>
+  <path class="ret" d="M834 900H688" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono dom" x="761" y="893" text-anchor="middle" font-size="11">JobPosting</text>
+
+  <g class="num"><circle cx="666" cy="934" r="9"/><text x="666" y="938">19</text></g>
+  <path class="ret" d="M654 934H108" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="381" y="927" text-anchor="middle"><tspan class="mono dom">JobPosting</tspan> 링크 · 본문 포함</text>
+</svg>

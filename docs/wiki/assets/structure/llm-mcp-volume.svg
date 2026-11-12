@@ -1,0 +1,160 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 500" role="img" aria-label="공고 50개를 클라이언트가 읽으면 본문이 대화에 쌓이고, agent 도구는 요약만 넘김" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="vol-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">공고 50개를 클라이언트가 읽으면 본문이 대화에 쌓이고, agent 도구는 요약만 넘김</text>
+  <g id="legend">
+    <rect x="24" y="46" width="26" height="12" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <text x="58" y="56" font-size="11.5" fill="#52514e">공고 본문 1개 (약 5,000자)</text>
+    <rect x="222" y="46" width="4" height="12" rx="1" fill="#c3c2b7" fill-opacity="0.6"/>
+    <text x="234" y="56" font-size="11.5" fill="#52514e">요약 1개</text>
+    <rect x="306" y="46" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="330" y="56" font-size="11.5" fill="#52514e">우리 agent (LLM 호출)</text>
+    <rect x="478" y="46" width="16" height="12" rx="3" fill="#ededec"/>
+    <text x="502" y="56" font-size="11.5" fill="#52514e">우리 코드</text>
+  </g>
+  <g id="client-side">
+    <rect x="24" y="72" width="344" height="408" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="40" y="96" font-weight="600" fill="#141413">A. 클라이언트가 직접 읽을 때</text>
+    <rect x="126" y="112" width="140" height="32" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="196" y="132" text-anchor="middle" fill="#141413">Claude · ChatGPT</text>
+    <rect x="126" y="176" width="140" height="32" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="196" y="196" text-anchor="middle" fill="#141413">본문 조회 도구</text>
+    <text x="206" y="164" font-size="11.5" fill="#52514e">공고마다 한 번씩, 50번 호출</text>
+    <text x="206" y="258" font-size="11.5" fill="#52514e">본문 50개를 그대로 돌려줌</text>
+    <rect x="40" y="300" width="312" height="120" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="56" y="318" font-size="11.5" font-weight="600" fill="#141413">대화 컨텍스트</text>
+    <rect x="58" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="87" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="116" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="145" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="174" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="203" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="232" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="261" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="290" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="319" y="330" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="58" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="87" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="116" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="145" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="174" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="203" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="232" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="261" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="290" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="319" y="347" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="58" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="87" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="116" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="145" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="174" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="203" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="232" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="261" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="290" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="319" y="364" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="58" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="87" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="116" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="145" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="174" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="203" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="232" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="261" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="290" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="319" y="381" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="58" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="87" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="116" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="145" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="174" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="203" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="232" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="261" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="290" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="319" y="398" width="26" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <text x="40" y="446" font-size="11.5" fill="#141413">본문 50개, 약 25만 자가 대화에 쌓임</text>
+    <text x="40" y="464" font-size="11.5" fill="#52514e">모델이 턴마다 쌓인 본문을 다시 읽음</text>
+  </g>
+  <g id="agent-side">
+    <rect x="392" y="72" width="344" height="408" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="408" y="96" font-weight="600" fill="#141413">B. agent 도구로 할 때</text>
+    <rect x="494" y="112" width="140" height="32" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="564" y="132" text-anchor="middle" fill="#141413">Claude · ChatGPT</text>
+    <text x="574" y="161" font-size="11.5" fill="#52514e">structure_postings 1번 호출</text>
+    <rect x="408" y="168" width="312" height="112" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="424" y="186" font-size="11.5" font-weight="600" fill="#141413">MCP 서버 · 우리 agent</text>
+    <rect x="424" y="194" width="280" height="22" rx="6" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="564" y="209" text-anchor="middle" font-size="12" fill="#141413">공고 정리 agent ×50 · 병렬</text>
+    <rect x="424" y="222" width="280" height="22" rx="6" fill="#ededec"/>
+    <text x="564" y="237" text-anchor="middle" font-size="12" fill="#141413">조건 필터 (코드)</text>
+    <rect x="424" y="250" width="280" height="22" rx="6" fill="#ededec"/>
+    <text x="564" y="265" text-anchor="middle" font-size="12" fill="#141413">정리 결과 저장 · 다음엔 재사용</text>
+    <text x="574" y="294" font-size="11.5" fill="#52514e">요약만 돌려줌</text>
+    <rect x="408" y="300" width="312" height="120" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="424" y="318" font-size="11.5" font-weight="600" fill="#141413">대화 컨텍스트</text>
+    <rect x="426" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="455" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="484" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="513" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="542" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="571" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="600" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="629" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="658" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="687" y="330" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="426" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="455" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="484" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="513" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="542" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="571" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="600" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="629" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="658" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="687" y="347" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="426" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="455" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="484" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="513" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="542" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="571" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="600" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="629" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="658" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="687" y="364" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="426" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="455" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="484" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="513" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="542" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="571" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="600" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="629" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="658" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="687" y="381" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="426" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="455" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="484" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="513" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="542" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="571" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="600" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="629" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="658" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <rect x="687" y="398" width="4" height="14" rx="2" fill="#c3c2b7" fill-opacity="0.6"/>
+    <text x="408" y="446" font-size="11.5" fill="#141413">공고마다 서버에서 병렬로 정리하고 요약만 넘김</text>
+    <text x="408" y="464" font-size="11.5" fill="#52514e">요약 길이는 본문의 약 1/7로 그림 (PoC 매칭 결과 약 700자 기준)</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M196 144V176" marker-end="url(#vol-arrow)"/>
+    <path d="M196 208V300" marker-end="url(#vol-arrow)"/>
+    <path d="M564 144V168" marker-end="url(#vol-arrow)"/>
+    <path d="M564 280V300" marker-end="url(#vol-arrow)"/>
+  </g>
+</svg>

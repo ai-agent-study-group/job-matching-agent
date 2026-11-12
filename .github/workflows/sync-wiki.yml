@@ -1,0 +1,151 @@
+name: Sync Wiki to Docs
+
+# wiki 편집(gollum) 시 wiki 전체를 docs/wiki/ 로 그대로 복사 → main 커밋 → Jekyll Pages 재빌드.
+# 규칙 하나뿐: wiki 페이지 "구조 FE" -> docs/wiki/구조-FE.md, SPA 경로 wiki/구조-FE.md.
+# 매핑 표 없음 → wiki 에서 뭘 하든(이름 변경·새 페이지·폴더 재배치) CI 는 건드릴 필요 없다.
+# 좌측 목차는 wiki _Sidebar 에서 생성. wiki = 단일 소스, page = 보기 전용.
+on:
+  gollum:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-wiki
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Clone wiki
+        run: git clone https://github.com/${{ github.repository }}.wiki.git wiki
+
+      - name: Copy wiki into docs site
+        run: |
+          python3 - <<'PY'
+          import pathlib, re, json, shutil
+
+          WIKI = pathlib.Path("wiki")
+          OUT = pathlib.Path("docs/wiki")
+
+          def route(name):  # wiki 페이지명(공백->-) -> SPA 경로
+              return "wiki/" + name.strip().replace(" ", "-") + ".md"
+
+          # gollum 링크 -> SPA 해시 라우트 ([[..]] 와 상대 [라벨](대상))
+          def convert_links(text):
+              def wikilink(m):
+                  inner = m.group(1)
+                  label, target = inner.split("|", 1) if "|" in inner else (inner, inner)
+                  return f"[{label.strip()}](#doc={route(target)})"
+
+              def inline(m):
+                  label, target = m.group(1), m.group(2).strip()
+                  if re.match(r"^[a-zA-Z][\w+.-]*:", target) or target[:1] in ("/", "#"):
+                      return m.group(0)  # 외부/절대/메일/해시는 그대로
+                  anchor = ""
+                  if "#" in target:
+                      target, anchor = target.split("#", 1)
+                  if not target:
+                      return m.group(0)
+                  sec = f"&section={anchor}" if anchor else ""
+                  return f"[{label}](#doc={route(target)}{sec})"
+
+              text = re.sub(r"\[\[([^\]]+)\]\]", wikilink, text)
+              text = re.sub(r"(?<!!)\[([^\]]+)\]\(([^)]+)\)", inline, text)
+              return text
+
+          # 링크 변환 자체 점검
+          assert convert_links("[[역할]]") == "[역할](#doc=wiki/역할.md)", "wikilink"
+          assert convert_links("[FE](구조 FE)") == "[FE](#doc=wiki/구조-FE.md)", "inline"
+          assert convert_links("[s](구조 FE#scope)") == "[s](#doc=wiki/구조-FE.md&section=scope)", "anchor"
+          assert convert_links("[x](https://a.com)") == "[x](https://a.com)", "external kept"
+          assert convert_links("![i](assets/a.png)") == "![i](assets/a.png)", "image kept"
+
+          def build(text, name):
+              body = convert_links(text)
+              if body.lstrip().startswith("---"):
+                  return body  # 작성자가 직접 넣은 front matter 는 유지
+              m = re.search(r"^#\s+(.+)$", body, re.MULTILINE)
+              title = (m.group(1).strip() if m else name.replace("-", " ")).replace('"', "'")
+              fm = (f'---\n제목: "{title}"\n유형: "위키"\n'
+                    f'설명: "GitHub Wiki 에서 자동 동기화된 문서입니다."\n---\n\n')
+              return fm + body
+
+          # _Sidebar.md -> 좌측 nav 데이터. `**제목**`/`### 제목` = 섹션, `* [[페이지]]` = 항목.
+          def build_sidebar(text):
+              sections, current = [], {"title": None, "items": []}
+              sections.append(current)
+              for line in text.splitlines():
+                  line = line.strip()
+                  if not line:
+                      continue
+                  h = re.match(r"^\*\*(.+?)\*\*$", line) or re.match(r"^#{1,6}\s+(.+)$", line)
+                  if h:
+                      current = {"title": h.group(1).strip(), "items": []}
+                      sections.append(current)
+                      continue
+                  w = re.match(r"^[*\-]\s*\[\[([^\]]+)\]\]", line)
+                  if w:
+                      inner = w.group(1)
+                      label, target = inner.split("|", 1) if "|" in inner else (inner, inner)
+                      current["items"].append({"label": label.strip(), "route": route(target)})
+                      continue
+                  g = re.match(r"^[*\-]\s*\[([^\]]+)\]\(([^)]+)\)", line)
+                  if g:
+                      label, target = g.group(1).strip(), g.group(2).strip()
+                      current["items"].append(
+                          {"label": label, "url": target}
+                          if re.match(r"^[a-zA-Z][\w+.-]*:", target)
+                          else {"label": label, "route": route(target)})
+              return [s for s in sections if s["items"]]
+
+          _sb = build_sidebar("### 📚 목차\n* [[Home]]\n**안내**\n* [[역할]]\n* [외부](https://a.com)\n")
+          assert [s["title"] for s in _sb] == ["📚 목차", "안내"], _sb
+          assert _sb[0]["items"][0] == {"label": "Home", "route": "wiki/Home.md"}, _sb
+          assert _sb[1]["items"][1] == {"label": "외부", "url": "https://a.com"}, _sb
+
+          # 전량 재생성: 삭제 동기화가 공짜로 됨
+          if OUT.exists():
+              shutil.rmtree(OUT)
+          OUT.mkdir(parents=True)
+
+          pages = [md for md in sorted(WIKI.rglob("*.md"))
+                   if ".git" not in md.parts and not md.name.startswith("_")]
+          for md in pages:
+              (OUT / f"{md.stem}.md").write_text(
+                  build(md.read_text(encoding="utf-8"), md.stem), encoding="utf-8")
+              print(f"wrote: wiki/{md.stem}.md")
+
+          # wiki 이미지(assets/) 함께 복사
+          assets = WIKI / "assets"
+          if assets.is_dir():
+              shutil.copytree(assets, OUT / "assets")
+              print("copied: wiki/assets/")
+
+          # _Sidebar -> 좌측 nav 데이터 (Jekyll site.data.sidebar / 로컬 preview 공용)
+          data_dir = pathlib.Path("docs/_data")
+          data_dir.mkdir(parents=True, exist_ok=True)
+          sb_src = WIKI / "_Sidebar.md"
+          sb = build_sidebar(sb_src.read_text(encoding="utf-8")) if sb_src.exists() else []
+          (data_dir / "sidebar.json").write_text(
+              json.dumps(sb, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print(f"wrote nav: _data/sidebar.json ({len(sb)} sections)")
+          PY
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs
+          if git diff --cached --quiet; then
+            echo "No doc changes."
+          else
+            git commit -m "docs: sync wiki to site"
+            git push
+          fi

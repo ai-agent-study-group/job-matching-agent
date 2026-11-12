@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="720" height="300" fill="#ffffff"/>
+  <text x="20" y="30" font-size="15" font-weight="700" fill="#1f2328">페이지 추가 · 삭제는 두 곳을 같이 고쳐야 목차에 보입니다</text>
+
+  <!-- step 1: page -->
+  <rect x="20" y="60" width="200" height="110" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
+  <text x="120" y="88" font-size="13" font-weight="700" text-anchor="middle" fill="#0969da">① 페이지</text>
+  <text x="120" y="114" font-size="12" text-anchor="middle" fill="#1f2328">New Page로 새 문서</text>
+  <text x="120" y="134" font-size="12" text-anchor="middle" fill="#1f2328">또는 Delete로 삭제</text>
+  <text x="120" y="156" font-size="11" text-anchor="middle" fill="#656d76">파일: 제목.md</text>
+
+  <!-- arrow -->
+  <line x1="230" y1="115" x2="290" y2="115" stroke="#656d76" stroke-width="2"/>
+  <polygon points="290,115 280,110 280,120" fill="#656d76"/>
+  <text x="260" y="105" font-size="11" text-anchor="middle" fill="#cf222e" font-weight="700">꼭!</text>
+
+  <!-- step 2: sidebar -->
+  <rect x="300" y="60" width="200" height="110" rx="8" fill="#fff8c5" stroke="#d4a72c"/>
+  <text x="400" y="88" font-size="13" font-weight="700" text-anchor="middle" fill="#7d4e00">② _Sidebar (목차)</text>
+  <text x="400" y="114" font-size="12" text-anchor="middle" fill="#1f2328">직군 아래에 링크를</text>
+  <text x="400" y="134" font-size="12" text-anchor="middle" fill="#1f2328">추가 / 삭제</text>
+  <text x="400" y="156" font-size="11" text-anchor="middle" fill="#656d76">[[페이지 제목]]</text>
+
+  <!-- arrow -->
+  <line x1="510" y1="115" x2="570" y2="115" stroke="#656d76" stroke-width="2"/>
+  <polygon points="570,115 560,110 560,120" fill="#656d76"/>
+
+  <!-- result -->
+  <rect x="580" y="60" width="120" height="110" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+  <text x="640" y="110" font-size="13" font-weight="700" text-anchor="middle" fill="#1a7f37">목차에</text>
+  <text x="640" y="130" font-size="13" font-weight="700" text-anchor="middle" fill="#1a7f37">보임</text>
+
+  <!-- warning line -->
+  <rect x="20" y="200" width="680" height="72" rx="8" fill="#ffebe9" stroke="#ff818266"/>
+  <text x="36" y="228" font-size="13" font-weight="700" fill="#cf222e">_Sidebar를 안 고치면</text>
+  <text x="36" y="252" font-size="12" fill="#1f2328">페이지는 만들어져도 왼쪽 목차에 안 나타나고, 삭제한 페이지는 목차에 깨진 링크로 남습니다.</text>
+</svg>

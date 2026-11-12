@@ -1,0 +1,127 @@
+[
+  {
+    "title": "📚 목차",
+    "items": [
+      {
+        "label": "Home",
+        "route": "wiki/Home.md"
+      }
+    ]
+  },
+  {
+    "title": "진행상황",
+    "items": [
+      {
+        "label": "진행상황",
+        "route": "wiki/진행상황.md"
+      }
+    ]
+  },
+  {
+    "title": "안내",
+    "items": [
+      {
+        "label": "역할",
+        "route": "wiki/역할.md"
+      },
+      {
+        "label": "Wiki 작성법",
+        "route": "wiki/Wiki-작성법.md"
+      }
+    ]
+  },
+  {
+    "title": "프론트엔드(FE)",
+    "items": [
+      {
+        "label": "구조 FE",
+        "route": "wiki/구조-FE.md"
+      },
+      {
+        "label": "FE 기술",
+        "route": "wiki/FE-기술.md"
+      }
+    ]
+  },
+  {
+    "title": "백엔드(BE)",
+    "items": [
+      {
+        "label": "구조 BE",
+        "route": "wiki/구조-BE.md"
+      },
+      {
+        "label": "BE 티켓 9",
+        "route": "wiki/BE-티켓-9.md"
+      },
+      {
+        "label": "BE 티켓 11",
+        "route": "wiki/BE-티켓-11.md"
+      },
+      {
+        "label": "BE 티켓 12",
+        "route": "wiki/BE-티켓-12.md"
+      },
+      {
+        "label": "BE 티켓 15",
+        "route": "wiki/BE-티켓-15.md"
+      },
+      {
+        "label": "BE 티켓 25",
+        "route": "wiki/BE-티켓-25.md"
+      }
+    ]
+  },
+  {
+    "title": "LLM",
+    "items": [
+      {
+        "label": "구조 LLM",
+        "route": "wiki/구조-LLM.md"
+      },
+      {
+        "label": "LLM 티켓 13",
+        "route": "wiki/LLM-티켓-13.md"
+      }
+    ]
+  },
+  {
+    "title": "인프라(DevOps)",
+    "items": [
+      {
+        "label": "구조 DevOps",
+        "route": "wiki/구조-DevOps.md"
+      }
+    ]
+  },
+  {
+    "title": "기획·품질(PO/QA)",
+    "items": [
+      {
+        "label": "구조 QA",
+        "route": "wiki/구조-QA.md"
+      }
+    ]
+  },
+  {
+    "title": "회의기록",
+    "items": [
+      {
+        "label": "2026-10-20 회의",
+        "route": "wiki/2026-10-20-회의.md"
+      },
+      {
+        "label": "2026-10-27 회의",
+        "route": "wiki/2026-10-27-회의.md"
+      },
+      {
+        "label": "2026-11-03 회의",
+        "route": "wiki/2026-11-03-회의.md"
+      },
+      {
+        "label": "회의록 양식",
+        "route": "wiki/회의록-양식.md"
+      }
+    ]
+  }
+]

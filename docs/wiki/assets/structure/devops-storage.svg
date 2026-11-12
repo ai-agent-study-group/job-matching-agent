@@ -1,0 +1,70 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="412" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 412" role="img" aria-label="저장하지 않으면 이력이 매번 따라오고, 저장하면 인증 · DB · GDPR이 따라옴" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="sv-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">저장하지 않으면 이력이 매번 따라오고, 저장하면 인증 · DB · GDPR이 따라옴</text>
+  <g id="legend">
+    <rect x="24" y="42" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="48" y="52" font-size="11.5" fill="#52514e">서버</text>
+    <rect x="96" y="42" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.5"/>
+    <text x="120" y="52" font-size="11.5" fill="#52514e">새로 정해야 함</text>
+    <rect x="222" y="42" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="246" y="52" font-size="11.5" fill="#52514e">사용자 쪽</text>
+  </g>
+  <g id="panel-a">
+    <rect x="24" y="64" width="344" height="324" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="40" y="88" font-weight="600" fill="#141413">A. 저장 안 함</text>
+    <g id="a-holder">
+      <rect x="56" y="104" width="280" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+      <text x="196" y="122" text-anchor="middle" font-weight="600" fill="#141413">이력을 가진 곳</text>
+      <text x="196" y="139" text-anchor="middle" font-size="11.5" fill="#52514e">커넥터: 대화 · JMA 앱: 브라우저</text>
+    </g>
+    <g id="a-server">
+      <rect x="56" y="192" width="280" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+      <text x="196" y="210" text-anchor="middle" font-weight="600" fill="#141413">서버: 매칭</text>
+      <text x="196" y="227" text-anchor="middle" font-size="11.5" fill="#52514e">이력은 처리에만 씀</text>
+    </g>
+    <g id="a-receiver">
+      <rect x="56" y="280" width="280" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+      <text x="196" y="298" text-anchor="middle" font-weight="600" fill="#141413">결과를 받는 곳</text>
+      <text x="196" y="315" text-anchor="middle" font-size="11.5" fill="#52514e">대화 · 화면에만 남음</text>
+    </g>
+    <text x="204" y="174" font-size="11.5" fill="#52514e">매 요청에 이력 포함</text>
+    <text x="204" y="262" font-size="11.5" fill="#52514e">결과 응답</text>
+    <text x="40" y="352" font-size="11.5" fill="#141413">서버에 남는 것: 공고 정리 결과 (개인정보 아님)</text>
+    <text x="40" y="370" font-size="11.5" fill="#52514e">DB 없이 시작 가능 · 인증은 비용 보호용</text>
+  </g>
+  <g id="panel-b">
+    <rect x="392" y="64" width="344" height="324" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="408" y="88" font-weight="600" fill="#141413">B. 계정별 저장</text>
+    <g id="b-login">
+      <rect x="424" y="104" width="280" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="564" y="122" text-anchor="middle" font-weight="600" fill="#141413">로그인</text>
+      <text x="564" y="139" text-anchor="middle" font-size="11.5" fill="#52514e">OAuth로 사용자 구분 (DevOps-3)</text>
+    </g>
+    <g id="b-server">
+      <rect x="424" y="192" width="280" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+      <text x="564" y="210" text-anchor="middle" font-weight="600" fill="#141413">서버: 이력 · 결과 저장</text>
+      <text x="564" y="227" text-anchor="middle" font-size="11.5" fill="#52514e">계정별로 DB에 (DevOps-4)</text>
+    </g>
+    <g id="b-return">
+      <rect x="424" y="280" width="280" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+      <text x="564" y="298" text-anchor="middle" font-weight="600" fill="#141413">이어서 봄</text>
+      <text x="564" y="315" text-anchor="middle" font-size="11.5" fill="#52514e">이력을 다시 안 넘겨도 됨</text>
+    </g>
+    <text x="572" y="174" font-size="11.5" fill="#52514e">이력 저장</text>
+    <text x="572" y="262" font-size="11.5" fill="#52514e">다음 방문</text>
+    <text x="408" y="352" font-size="11.5" fill="#141413">서버에 남는 것: 계정, 이력, 매칭 결과</text>
+    <text x="408" y="370" font-size="11.5" fill="#52514e">보관 기간 · 삭제 요청 · 접근 권한을 정해야 함 (GDPR)</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M196 148V192" marker-end="url(#sv-arrow)"/>
+    <path d="M196 236V280" marker-end="url(#sv-arrow)"/>
+    <path d="M564 148V192" marker-end="url(#sv-arrow)"/>
+    <path d="M564 236V280" marker-end="url(#sv-arrow)"/>
+  </g>
+</svg>

@@ -1,0 +1,85 @@
+<!-- 색은 헥사고날 폴더 그림과 같음: 초록 = 어댑터 · 회색 = 바깥 · 노랑 글자 = 도메인(Profile). 실선 = 호출, 점선 = 돌려받는 값 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', sans-serif" font-size="12.5" role="img" aria-label="모델 이름으로 프로필 agent를 만들고, 부르는 쪽이 agent.run에 이력서 텍스트를 넣으면 pydantic-ai가 LLM에 지시문 · 이력서 · Profile 형식을 보내고, 돌아온 JSON을 Profile로 검증해 돌려주는 7단계 호출 흐름">
+  <defs>
+    <marker id="cf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#59626e"/>
+    </marker>
+    <style>
+      .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+      .lbl { paint-order: stroke; stroke: #ffffff; stroke-width: 5px; stroke-linejoin: round; fill: #1f2328; }
+      .call { stroke: #59626e; stroke-width: 1.6; fill: none; }
+      .ret { stroke: #59626e; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+      .num circle { fill: #1f2328; }
+      .num text { fill: #ffffff; font-size: 11px; font-weight: 700; text-anchor: middle; }
+      .dom { fill: #684800; font-weight: 700; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" rx="10" fill="#ffffff"/>
+  <text x="24" y="34" font-size="15" font-weight="700" fill="#1f2328">호출 흐름: 모델 이름으로 agent를 만들고 → 이력서를 넣으면 → Profile이 나옴</text>
+  <text x="24" y="56" font-size="12" fill="#68717c">실선 화살표 = 호출 · 점선 화살표 = 돌려받는 값 · 숫자 = 순서 · 진한 테두리 = 이 티켓에서 만드는 것 · 점선 상자 = 이 티켓 밖</text>
+
+  <g id="phases">
+    <rect x="16" y="144" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="161" font-size="13" font-weight="700" fill="#1f2328">1. agent 만들기</text>
+    <rect x="16" y="290" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="307" font-size="13" font-weight="700" fill="#1f2328">2. Profile 뽑기</text>
+  </g>
+
+  <g id="lifelines" stroke="#c9ccd1" stroke-width="1.2" stroke-dasharray="4 4">
+    <path d="M100 134V520"/>
+    <path d="M340 134V520"/>
+    <path d="M580 134V520"/>
+    <path d="M840 134V520"/>
+  </g>
+
+  <g id="lanes">
+    <rect x="24" y="76" width="152" height="58" rx="10" fill="#f3f4f6" stroke="#8c95a0" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="100" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2f36">호출하는 쪽</text>
+    <text x="100" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">테스트 · JMA 앱(추후)</text>
+
+    <rect x="260" y="76" width="160" height="58" rx="10" fill="#edf7f1" stroke="#1d6145" stroke-width="2.4"/>
+    <text x="340" y="99" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d6145" class="mono">profile.py</text>
+    <text x="340" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">프로필 agent</text>
+
+    <rect x="500" y="76" width="160" height="58" rx="10" fill="#edf7f1" stroke="#58a67e" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="580" y="99" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d6145">pydantic-ai Agent</text>
+    <text x="580" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">라이브러리</text>
+
+    <rect x="760" y="76" width="160" height="58" rx="10" fill="#f3f4f6" stroke="#8c95a0" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="840" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2f36">LLM 제공사</text>
+    <text x="840" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">테스트에서는 TestModel</text>
+  </g>
+
+  <!-- 1. agent 만들기 -->
+  <g class="num"><circle cx="114" cy="192" r="9"/><text x="114" y="196">1</text></g>
+  <path class="call" d="M126 192H332" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="229" y="185" text-anchor="middle" font-size="11">create_profile_agent(model)</text>
+
+  <g class="num"><circle cx="354" cy="226" r="9"/><text x="354" y="230">2</text></g>
+  <path class="call" d="M366 226H572" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="469" y="219" text-anchor="middle" font-size="11">output_type=Profile</text>
+
+  <g class="num"><circle cx="566" cy="260" r="9"/><text x="566" y="264">3</text></g>
+  <path class="ret" d="M554 260H108" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="331" y="253" text-anchor="middle">agent</text>
+
+  <!-- 2. Profile 뽑기 -->
+  <g class="num"><circle cx="114" cy="348" r="9"/><text x="114" y="352">4</text></g>
+  <path class="call" d="M126 348H572" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="349" y="341" text-anchor="middle" font-size="11">agent.run(text)</text>
+
+  <g class="num"><circle cx="594" cy="382" r="9"/><text x="594" y="386">5</text></g>
+  <path class="call" d="M606 382H832" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="719" y="375" text-anchor="middle">지시문 · 이력서 · <tspan class="mono">Profile</tspan> 형식</text>
+
+  <g class="num"><circle cx="826" cy="416" r="9"/><text x="826" y="420">6</text></g>
+  <path class="ret" d="M814 416H588" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="701" y="409" text-anchor="middle">JSON</text>
+
+  <rect x="490" y="430" width="180" height="30" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
+  <text x="580" y="450" text-anchor="middle" font-size="12" fill="#1f2328"><tspan class="mono">Profile</tspan>로 검증</text>
+
+  <g class="num"><circle cx="566" cy="494" r="9"/><text x="566" y="498">7</text></g>
+  <path class="ret" d="M554 494H108" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="331" y="487" text-anchor="middle"><tspan class="mono" font-size="11">result.output</tspan> · <tspan class="mono dom" font-size="11">Profile</tspan></text>
+</svg>
