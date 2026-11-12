@@ -21,6 +21,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Extract a profile from a resume
+         * @description Extract job titles and preferred work locations from the resume text.
+         */
+        post: operations["profile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/search": {
         parameters: {
             query?: never;
@@ -31,9 +51,10 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Search job postings for a resume
-         * @description Extract job titles and preferred locations from the resume text,
-         *     then search the job sources through the MCP tools and return the postings found.
+         * Search job postings for a profile
+         * @description Search the job sources through the MCP tools for postings that match the profile.
+         *
+         *     Pass the profile returned by /api/profile, edited by the user if needed.
          */
         post: operations["search"];
         delete?: never;
@@ -46,6 +67,17 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * ErrorDTO
+         * @description Error response body.
+         */
+        ErrorDTO: {
+            /**
+             * Detail
+             * @description What failed
+             */
+            detail: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -93,10 +125,42 @@ export interface components {
             description: string | null;
         };
         /**
-         * SearchRequestDTO
-         * @description Request body for searching jobs from resume text.
+         * Profile
+         * @description Profile information extracted from a candidate's resume.
          */
-        SearchRequestDTO: {
+        "Profile-Input": {
+            /**
+             * Job Titles
+             * @description Relevant job titles based on the candidate's experience and skills. Use titles commonly found in job postings.
+             */
+            job_titles?: string[];
+            /**
+             * Locations
+             * @description Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified.
+             */
+            locations?: string[];
+        };
+        /**
+         * Profile
+         * @description Profile information extracted from a candidate's resume.
+         */
+        "Profile-Output": {
+            /**
+             * Job Titles
+             * @description Relevant job titles based on the candidate's experience and skills. Use titles commonly found in job postings.
+             */
+            job_titles: string[];
+            /**
+             * Locations
+             * @description Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified.
+             */
+            locations: string[];
+        };
+        /**
+         * ProfileRequestDTO
+         * @description Request body for extracting a profile from resume text.
+         */
+        ProfileRequestDTO: {
             /**
              * Resume Text
              * @description Resume as plain text
@@ -148,6 +212,81 @@ export interface operations {
             };
         };
     };
+    profile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProfileRequestDTO"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Profile-Output"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description The agent failed for another reason, such as an LLM error */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "detail": "Profile extraction failed. The agent failed for another reason, such as an LLM error"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ErrorDTO"];
+                };
+            };
+            /** @description The LLM is rate limited or overloaded. Try again later */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "detail": "Profile extraction failed. The LLM is rate limited or overloaded. Try again later"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ErrorDTO"];
+                };
+            };
+            /** @description The LLM did not respond in time. Try again later */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "detail": "Profile extraction failed. The LLM did not respond in time. Try again later"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ErrorDTO"];
+                };
+            };
+        };
+    };
     search: {
         parameters: {
             query?: never;
@@ -157,7 +296,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SearchRequestDTO"];
+                "application/json": components["schemas"]["Profile-Input"];
             };
         };
         responses: {
@@ -177,6 +316,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description The agent failed for another reason, such as an LLM error */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "detail": "Job search failed. The agent failed for another reason, such as an LLM error"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ErrorDTO"];
+                };
+            };
+            /** @description The LLM is rate limited or overloaded. Try again later */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "detail": "Job search failed. The LLM is rate limited or overloaded. Try again later"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ErrorDTO"];
+                };
+            };
+            /** @description The LLM did not respond in time. Try again later */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "detail": "Job search failed. The LLM did not respond in time. Try again later"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ErrorDTO"];
                 };
             };
         };
