@@ -1,0 +1,116 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 600" role="img" aria-label="BE 서비스 한 대에 MCP 도구 · agent · API가 다 있고, 두 채널이 같은 도구를 씀" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="ov-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">BE 서비스 한 대에 MCP 도구 · agent · API가 다 있고, 두 채널이 같은 도구를 씀</text>
+  <g id="legend">
+    <rect x="24" y="46" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="48" y="56" font-size="11.5" fill="#52514e">agent (LLM 호출)</text>
+    <rect x="166" y="46" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="190" y="56" font-size="11.5" fill="#52514e">MCP 도구</text>
+    <rect x="262" y="46" width="16" height="12" rx="3" fill="#8b5cf6" fill-opacity="0.08" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="286" y="56" font-size="11.5" fill="#52514e">MCP 서버</text>
+    <rect x="358" y="46" width="16" height="12" rx="3" fill="#2e9e6a" fill-opacity="0.1" stroke="#2e9e6a" stroke-width="1.5"/>
+    <text x="382" y="56" font-size="11.5" fill="#52514e">JMA 앱 (화면)</text>
+    <rect x="476" y="46" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="500" y="56" font-size="11.5" fill="#52514e">사용자 · 외부</text>
+    <rect x="586" y="46" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="4 3"/>
+    <text x="610" y="56" font-size="11.5" fill="#52514e">추후</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M174 148V196" marker-end="url(#ov-arrow)"/>
+    <path d="M470 148V196" marker-end="url(#ov-arrow)"/>
+    <path d="M470 222V246" marker-end="url(#ov-arrow)"/>
+    <path d="M174 222V342" marker-end="url(#ov-arrow)"/>
+    <path d="M470 318V342" marker-end="url(#ov-arrow)"/>
+    <path d="M590 282H616" marker-end="url(#ov-arrow)"/>
+    <path d="M584 444H616" marker-end="url(#ov-arrow)"/>
+  </g>
+  <text x="182" y="176" font-size="11.5" fill="#52514e">MCP · 원격 HTTPS</text>
+  <text x="478" y="176" font-size="11.5" fill="#52514e">API 호출</text>
+  <text x="182" y="300" font-size="11.5" fill="#52514e">AI 앱이 바로 부름</text>
+  <text x="478" y="334" font-size="11.5" fill="#52514e">같은 도구 호출</text>
+  <g id="ch1-user">
+    <rect x="24" y="76" width="300" height="72" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="174" y="98" text-anchor="middle" font-weight="600" fill="#141413">사용자의 AI 앱</text>
+    <text x="174" y="116" text-anchor="middle" font-size="11.5" fill="#52514e">Claude Code · Codex · Claude · ChatGPT</text>
+    <text x="174" y="134" text-anchor="middle" font-size="11.5" fill="#141413">MCP 클라이언트 · LLM은 사용자 구독</text>
+  </g>
+  <g id="ch2-user">
+    <rect x="340" y="76" width="260" height="72" rx="8" fill="#2e9e6a" fill-opacity="0.1" stroke="#2e9e6a" stroke-width="1.75"/>
+    <rect x="356" y="87" width="32" height="22" rx="11" fill="#ededec" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="372" y="102" text-anchor="middle" font-size="11.5" font-weight="700" fill="#141413">FE</text>
+    <text x="486" y="98" text-anchor="middle" font-weight="600" fill="#141413">JMA 앱 (web/)</text>
+    <text x="486" y="116" text-anchor="middle" font-size="11.5" fill="#52514e">화면만 · 프레임워크 미정</text>
+    <text x="486" y="134" text-anchor="middle" font-size="11.5" fill="#141413">BE의 /api를 부름</text>
+  </g>
+  <g id="be-service">
+    <rect x="24" y="184" width="576" height="392" rx="8" fill="none" stroke="#52514e" stroke-width="1.5"/>
+    <rect x="24" y="536" width="576" height="40" rx="8" fill="#ededec" stroke="none"/>
+    <text x="40" y="562" font-size="15" font-weight="600" fill="#141413">BE 서비스 · FastAPI 앱 하나 (서버 1대)</text>
+    <rect x="440" y="545" width="64" height="22" rx="11" fill="#ededec" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="472" y="560" text-anchor="middle" font-size="11" font-weight="700" fill="#141413">DevOps</text>
+    <text x="512" y="560" font-size="11.5" fill="#141413">배포 · 인증</text>
+  </g>
+  <g id="port-mcp">
+    <rect x="124" y="196" width="100" height="26" rx="13" fill="none" stroke="#52514e" stroke-width="1.25"/>
+    <text x="174" y="214" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">/mcp</text>
+    <text x="232" y="214" font-size="11.5" fill="#52514e">커넥터 입구</text>
+  </g>
+  <g id="port-api">
+    <rect x="420" y="196" width="100" height="26" rx="13" fill="none" stroke="#52514e" stroke-width="1.25"/>
+    <text x="470" y="214" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">/api</text>
+    <text x="528" y="214" font-size="11.5" fill="#52514e">JMA 앱 입구</text>
+  </g>
+  <g id="agent">
+    <rect x="350" y="246" width="240" height="72" rx="8" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.75" stroke-dasharray="none"/>
+    <text x="470" y="268" text-anchor="middle" font-weight="600" fill="#141413">agent (pydantic-ai)</text>
+    <text x="470" y="288" text-anchor="middle" font-size="11.5" fill="#141413">MCP 클라이언트 · 도구를 골라 부름</text>
+    <text x="470" y="304" text-anchor="middle" font-size="11.5" fill="#52514e">프로필 · 검색 · 정리 · 매칭 · 우리 LLM 키</text>
+  </g>
+  <g id="mcp-server">
+    <rect x="40" y="342" width="544" height="128" rx="8" fill="#8b5cf6" fill-opacity="0.06" stroke="#8b5cf6" stroke-width="1.75"/>
+    <text x="56" y="362" font-size="12.5" font-weight="600" fill="#141413">MCP 서버</text>
+  </g>
+  <g id="tool-search">
+    <rect x="56" y="374" width="128" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="120" y="392" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">search_jobs</text>
+    <text x="120" y="408" text-anchor="middle" font-size="11" fill="#52514e">검색</text>
+  </g>
+  <g id="tool-get">
+    <rect x="196" y="374" width="104" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="248" y="392" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">get_job</text>
+    <text x="248" y="408" text-anchor="middle" font-size="11" fill="#52514e">본문</text>
+  </g>
+  <g id="tool-sources">
+    <rect x="312" y="374" width="128" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="376" y="392" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">list_sources</text>
+    <text x="376" y="408" text-anchor="middle" font-size="11" fill="#52514e">출처 목록</text>
+  </g>
+  <g id="tool-agent">
+    <rect x="452" y="374" width="120" height="44" rx="8" fill="none" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="512" y="392" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">agent 도구</text>
+    <text x="512" y="408" text-anchor="middle" font-size="11" fill="#52514e">추후</text>
+  </g>
+  <g id="service">
+    <rect x="56" y="428" width="516" height="32" rx="8" fill="#ededec" stroke="none"/>
+    <text x="314" y="449" text-anchor="middle" font-size="12.5" fill="#141413">출처 어댑터 · 조건 필터 · 정규화 (코드)</text>
+  </g>
+  <g id="storage">
+    <rect x="40" y="486" width="160" height="36" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="5 4"/>
+    <text x="120" y="509" text-anchor="middle" font-size="12.5" fill="#141413">저장소</text>
+  </g>
+  <g id="ext-llm">
+    <rect x="616" y="258" width="120" height="48" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="676" y="278" text-anchor="middle" font-size="12.5" font-weight="600" fill="#141413">LLM 제공사</text>
+    <text x="676" y="295" text-anchor="middle" font-size="11" fill="#52514e">Anthropic 등</text>
+  </g>
+  <g id="ext-sites">
+    <rect x="616" y="426" width="120" height="36" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25" stroke-dasharray="none"/>
+    <text x="676" y="449" text-anchor="middle" font-size="12.5" fill="#141413">공고 사이트</text>
+  </g>
+</svg>

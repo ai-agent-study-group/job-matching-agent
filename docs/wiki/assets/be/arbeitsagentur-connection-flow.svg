@@ -1,0 +1,124 @@
+<!-- 색은 헥사고날 폴더 그림과 같음: 초록 = 어댑터 · 회색 = 바깥 · 노랑 글자 = 도메인(JobPosting). 실선 = 호출, 점선 = 돌려받는 값 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="930" viewBox="0 0 960 930" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', sans-serif" font-size="12.5" role="img" aria-label="서버가 시작할 때 클라이언트를 하나 만들고, 1초 안에 이어지는 요청은 같은 연결을 쓰고, 1초 넘게 쉬면 새로 연결하고, 서버가 끝날 때 닫는 14단계 흐름">
+  <defs>
+    <marker id="cf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#59626e"/>
+    </marker>
+    <style>
+      .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+      .lbl { paint-order: stroke; stroke: #ffffff; stroke-width: 5px; stroke-linejoin: round; fill: #1f2328; }
+      .call { stroke: #59626e; stroke-width: 1.6; fill: none; }
+      .ret { stroke: #59626e; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+      .num circle { fill: #1f2328; }
+      .num text { fill: #ffffff; font-size: 11px; font-weight: 700; text-anchor: middle; }
+      .dom { fill: #684800; font-weight: 700; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" rx="10" fill="#ffffff"/>
+  <text x="24" y="34" font-size="15" font-weight="700" fill="#1f2328">연결 흐름: 서버가 떠 있는 동안 클라이언트 하나가 맺어 둔 연결을 다시 씀</text>
+  <text x="24" y="56" font-size="12" fill="#68717c">실선 화살표 = 호출 · 점선 화살표 = 돌려받는 값 · 숫자 = 순서 · 점선 상자 = 이 티켓에서 고치지 않은 부분</text>
+
+  <g id="phases">
+    <rect x="16" y="144" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="161" font-size="13" font-weight="700" fill="#1f2328">1. 서버 시작</text>
+    <rect x="16" y="264" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="281" font-size="13" font-weight="700" fill="#1f2328">2. 1초 안에 이어서 부름: 같은 연결을 씀</text>
+    <rect x="16" y="602" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="619" font-size="13" font-weight="700" fill="#1f2328">3. 1초 넘게 쉬고 부름: 새로 연결함</text>
+    <rect x="16" y="812" width="928" height="24" rx="6" fill="#f5f5f2"/>
+    <text x="28" y="829" font-size="13" font-weight="700" fill="#1f2328">4. 서버 종료</text>
+  </g>
+
+  <g id="lifelines" stroke="#c9ccd1" stroke-width="1.2" stroke-dasharray="4 4">
+    <path d="M170 134V916"/>
+    <path d="M500 134V916"/>
+    <path d="M820 134V916"/>
+  </g>
+
+  <g id="lanes">
+    <rect x="70" y="76" width="200" height="58" rx="10" fill="#f3f4f6" stroke="#8c95a0" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="170" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2f36">서버 · 도구</text>
+    <text x="170" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">server.py · JobService</text>
+
+    <rect x="396" y="76" width="208" height="58" rx="10" fill="#edf7f1" stroke="#58a67e" stroke-width="1.6"/>
+    <text x="500" y="99" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d6145" class="mono">ArbeitsagenturClient</text>
+    <text x="500" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">JobSource 구현 · AsyncClient 하나</text>
+
+    <rect x="738" y="76" width="164" height="58" rx="10" fill="#f3f4f6" stroke="#8c95a0" stroke-width="1.4"/>
+    <text x="820" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2f36">연방고용청 API</text>
+    <text x="820" y="119" text-anchor="middle" font-size="11.5" fill="#68717c">Jobsuche</text>
+  </g>
+
+  <!-- 1. 서버 시작 -->
+  <g class="num"><circle cx="184" cy="192" r="9"/><text x="184" y="196">1</text></g>
+  <path class="call" d="M196 192H492" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="344" y="185" text-anchor="middle">async with → __aenter__()</text>
+
+  <rect x="406" y="206" width="188" height="46" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
+  <text x="500" y="225" text-anchor="middle" font-size="12" fill="#1f2328" class="mono">AsyncClient</text>
+  <text x="500" y="243" text-anchor="middle" font-size="11.5" fill="#68717c">하나 만듦 · 연결은 아직 없음</text>
+
+  <!-- 2. 1초 안에 이어서 부름 -->
+  <g class="num"><circle cx="184" cy="312" r="9"/><text x="184" y="316">2</text></g>
+  <path class="call" d="M196 312H492" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="344" y="305" text-anchor="middle">search(params)</text>
+
+  <g class="num"><circle cx="514" cy="346" r="9"/><text x="514" y="350">3</text></g>
+  <path class="call" d="M526 346H812" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="669" y="339" text-anchor="middle"><tspan font-weight="700">새 연결</tspan> + <tspan class="mono" font-size="11">GET /pc/v6/jobs</tspan></text>
+
+  <g class="num"><circle cx="806" cy="380" r="9"/><text x="806" y="384">4</text></g>
+  <path class="ret" d="M794 380H508" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="651" y="373" text-anchor="middle">공고 목록</text>
+
+  <rect x="406" y="394" width="188" height="32" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
+  <text x="500" y="415" text-anchor="middle" font-size="12" fill="#1f2328">연결을 끊지 않고 남겨 둠</text>
+
+  <g class="num"><circle cx="486" cy="448" r="9"/><text x="486" y="452">5</text></g>
+  <path class="ret" d="M474 448H178" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono dom" x="326" y="441" text-anchor="middle">list[JobPosting]</text>
+
+  <g class="num"><circle cx="184" cy="482" r="9"/><text x="184" y="486">6</text></g>
+  <path class="call" d="M196 482H492" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="344" y="475" text-anchor="middle">fetch(posting_id)</text>
+
+  <g class="num"><circle cx="514" cy="516" r="9"/><text x="514" y="520">7</text></g>
+  <path class="call" d="M526 516H812" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="669" y="509" text-anchor="middle"><tspan font-weight="700">같은 연결</tspan> + <tspan class="mono" font-size="11">GET /pc/v4/jobdetails/…</tspan></text>
+
+  <g class="num"><circle cx="806" cy="550" r="9"/><text x="806" y="554">8</text></g>
+  <path class="ret" d="M794 550H508" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="651" y="543" text-anchor="middle">공고 한 건 + 본문</text>
+
+  <g class="num"><circle cx="486" cy="584" r="9"/><text x="486" y="588">9</text></g>
+  <path class="ret" d="M474 584H178" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono dom" x="326" y="577" text-anchor="middle">JobPosting</text>
+
+  <!-- 3. 1초 넘게 쉬고 부름 -->
+  <rect x="340" y="636" width="320" height="34" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
+  <text x="500" y="658" text-anchor="middle" font-size="12" fill="#1f2328">쉰 지 1초가 지나면 연결을 버림 (서버는 2초에 끊음)</text>
+
+  <g class="num"><circle cx="184" cy="692" r="9"/><text x="184" y="696">10</text></g>
+  <path class="call" d="M196 692H492" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="344" y="685" text-anchor="middle">search(params)</text>
+
+  <g class="num"><circle cx="514" cy="726" r="9"/><text x="514" y="730">11</text></g>
+  <path class="call" d="M526 726H812" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="669" y="719" text-anchor="middle"><tspan font-weight="700">새 연결</tspan> + <tspan class="mono" font-size="11">GET /pc/v6/jobs</tspan></text>
+
+  <g class="num"><circle cx="806" cy="760" r="9"/><text x="806" y="764">12</text></g>
+  <path class="ret" d="M794 760H508" marker-end="url(#cf-arrow)"/>
+  <text class="lbl" x="651" y="753" text-anchor="middle">공고 목록</text>
+
+  <g class="num"><circle cx="486" cy="794" r="9"/><text x="486" y="798">13</text></g>
+  <path class="ret" d="M474 794H178" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono dom" x="326" y="787" text-anchor="middle">list[JobPosting]</text>
+
+  <!-- 4. 서버 종료 -->
+  <g class="num"><circle cx="184" cy="860" r="9"/><text x="184" y="864">14</text></g>
+  <path class="call" d="M196 860H492" marker-end="url(#cf-arrow)"/>
+  <text class="lbl mono" x="344" y="853" text-anchor="middle">async with 끝 → __aexit__()</text>
+
+  <rect x="406" y="874" width="188" height="32" rx="8" fill="#ffffff" stroke="#58a67e" stroke-width="1.2"/>
+  <text x="500" y="895" text-anchor="middle" font-size="12" fill="#1f2328"><tspan class="mono">aclose()</tspan> 남은 연결을 닫음</text>
+</svg>

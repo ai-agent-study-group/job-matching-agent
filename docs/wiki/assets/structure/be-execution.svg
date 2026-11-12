@@ -1,0 +1,70 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="352" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 352" role="img" aria-label="시작하면 작업 ID를 바로 받고, 결과는 따로 조회함" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="job-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">시작하면 작업 ID를 바로 받고, 결과는 따로 조회함</text>
+  <g id="legend">
+    <rect x="24" y="46" width="16" height="12" rx="3" fill="none" stroke="#52514e" stroke-width="1.5"/>
+    <text x="48" y="56" font-size="11.5" fill="#52514e">API</text>
+    <rect x="86" y="46" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="110" y="56" font-size="11.5" fill="#52514e">agent 작업 (LLM 호출)</text>
+    <rect x="240" y="46" width="16" height="12" rx="3" fill="#c3c2b7" fill-opacity="0.25" stroke="none"/>
+    <text x="264" y="56" font-size="11.5" fill="#52514e">작업 상태 (코드)</text>
+    <rect x="368" y="46" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="392" y="56" font-size="11.5" fill="#52514e">호출하는 쪽</text>
+  </g>
+  <g id="caller">
+    <rect x="24" y="100" width="152" height="176" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="100" y="180" text-anchor="middle" font-weight="600" fill="#141413">부르는 쪽</text>
+    <text x="100" y="200" text-anchor="middle" font-size="11.5" fill="#52514e">JMA 앱</text>
+    <text x="100" y="216" text-anchor="middle" font-size="11.5" fill="#52514e">API로 부름</text>
+  </g>
+  <g id="start">
+    <rect x="264" y="100" width="208" height="52" rx="8" fill="none" stroke="#52514e" stroke-width="1.5"/>
+    <text x="368" y="122" text-anchor="middle" font-weight="600" fill="#141413">① 매칭 시작</text>
+    <text x="368" y="140" text-anchor="middle" font-size="11.5" fill="#52514e">매칭 시작 API</text>
+  </g>
+  <g id="query">
+    <rect x="264" y="224" width="208" height="52" rx="8" fill="none" stroke="#52514e" stroke-width="1.5"/>
+    <text x="368" y="246" text-anchor="middle" font-weight="600" fill="#141413">② 결과 조회</text>
+    <text x="368" y="264" text-anchor="middle" font-size="11" fill="#52514e">결과 조회 API</text>
+  </g>
+  <g id="background">
+    <rect x="512" y="72" width="224" height="220" rx="8" fill="none" stroke="#e6e6e6" stroke-width="1.25"/>
+    <text x="528" y="92" font-size="11.5" fill="#52514e">백그라운드 · 같은 프로세스</text>
+    <rect x="528" y="104" width="192" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="624" y="131" text-anchor="middle" font-weight="600" fill="#141413">run_matching()</text>
+    <rect x="528" y="168" width="56" height="28" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <rect x="596" y="168" width="56" height="28" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <rect x="664" y="168" width="56" height="28" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="556" y="186" text-anchor="middle" font-size="11.5" fill="#141413">공고 1</text>
+    <text x="624" y="186" text-anchor="middle" font-size="11.5" fill="#141413">공고 2</text>
+    <text x="692" y="186" text-anchor="middle" font-size="11.5" fill="#141413">공고 N</text>
+    <rect x="528" y="220" width="192" height="56" rx="8" fill="#c3c2b7" fill-opacity="0.25" stroke="none"/>
+    <text x="624" y="242" text-anchor="middle" font-weight="600" fill="#141413">작업 상태</text>
+    <text x="624" y="260" text-anchor="middle" font-size="11.5" fill="#52514e">진행 중 → 완료 + 결과</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M176 114H264" marker-end="url(#job-arrow)"/>
+    <path d="M264 140H176" marker-end="url(#job-arrow)"/>
+    <path d="M472 126H528" marker-end="url(#job-arrow)"/>
+    <path d="M624 148V158H556V168" marker-end="url(#job-arrow)"/>
+    <path d="M624 158V168" marker-end="url(#job-arrow)"/>
+    <path d="M624 158H692V168" marker-end="url(#job-arrow)"/>
+    <path d="M624 196V220" marker-end="url(#job-arrow)"/>
+    <path d="M176 238H264" marker-end="url(#job-arrow)"/>
+    <path d="M264 264H176" marker-end="url(#job-arrow)"/>
+    <path d="M528 248H472" marker-end="url(#job-arrow)"/>
+  </g>
+  <text x="220" y="106" text-anchor="middle" font-size="11.5" fill="#52514e">이력 + 조건</text>
+  <text x="220" y="158" text-anchor="middle" font-size="11.5" fill="#52514e">작업 ID (바로)</text>
+  <text x="220" y="230" text-anchor="middle" font-size="11.5" fill="#52514e">작업 ID</text>
+  <text x="220" y="282" text-anchor="middle" font-size="11.5" fill="#52514e">상태 · 결과</text>
+  <text x="500" y="240" text-anchor="middle" font-size="11.5" fill="#52514e">읽음</text>
+  <text x="368" y="298" text-anchor="middle" font-size="11.5" fill="#52514e">완료될 때까지 ②를 반복</text>
+  <text x="24" y="330" font-size="11.5" fill="#52514e">MCP 데이터 도구는 LLM을 안 불러 바로 응답함 · 작업 ID는 JMA 앱의 매칭에만 씀</text>
+</svg>

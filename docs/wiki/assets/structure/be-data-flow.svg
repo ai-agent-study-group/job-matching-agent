@@ -1,0 +1,100 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="512" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 512" role="img" aria-label="두 채널은 SearchQuery와 JobPosting을 같이 쓰고, JMA 앱만 Profile · JD · MatchResult를 더 씀" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="cm-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+    <marker id="ai-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#8b5cf6"/>
+    </marker>
+    <marker id="fe-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#2e9e6a"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">두 채널은 SearchQuery와 JobPosting을 같이 쓰고, JMA 앱만 Profile · JD · MatchResult를 더 씀</text>
+  <g id="legend">
+    <rect x="24" y="48" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="48" y="58" font-size="11.5" fill="#52514e">도메인 (domain/)</text>
+    <rect x="170" y="48" width="16" height="12" rx="3" fill="#ededec" stroke="none"/>
+    <text x="194" y="58" font-size="11.5" fill="#52514e">두 채널 공통</text>
+    <path d="M292 54H316" stroke="#8b5cf6" stroke-width="2"/>
+    <text x="324" y="58" font-size="11.5" fill="#52514e">AI 앱 채널</text>
+    <path d="M404 54H428" stroke="#2e9e6a" stroke-width="2"/>
+    <text x="436" y="58" font-size="11.5" fill="#52514e">JMA 앱</text>
+    <rect x="504" y="48" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="528" y="58" font-size="11.5" fill="#52514e">입구 · 출구</text>
+  </g>
+  <g id="common-band">
+    <rect x="196" y="160" width="384" height="106" rx="8" fill="#ededec" stroke="none"/>
+    <text x="388" y="178" text-anchor="middle" font-size="11.5" font-weight="600" fill="#52514e">두 채널 공통</text>
+    <text x="388" y="254" text-anchor="middle" font-size="11.5" fill="#52514e">/mcp → service → 출처 어댑터</text>
+  </g>
+  <g id="common-flow" fill="none" stroke="#c3c2b7" stroke-width="1.5">
+    <path d="M358 208H418" marker-end="url(#cm-arrow)"/>
+  </g>
+  <g id="ai-flow" fill="none" stroke="#8b5cf6" stroke-width="1.75">
+    <path d="M144 122H290V186" marker-end="url(#ai-arrow)"/>
+    <path d="M486 186V122H616" marker-end="url(#ai-arrow)"/>
+  </g>
+  <g id="fe-flow" fill="none" stroke="#2e9e6a" stroke-width="1.75">
+    <path d="M144 312H222" marker-end="url(#fe-arrow)"/>
+    <path d="M290 290V230" marker-end="url(#fe-arrow)"/>
+    <path d="M486 230V290" marker-end="url(#fe-arrow)"/>
+    <path d="M290 334V406H320" marker-end="url(#fe-arrow)"/>
+    <path d="M486 334V406H456" marker-end="url(#fe-arrow)"/>
+    <path d="M388 428V452" marker-end="url(#fe-arrow)"/>
+  </g>
+  <text x="24" y="92" font-size="12" font-weight="600" fill="#141413">AI 앱 채널</text>
+  <text x="24" y="282" font-size="12" font-weight="600" fill="#141413">JMA 앱</text>
+  <g id="ai-in">
+    <rect x="24" y="100" width="120" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="84" y="118" text-anchor="middle" font-weight="600" fill="#141413">AI 앱</text>
+    <text x="84" y="135" text-anchor="middle" font-size="11.5" fill="#52514e">Claude · ChatGPT</text>
+  </g>
+  <g id="ai-out">
+    <rect x="616" y="100" width="120" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="676" y="118" text-anchor="middle" font-weight="600" fill="#141413">AI 앱</text>
+    <text x="676" y="135" text-anchor="middle" font-size="11.5" fill="#52514e">앱의 LLM이 판단</text>
+  </g>
+  <g id="fe-in">
+    <rect x="24" y="290" width="120" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="84" y="308" text-anchor="middle" font-weight="600" fill="#141413">FE 화면</text>
+    <text x="84" y="325" text-anchor="middle" font-size="11.5" fill="#52514e">이력서 올림</text>
+  </g>
+  <g id="fe-out">
+    <rect x="328" y="452" width="120" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="388" y="470" text-anchor="middle" font-weight="600" fill="#141413">FE 화면</text>
+    <text x="388" y="487" text-anchor="middle" font-size="11.5" fill="#52514e">결과 목록</text>
+  </g>
+  <g id="s-query">
+    <rect x="222" y="186" width="136" height="44" rx="8" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="2"/>
+    <text x="290" y="205" text-anchor="middle" font-weight="600" fill="#141413">SearchQuery</text>
+    <text x="290" y="222" text-anchor="middle" font-size="11.5" fill="#52514e">검색 조건</text>
+  </g>
+  <g id="s-posting">
+    <rect x="418" y="186" width="136" height="44" rx="8" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="2"/>
+    <text x="486" y="205" text-anchor="middle" font-weight="600" fill="#141413">JobPosting</text>
+    <text x="486" y="222" text-anchor="middle" font-size="11.5" fill="#52514e">공고 원문</text>
+  </g>
+  <g id="s-profile">
+    <rect x="222" y="290" width="136" height="44" rx="8" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="2"/>
+    <text x="290" y="309" text-anchor="middle" font-weight="600" fill="#141413">Profile</text>
+    <text x="290" y="326" text-anchor="middle" font-size="11.5" fill="#52514e">이력</text>
+  </g>
+  <g id="s-jd">
+    <rect x="418" y="290" width="136" height="44" rx="8" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="2"/>
+    <text x="486" y="309" text-anchor="middle" font-weight="600" fill="#141413">JD</text>
+    <text x="486" y="326" text-anchor="middle" font-size="11.5" fill="#52514e">정리본</text>
+  </g>
+  <g id="s-result">
+    <rect x="320" y="384" width="136" height="44" rx="8" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="2"/>
+    <text x="388" y="403" text-anchor="middle" font-weight="600" fill="#141413">MatchResult</text>
+    <text x="388" y="420" text-anchor="middle" font-size="11.5" fill="#52514e">매칭 결과</text>
+  </g>
+  <text x="217" y="114" text-anchor="middle" font-size="11.5" fill="#52514e">앱의 LLM이 채움</text>
+  <text x="551" y="114" text-anchor="middle" font-size="11.5" fill="#52514e">목록 · 본문</text>
+  <text x="183" y="304" text-anchor="middle" font-size="11.5" fill="#52514e">프로필 agent</text>
+  <text x="494" y="282" font-size="11.5" fill="#52514e">공고 정리 agent</text>
+  <text x="388" y="372" text-anchor="middle" font-size="11.5" fill="#52514e">매칭 agent (+ 점수 코드)</text>
+</svg>
