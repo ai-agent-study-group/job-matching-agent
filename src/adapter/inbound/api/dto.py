@@ -16,3 +16,16 @@ class SearchRequestDTO(BaseModel):
             min_length=1,
         ),
     ]
+
+
+class JDRequestDTO(BaseModel):
+    """Request body for fetching and summarizing one job."""
+
+    source: Annotated[
+        str,
+        StringConstraints(strip_whitespace=True, min_length=1),
+    ]
+    posting_id: Annotated[
+        str,
+        StringConstraints(strip_whitespace=True, min_length=1),
+    ]
