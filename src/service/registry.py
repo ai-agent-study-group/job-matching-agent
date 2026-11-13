@@ -6,7 +6,7 @@ from port.inbound.registry import RegistryServicePort
 
 
 class RegistryService(RegistryServicePort):
-    """조립할 때 받은 JobService들을 출처 이름으로 들고 있음."""
+    """출처 이름마다 JobService를 하나씩 보관. list_sources는 출처마다 이름과 설명을, get은 그 이름의 JobService를 돌려줌."""
 
     def __init__(self, services: list[JobServicePort]):
         names = [service.get_name() for service in services]

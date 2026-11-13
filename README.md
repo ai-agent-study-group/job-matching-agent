@@ -62,7 +62,7 @@ agent는 MCP 도구로 제공하지 않습니다. 제공하면 AI 앱이 agent�
 
 검색 결과가 상한을 넘으면 `search_jobs`가 조건을 좁히라는 오류를 돌려줍니다.
 
-새 출처는 `port/outbound/source.py`의 `JobSource` 인터페이스를 구현해 추가합니다. MCP 도구 코드는 고치지 않아도 됩니다. 구현 예는 [연방고용청 어댑터](docs/be/ticket-11.md)와 [freehire 어댑터](docs/be/ticket-15.md) 작업 메모에 있습니다.
+새 출처는 `port/outbound/source.py`의 `JobSource` 인터페이스를 구현하고, `src/bootstrap.py`의 출처 목록에 한 줄 추가합니다. MCP 도구 코드는 고치지 않아도 됩니다. 구현 예는 [연방고용청 어댑터](docs/be/ticket-11.md)와 [freehire 어댑터](docs/be/ticket-15.md) 작업 메모에 있습니다.
 
 ## 폴더 구조
 
@@ -78,7 +78,8 @@ src/
   adapter/
     inbound/    api/ (FastAPI 경로), mcp/ (MCP 도구), agent/ (pydantic-ai agent)
     outbound/   source/api/arbeitsagentur/, source/api/freehire/
-  main.py       앱 시작점
+  bootstrap.py  출처 클라이언트를 만들어 registry에 넣는 곳
+  main.py       앱 시작점: /api와 /mcp를 FastAPI 앱 하나에 올림
 test/           src/와 같은 구조의 테스트
 web/            JMA 앱 (Next.js)
 docs/           설계 문서, 작업 메모, 회의 기록
@@ -110,11 +111,17 @@ Anthropic 모델을 쓰려면 `LLM_MODEL=anthropic:claude-haiku-5-5`와 `ANTHROP
 uv run --env-file .env uvicorn main:app --reload   # http://localhost:8000/health
 ```
 
-로컬에서는 MCP 서버를 stdio로 띄워 도구 목록을 보거나 도구 하나를 불러 볼 수 있습니다.
+앱을 띄우면 MCP 서버도 `http://localhost:8000/mcp`에서 함께 열립니다. 다른 터미널에서 도구 목록을 보거나 도구 하나를 불러 볼 수 있습니다.
 
 ```bash
-uv run fastmcp list --command "uv run python -m adapter.inbound.mcp.server"
-uv run fastmcp call --command "uv run python -m adapter.inbound.mcp.server" --target list_sources
+uv run fastmcp list http://localhost:8000/mcp
+uv run fastmcp call http://localhost:8000/mcp --target list_sources
+```
+
+Claude Code에서 쓰려면 이 주소를 MCP 서버로 등록합니다.
+
+```bash
+claude mcp add --transport http jobs http://localhost:8000/mcp
 ```
 
 테스트와 린트는 아래 명령으로 실행합니다. CI도 PR마다 같은 검사를 돌립니다.

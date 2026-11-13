@@ -54,21 +54,3 @@ def create_server(registry: RegistryServicePort) -> FastMCP:
         return await registry.get(source).get_job(posting_id)
 
     return mcp
-
-
-if __name__ == "__main__":
-    # 로컬에서 stdio로 실행할 때의 조립
-    import asyncio
-
-    from adapter.outbound.source.api.arbeitsagentur.client import ArbeitsagenturClient
-    from adapter.outbound.source.api.freehire.client import FreehireClient
-    from service.job import JobService
-    from service.registry import RegistryService
-
-    # freehire는 약관상 개인 사용만 무료라 배포용 조립(src/main.py)에는 넣지 않음
-    async def main() -> None:
-        async with ArbeitsagenturClient() as arbeitsagentur, FreehireClient() as freehire:
-            registry = RegistryService([JobService(arbeitsagentur), JobService(freehire)])
-            await create_server(registry).run_async()
-
-    asyncio.run(main())

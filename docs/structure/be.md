@@ -64,7 +64,8 @@ job-matching-agent/
 │  │     └─ repository/          #   Repository 구현 (추후)
 │  │        ├─ postgres/         #     JD · 매칭 결과 (PostgreSQL)
 │  │        └─ mongo/            #     공고 원문 JobPosting (MongoDB, 미정)
-│  └─ main.py                    # 조립: source 어댑터를 service에 연결, api + mcp를 한 앱에 올림
+│  ├─ bootstrap.py               # 조립: 출처 어댑터를 service에 연결해 registry에 넣음
+│  └─ main.py                    # 시작점: api + mcp를 한 앱에 올림
 ├─ web/                          # FE (FE 서버는 FE-1, 프레임워크는 FE-2)
 └─ test/                         # src와 같은 구조
 ```
