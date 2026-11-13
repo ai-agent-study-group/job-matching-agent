@@ -1,0 +1,126 @@
+<!-- 색: 파랑 #2a78d6 = 확정 · 주황 #fab219 = 미정 · 주황 점선(stroke-dasharray) = 추후 · 회색 #c3c2b7 = 선·외부 · 배경 #ededec -->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="476" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" viewBox="0 0 760 476" role="img" aria-label="두 채널이 같은 도구를 부르고, 판단은 앱의 LLM과 우리 agent가 각자 함" font-size="13">
+  <rect width="100%" height="100%" rx="8" fill="#ffffff"/>
+  <defs>
+    <marker id="wf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#c3c2b7"/>
+    </marker>
+  </defs>
+  <text x="24" y="32" font-size="15" font-weight="600" fill="#141413">두 채널이 같은 도구를 호출 (비교군: MCP 커넥터)</text>
+  <g id="legend">
+    <rect x="24" y="44" width="16" height="12" rx="3" fill="#fab219" fill-opacity="0.12" stroke="#fab219" stroke-width="1.5"/>
+    <text x="48" y="54" font-size="11.5" fill="#52514e">agent (LLM 호출)</text>
+    <rect x="166" y="44" width="16" height="12" rx="3" fill="#2a78d6" fill-opacity="0.12" stroke="#2a78d6" stroke-width="1.5"/>
+    <text x="190" y="54" font-size="11.5" fill="#52514e">MCP 도구</text>
+    <rect x="262" y="44" width="16" height="12" rx="3" fill="#8b5cf6" fill-opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="286" y="54" font-size="11.5" fill="#52514e">MCP 서버</text>
+    <rect x="358" y="44" width="16" height="12" rx="3" fill="#2e9e6a" fill-opacity="0.12" stroke="#2e9e6a" stroke-width="1.5"/>
+    <text x="382" y="54" font-size="11.5" fill="#52514e">JMA 앱 (화면)</text>
+    <rect x="476" y="44" width="16" height="12" rx="3" fill="#c3c2b7" fill-opacity="0.25" stroke="none"/>
+    <text x="500" y="54" font-size="11.5" fill="#52514e">코드</text>
+    <rect x="540" y="44" width="16" height="12" rx="3" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="564" y="54" font-size="11.5" fill="#52514e">클라이언트 (AI 앱)</text>
+  </g>
+  <g id="lane-connector">
+    <rect x="24" y="68" width="236" height="384" rx="8" fill="#ededec" stroke="none"/>
+    <text x="40" y="90" font-weight="600" fill="#141413">채널 1 · MCP 커넥터</text>
+    <text x="40" y="106" font-size="11.5" fill="#52514e">Claude · ChatGPT · CLI</text>
+  </g>
+  <g id="lane-server">
+    <rect x="276" y="68" width="208" height="384" rx="8" fill="#8b5cf6" fill-opacity="0.07" stroke="#8b5cf6" stroke-width="1.25"/>
+    <text x="292" y="90" font-weight="600" fill="#141413">MCP 서버 (공유)</text>
+    <text x="292" y="106" font-size="11.5" fill="#52514e">같은 도구 · LLM 안 씀</text>
+    <text x="380" y="176" text-anchor="middle" font-size="11.5" fill="#52514e">같은 도구 정의(이름 · 설명 · 입력)를</text>
+    <text x="380" y="192" text-anchor="middle" font-size="11.5" fill="#52514e">두 채널이 읽고 부름</text>
+  </g>
+  <g id="lane-fe">
+    <rect x="500" y="68" width="236" height="384" rx="8" fill="#ededec" stroke="none"/>
+    <text x="516" y="90" font-weight="600" fill="#141413">채널 2 · 우리 앱</text>
+    <text x="516" y="106" font-size="11.5" fill="#52514e">화면 + 우리 agent</text>
+  </g>
+  <g id="connectors" fill="none" stroke="#c3c2b7" stroke-width="1.25">
+    <path d="M142 164V184" marker-end="url(#wf-arrow)"/>
+    <path d="M142 228V248" marker-end="url(#wf-arrow)"/>
+    <path d="M142 292V312" marker-end="url(#wf-arrow)"/>
+    <path d="M142 356V376" marker-end="url(#wf-arrow)"/>
+    <path d="M618 164V184" marker-end="url(#wf-arrow)"/>
+    <path d="M618 228V248" marker-end="url(#wf-arrow)"/>
+    <path d="M618 292V312" marker-end="url(#wf-arrow)"/>
+    <path d="M618 356V376" marker-end="url(#wf-arrow)"/>
+    <path d="M244 270H292" marker-end="url(#wf-arrow)"/>
+    <path d="M516 270H468" marker-end="url(#wf-arrow)"/>
+    <path d="M292 334H244" marker-end="url(#wf-arrow)"/>
+    <path d="M468 334H516" marker-end="url(#wf-arrow)"/>
+    <path d="M380 356V376" marker-end="url(#wf-arrow)"/>
+    <path d="M40 398H32V270H40" stroke-dasharray="4 3" marker-end="url(#wf-arrow)"/>
+  </g>
+  <text x="268" y="262" text-anchor="middle" font-size="11.5" fill="#52514e">호출</text>
+  <text x="492" y="262" text-anchor="middle" font-size="11.5" fill="#52514e">호출</text>
+  <text x="268" y="326" text-anchor="middle" font-size="11.5" fill="#52514e">본문</text>
+  <text x="492" y="326" text-anchor="middle" font-size="11.5" fill="#52514e">본문</text>
+  <g id="c1">
+    <rect x="40" y="120" width="204" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="142" y="138" text-anchor="middle" font-weight="600" fill="#141413">이력서를 대화에 올림</text>
+    <text x="142" y="155" text-anchor="middle" font-size="11.5" fill="#52514e">파일 첨부 · 붙여넣기</text>
+  </g>
+  <g id="c2">
+    <rect x="40" y="184" width="204" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="142" y="202" text-anchor="middle" font-weight="600" fill="#141413">앱의 LLM이 조건을 뽑음</text>
+    <text x="142" y="219" text-anchor="middle" font-size="11.5" fill="#52514e">직무 · 지역 · 언어 등</text>
+  </g>
+  <g id="c3">
+    <rect x="40" y="248" width="204" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="142" y="266" text-anchor="middle" font-weight="600" fill="#141413">앱의 LLM이 도구 호출</text>
+    <text x="142" y="283" text-anchor="middle" font-size="11.5" fill="#52514e">search_jobs → get_job</text>
+  </g>
+  <g id="c4">
+    <rect x="40" y="312" width="204" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="142" y="330" text-anchor="middle" font-weight="600" fill="#141413">앱의 LLM이 요건 대조</text>
+    <text x="142" y="347" text-anchor="middle" font-size="11.5" fill="#52514e">본문을 읽고 판단</text>
+  </g>
+  <g id="c5">
+    <rect x="40" y="376" width="204" height="44" rx="8" fill="none" stroke="#c3c2b7" stroke-width="1.25"/>
+    <text x="142" y="394" text-anchor="middle" font-weight="600" fill="#141413">설명 · 되묻기</text>
+    <text x="142" y="411" text-anchor="middle" font-size="11.5" fill="#52514e">조건 바꿔 다시 찾기</text>
+  </g>
+  <g id="t1">
+    <rect x="292" y="248" width="176" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="380" y="266" text-anchor="middle" font-weight="600" fill="#141413">search_jobs</text>
+    <text x="380" y="283" text-anchor="middle" font-size="11.5" fill="#52514e">검색 · 조건 필터</text>
+  </g>
+  <g id="t2">
+    <rect x="292" y="312" width="176" height="44" rx="8" fill="#2a78d6" fill-opacity="0.1" stroke="#2a78d6" stroke-width="1.75"/>
+    <text x="380" y="330" text-anchor="middle" font-weight="600" fill="#141413">get_job</text>
+    <text x="380" y="347" text-anchor="middle" font-size="11.5" fill="#52514e">공고 본문</text>
+  </g>
+  <g id="t3">
+    <rect x="292" y="376" width="176" height="44" rx="8" fill="#c3c2b7" fill-opacity="0.25" stroke="none"/>
+    <text x="380" y="394" text-anchor="middle" font-weight="600" fill="#141413">출처 어댑터</text>
+    <text x="380" y="411" text-anchor="middle" font-size="11.5" fill="#52514e">Greenhouse · 연방고용청</text>
+  </g>
+  <g id="f1">
+    <rect x="516" y="120" width="204" height="44" rx="8" fill="#2e9e6a" fill-opacity="0.1" stroke="#2e9e6a" stroke-width="1.75"/>
+    <text x="618" y="138" text-anchor="middle" font-weight="600" fill="#141413">이력서 업로드</text>
+    <text x="618" y="155" text-anchor="middle" font-size="11.5" fill="#52514e">PDF · Word</text>
+  </g>
+  <g id="f2">
+    <rect x="516" y="184" width="204" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="618" y="202" text-anchor="middle" font-weight="600" fill="#141413">프로필 agent가 조건 정리</text>
+    <text x="618" y="219" text-anchor="middle" font-size="11.5" fill="#52514e">화면에서 확인 · 수정</text>
+  </g>
+  <g id="f3">
+    <rect x="516" y="248" width="204" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="618" y="266" text-anchor="middle" font-weight="600" fill="#141413">agent가 도구 호출</text>
+    <text x="618" y="283" text-anchor="middle" font-size="11.5" fill="#52514e">search_jobs → get_job</text>
+  </g>
+  <g id="f4">
+    <rect x="516" y="312" width="204" height="44" rx="8" fill="#fab219" fill-opacity="0.1" stroke="#fab219" stroke-width="1.75"/>
+    <text x="618" y="330" text-anchor="middle" font-weight="600" fill="#141413">공고 정리 · 매칭 agent</text>
+    <text x="618" y="347" text-anchor="middle" font-size="11.5" fill="#52514e">요건 대조 · 점수 · 공고마다</text>
+  </g>
+  <g id="f5">
+    <rect x="516" y="376" width="204" height="44" rx="8" fill="#2e9e6a" fill-opacity="0.1" stroke="#2e9e6a" stroke-width="1.75"/>
+    <text x="618" y="394" text-anchor="middle" font-weight="600" fill="#141413">결과 목록</text>
+    <text x="618" y="411" text-anchor="middle" font-size="11.5" fill="#52514e">작업 ID로 진행 확인</text>
+  </g>
+</svg>
