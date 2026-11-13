@@ -30,19 +30,100 @@
         }
       }
     },
+    "/api/profile": {
+      "post": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Extract a profile from a resume",
+        "description": "Extract job titles and preferred work locations from the resume text.",
+        "operationId": "profile",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile-Output"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "The agent failed for another reason, such as an LLM error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                },
+                "example": {
+                  "detail": "Profile extraction failed. The agent failed for another reason, such as an LLM error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The LLM is rate limited or overloaded. Try again later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                },
+                "example": {
+                  "detail": "Profile extraction failed. The LLM is rate limited or overloaded. Try again later"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "The LLM did not respond in time. Try again later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                },
+                "example": {
+                  "detail": "Profile extraction failed. The LLM did not respond in time. Try again later"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/search": {
       "post": {
         "tags": [
           "search"
         ],
-        "summary": "Search job postings for a resume",
-        "description": "Extract job titles and preferred locations from the resume text,\nthen search the job sources through the MCP tools and return the postings found.",
+        "summary": "Search job postings for a profile",
+        "description": "Search the job sources through the MCP tools for postings that match the profile.\n\nPass the profile returned by /api/profile, edited by the user if needed.",
         "operationId": "search",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchRequestDTO"
+                "$ref": "#/components/schemas/Profile-Input"
               }
             }
           },
@@ -63,6 +144,45 @@
               }
             }
           },
+          "502": {
+            "description": "The agent failed for another reason, such as an LLM error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                },
+                "example": {
+                  "detail": "Job search failed. The agent failed for another reason, such as an LLM error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The LLM is rate limited or overloaded. Try again later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                },
+                "example": {
+                  "detail": "Job search failed. The LLM is rate limited or overloaded. Try again later"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "The LLM did not respond in time. Try again later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                },
+                "example": {
+                  "detail": "Job search failed. The LLM did not respond in time. Try again later"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -79,6 +199,21 @@
   },
   "components": {
     "schemas": {
+      "ErrorDTO": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "What failed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorDTO",
+        "description": "Error response body."
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -157,7 +292,57 @@
         "title": "JobPosting",
         "description": "A job posting from a source, converted to our common format."
       },
-      "SearchRequestDTO": {
+      "Profile-Input": {
+        "properties": {
+          "job_titles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Job Titles",
+            "description": "Relevant job titles based on the candidate's experience and skills. Use titles commonly found in job postings."
+          },
+          "locations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Locations",
+            "description": "Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified."
+          }
+        },
+        "type": "object",
+        "title": "Profile",
+        "description": "Profile information extracted from a candidate's resume."
+      },
+      "Profile-Output": {
+        "properties": {
+          "job_titles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Job Titles",
+            "description": "Relevant job titles based on the candidate's experience and skills. Use titles commonly found in job postings."
+          },
+          "locations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Locations",
+            "description": "Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified."
+          }
+        },
+        "type": "object",
+        "required": [
+          "job_titles",
+          "locations"
+        ],
+        "title": "Profile",
+        "description": "Profile information extracted from a candidate's resume."
+      },
+      "ProfileRequestDTO": {
         "properties": {
           "resume_text": {
             "type": "string",
@@ -173,8 +358,8 @@
         "required": [
           "resume_text"
         ],
-        "title": "SearchRequestDTO",
-        "description": "Request body for searching jobs from resume text."
+        "title": "ProfileRequestDTO",
+        "description": "Request body for extracting a profile from resume text."
       },
       "ValidationError": {
         "properties": {
