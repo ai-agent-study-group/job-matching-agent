@@ -1,0 +1,221 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "job-matching-agent API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Health check",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "post": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Search job postings for a resume",
+        "description": "Extract job titles and preferred locations from the resume text,\nthen search the job sources through the MCP tools and return the postings found.",
+        "operationId": "search",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/JobPosting"
+                  },
+                  "type": "array",
+                  "title": "Response Search"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "JobPosting": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "description": "Source of the posting, e.g. arbeitsagentur"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "Posting id within the source"
+          },
+          "company": {
+            "type": "string",
+            "title": "Company",
+            "description": "Company name"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "Job title"
+          },
+          "location": {
+            "type": "string",
+            "title": "Location",
+            "description": "Location as written by the source"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url",
+            "description": "Posting page URL; only set when a single posting is fetched"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "Posting body as plain text; only set when a single posting is fetched"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "id",
+          "company",
+          "title",
+          "location",
+          "url",
+          "description"
+        ],
+        "title": "JobPosting",
+        "description": "A job posting from a source, converted to our common format."
+      },
+      "SearchRequestDTO": {
+        "properties": {
+          "resume_text": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Resume Text",
+            "description": "Resume as plain text",
+            "examples": [
+              "Data analyst, 3 years of Python and SQL. Looking for a full-time job in Berlin."
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "resume_text"
+        ],
+        "title": "SearchRequestDTO",
+        "description": "Request body for searching jobs from resume text."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

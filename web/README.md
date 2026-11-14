@@ -23,14 +23,17 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-| 명령                 | 내용                                         |
-| -------------------- | -------------------------------------------- |
-| `npm run dev`        | 개발 서버                                    |
-| `npm run build`      | 프로덕션 빌드                                |
-| `npm run start`      | 빌드 실행                                    |
-| `npm run lint`       | ESLint                                       |
-| `npm run type-check` | `tsc --noEmit`                               |
-| `npm run format`     | Prettier (docs/·skills/·components/ui/ 제외) |
+| 명령                     | 내용                                                   |
+| ------------------------ | ------------------------------------------------------ |
+| `npm run dev`            | 개발 서버                                              |
+| `npm run build`          | 프로덕션 빌드                                          |
+| `npm run start`          | 빌드 실행                                              |
+| `npm run lint`           | ESLint                                                 |
+| `npm run type-check`     | `tsc --noEmit`                                         |
+| `npm run format`         | Prettier (docs/·skills/·components/ui/ 제외)           |
+| `npm run generate:types` | BE OpenAPI 스펙과 그 TS 타입을 `lib/api-types/`에 생성 |
+
+BE 응답 타입은 직접 쓰지 않고 `lib/api-types/api.generated.ts`에서 가져옵니다. BE 모델을 고쳐 커밋하면 훅이 다시 만듭니다. 자세한 흐름은 [#41 작업 메모](../docs/be/ticket-41.md).
 
 ## 구조
 

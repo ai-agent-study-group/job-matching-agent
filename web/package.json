@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "generate:types": "uv run python ../scripts/export_openapi.py && openapi-typescript lib/api-types/openapi.json -o lib/api-types/api.generated.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -50,6 +51,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.3.5",
+    "openapi-typescript": "^7.13.0",
     "prettier": "^3",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"
