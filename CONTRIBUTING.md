@@ -25,7 +25,7 @@
 | Review (리뷰, 검토) | 다른 사람이 내용을 읽고 질문·수정 의견·승인을 남기는 과정 |
 | Rebase (리베이스) | 내 변경 이력이 최신 기본 브랜치 뒤에서 이어지도록 정리하는 작업 |
 
-문서 작성만 하려면 아래 개발용 명령을 실행할 필요가 없습니다. [쉬운 문서 작성 안내](docs/GITHUB_GUIDE.md)를 따라 GitHub 웹에서 직접 저장하세요.
+문서 작성만 하려면 아래 개발용 명령을 실행할 필요가 없습니다. [쉬운 문서 작성 안내](https://github.com/ai-agent-study-group/job-matching-agent/wiki/Wiki-작성법)를 따라 GitHub 웹에서 직접 저장하세요.
 
 ## 브랜치 (코드 변경)
 
@@ -80,12 +80,12 @@ main: A───────M1──────M2
 
 ## GitHub에서 문서 기여
 
-**문서 작성에는 변경 검토 요청이 필수가 아닙니다.** 로컬 개발 환경 없이 문서를 만들거나 수정하려면 [GitHub 문서 작성 안내](docs/GITHUB_GUIDE.md)를 참고합니다.
+**문서 작성에는 변경 검토 요청이 필수가 아닙니다.** 로컬 개발 환경 없이 문서를 만들거나 수정하려면 [GitHub 문서 작성 안내](https://github.com/ai-agent-study-group/job-matching-agent/wiki/Wiki-작성법)를 참고합니다.
 위 규칙과 실제 브랜치 보호·병합 옵션 설정이 일치하는지는 저장소 관리자가 확인해야 합니다.
 
 ## PoC와 비공개 자료
 
-PoC·데모 코드는 개인 브랜치에만 두고 링크로 공유하며, main에 넣지 않습니다([코드 규칙](docs/STRUCTURE.md#code-rules)).
+PoC·데모 코드는 개인 브랜치에만 두고 링크로 공유하며, main에 넣지 않습니다([코드 규칙](https://github.com/ai-agent-study-group/job-matching-agent/wiki/Home#code-rules)).
 
 이력서 원본, 개인 이력 데이터, API 키와 개인 정보가 담긴 실행 결과는 공개 저장소에 커밋하지 않습니다. 현재 체크아웃의 `.gitignore`에는 `.env`가 등록되어 있으며, `poc/private/`는 등록되어 있지 않습니다. 공통 비공개 경로와 제외 패턴, 실수로 올렸을 때의 키 폐기·히스토리 정리 절차는 회의에서 정합니다. 업로드 전에 변경 파일과 diff에 비공개 자료가 없는지 확인합니다.
 
