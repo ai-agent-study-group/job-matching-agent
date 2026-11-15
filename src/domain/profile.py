@@ -5,7 +5,8 @@ class Profile(BaseModel):
     """Profile information extracted from a candidate's resume."""
 
     # 응답 스키마에서 기본값 있는 필드도 필수로 적음 (FE TS 타입에 `?`가 안 붙게)
-    model_config = ConfigDict(json_schema_serialization_defaults_required=True)
+    # 모르는 키는 오류로 막음 (예: `location` 오타, 예전 `{"resume_text": ...}` 형식)
+    model_config = ConfigDict(json_schema_serialization_defaults_required=True, extra="forbid")
 
     # 이력서의 경력과 기술에 맞는 직무명
     job_titles: list[str] = Field(
