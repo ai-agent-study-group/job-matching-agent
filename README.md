@@ -62,7 +62,7 @@ agent는 MCP 도구로 제공하지 않습니다. 제공하면 AI 앱이 agent�
 
 검색 결과가 상한을 넘으면 `search_jobs`가 조건을 좁히라는 오류를 돌려줍니다.
 
-새 출처는 `port/outbound/source.py`의 `JobSource` 인터페이스를 구현하고, `src/bootstrap.py`의 출처 목록에 한 줄 추가합니다. MCP 도구 코드는 고치지 않아도 됩니다. 구현 예는 [연방고용청 어댑터](docs/be/ticket-11.md)와 [freehire 어댑터](docs/be/ticket-15.md) 작업 메모에 있습니다.
+새 출처는 `port/outbound/source.py`의 `JobSource` 인터페이스를 구현하고, `src/bootstrap.py`의 출처 목록에 한 줄 추가합니다. MCP 도구 코드는 고치지 않아도 됩니다. 구현 예는 [연방고용청 어댑터](https://github.com/ai-agent-study-group/job-matching-agent/wiki/BE-티켓-11)와 [freehire 어댑터](https://github.com/ai-agent-study-group/job-matching-agent/wiki/BE-티켓-15) 작업 메모에 있습니다.
 
 ## 폴더 구조
 
@@ -82,10 +82,10 @@ src/
   main.py       앱 시작점: /api와 /mcp를 FastAPI 앱 하나에 올림
 test/           src/와 같은 구조의 테스트
 web/            JMA 앱 (Next.js)
-docs/           설계 문서, 작업 메모, 회의 기록
+docs/           문서 사이트(index.html)와 그림. 문서 본문은 Wiki에 있음
 ```
 
-설계 설명은 [BE 구조](docs/structure/be.md)에 있습니다.
+설계 설명은 [BE 구조](https://github.com/ai-agent-study-group/job-matching-agent/wiki/구조-BE)에 있습니다.
 
 ## 로컬 실행
 
@@ -157,14 +157,12 @@ npm run dev   # http://localhost:3000
 
 | 문서 | 내용 |
 |---|---|
-| [현재 구조와 기술](docs/STRUCTURE.md) | 목표, 전체 구조, 구현 범위, 역할 분담 |
-| 영역별 설계 | [BE](docs/structure/be.md) · [LLM](docs/structure/llm.md) · [FE](docs/structure/fe.md) · [DevOps](docs/structure/devops.md) · [QA](docs/structure/qa.md) |
-| 직군별 작업 공간 | [기획](docs/po/README.md) · [프론트엔드](docs/fe/README.md) · [백엔드](docs/be/README.md) · [AI · LLM](docs/ai-llm/README.md) · [데이터 수집](docs/data/README.md) · [인프라](docs/infra/README.md) |
-| [프로젝트 역할](docs/TEAM.md) | 직군별 역할과 정기 모임 |
-| [회의 기록](docs/meetings/README.md) | 주간 회의 안건과 결정 |
-| [문서 작성 안내](docs/GITHUB_GUIDE.md) | 문서 쓰고 고치는 법, 로컬 미리보기 |
-| [문서 사이트](https://ai-agent-study-group.github.io/job-matching-agent/) | `docs/`를 GitHub Pages로 보는 사이트 |
-| [Wiki](https://github.com/ai-agent-study-group/job-matching-agent/wiki) | 진행 상황, 문서 모음 |
+| [현재 구조와 기술](https://github.com/ai-agent-study-group/job-matching-agent/wiki/Home) | 목표, 전체 구조, 구현 범위, 역할 분담 |
+| 영역별 설계 | [BE](https://github.com/ai-agent-study-group/job-matching-agent/wiki/구조-BE) · [LLM](https://github.com/ai-agent-study-group/job-matching-agent/wiki/구조-LLM) · [FE](https://github.com/ai-agent-study-group/job-matching-agent/wiki/구조-FE) · [DevOps](https://github.com/ai-agent-study-group/job-matching-agent/wiki/구조-DevOps) · [QA](https://github.com/ai-agent-study-group/job-matching-agent/wiki/구조-QA) |
+| [프로젝트 역할](https://github.com/ai-agent-study-group/job-matching-agent/wiki/역할) | 직군별 역할과 정기 모임 |
+| [문서 작성 안내](https://github.com/ai-agent-study-group/job-matching-agent/wiki/Wiki-작성법) | Wiki 문서 쓰고 고치는 법 |
+| [문서 사이트](https://ai-agent-study-group.github.io/job-matching-agent/) | Wiki를 GitHub Pages로 보는 사이트 |
+| [Wiki](https://github.com/ai-agent-study-group/job-matching-agent/wiki) | 진행 상황, 회의 기록, 작업 메모 |
 
 ## 기여
 

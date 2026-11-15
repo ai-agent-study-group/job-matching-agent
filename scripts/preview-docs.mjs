@@ -89,7 +89,10 @@ const server = createServer(async (request, response) => {
     }
     if (pathname === '/' || pathname === '/index.html') {
       const snapshot = await getSnapshot();
-      const rendered = await engine.parseAndRender(snapshot.template, { site: { pages: snapshot.pages } });
+      // getSnapshot 은 `_` 디렉터리를 건너뛰므로 nav 데이터는 따로 읽는다 (Jekyll 의 site.data.sidebar 대응).
+      let sidebar = [];
+      try { sidebar = JSON.parse(await readFile(resolve(root, '_data/sidebar.json'), 'utf8')); } catch { /* 없으면 빈 nav */ }
+      const rendered = await engine.parseAndRender(snapshot.template, { site: { pages: snapshot.pages, data: { sidebar } } });
       response.writeHead(200, { 'Content-Type': contentTypes['.html'] });
       response.end(request.method === 'HEAD' ? undefined : rendered.replace('</body>', liveReload(snapshot.version) + '</body>'));
       return;

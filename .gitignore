@@ -19,3 +19,7 @@ node_modules/
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
+
+# wiki -> docs 동기화 생성물 (sync-wiki.yml 이 실행 중에만 생성; 로컬 preview 는 아래 참고)
+docs/wiki/
+docs/_data/sidebar.json
