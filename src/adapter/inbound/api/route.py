@@ -1,6 +1,6 @@
 """/api 경로."""
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, HTTPException, Request, status
 from pydantic_ai.exceptions import AgentRunError
 
 from adapter.inbound.agent.search import extract_jobs
@@ -43,7 +43,13 @@ async def search(body: Profile, request: Request) -> list[JobPosting]:
     """Search the job sources through the MCP tools for postings that match the profile.
 
     Pass the profile returned by /api/profile, edited by the user if needed.
+    job_titles needs at least one non-blank title. Unknown fields are rejected with 422.
     """
+    # 검색 키워드가 될 직무명이 하나도 없으면 검색 agent를 부르지 않음
+    if not any(title.strip() for title in body.job_titles):
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_CONTENT, "job_titles needs at least one title"
+        )
     try:
         result = await request.app.state.search_agent.run(body.model_dump_json())
     except AgentRunError as e:

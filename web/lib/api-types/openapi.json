@@ -117,7 +117,7 @@
           "search"
         ],
         "summary": "Search job postings for a profile",
-        "description": "Search the job sources through the MCP tools for postings that match the profile.\n\nPass the profile returned by /api/profile, edited by the user if needed.",
+        "description": "Search the job sources through the MCP tools for postings that match the profile.\n\nPass the profile returned by /api/profile, edited by the user if needed.\njob_titles needs at least one non-blank title. Unknown fields are rejected with 422.",
         "operationId": "search",
         "requestBody": {
           "content": {
@@ -311,6 +311,7 @@
             "description": "Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified."
           }
         },
+        "additionalProperties": false,
         "type": "object",
         "title": "Profile",
         "description": "Profile information extracted from a candidate's resume."
@@ -334,6 +335,7 @@
             "description": "Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified."
           }
         },
+        "additionalProperties": false,
         "type": "object",
         "required": [
           "job_titles",

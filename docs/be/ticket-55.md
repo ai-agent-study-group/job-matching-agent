@@ -25,6 +25,15 @@
 
 JMA 앱은 `/api/profile`의 응답을 화면에 보여 주고, 사용자가 고친 프로필을 그대로 `/api/search`에 보냅니다. `/api/search`의 요청 본문은 도메인 `Profile`을 그대로 씁니다.
 
+`/api/search`는 아래 요청을 422로 막습니다. 그대로 두면 검색 agent가 LLM과 출처 API를 쓸데없이 부르고, 검색이 안 되면 재시도 끝에 502가 나서 입력 오류가 서버 오류처럼 보였습니다.
+
+| 요청 | 막는 곳 |
+| --- | --- |
+| 공백이 아닌 직무명이 하나도 없음 (`{}`, `{"job_titles": []}`, `[""]`, `["  "]`) | `search()` 핸들러의 검사 |
+| 모르는 키가 있음 (`location` 오타, 예전 `{"resume_text": ...}` 형식) | `Profile`의 `extra="forbid"` |
+
+정상 직무명 옆에 섞인 빈 값이나 빈 근무지(`locations: [""]`)는 여기서 막지 않고, #61에서 모든 필드에 빈 문자열을 받지 않는 값 타입을 쓰면서 한꺼번에 막습니다. 핸들러 검사는 `{"detail": "..."}` 꼴로 오류를 돌려줘서, FastAPI가 요청 검증에서 돌려주는 422(`detail`이 목록)와 모양이 다릅니다. 직무명 검사를 `Profile`에 직접 걸지 않은 건, `Profile`이 프로필 agent의 출력이기도 해서 이력서에서 직무명을 못 찾은 경우까지 실패가 되기 때문입니다. 별도의 요청 DTO도 만들지 않았습니다. #61에서 `Profile`을 이력서에서 찾을 수 있는 정보와 사용자가 고르는 조건으로 나누면서 `/api/search` 요청 본문이 바뀌기 때문입니다.
+
 `/api/profile`은 #44에서 이력서 파일(PDF · DOCX)을 받도록 바뀝니다. 그때까지는 이력서 텍스트를 JSON으로 받습니다. 프로필 agent는 긴 이력서에서 직무명과 근무지를 뽑아내는 일을 해서, 사용자가 직무명과 근무지를 이미 안다면 agent를 거치지 않고 FE 프로필 화면에서 바로 적은 뒤 `/api/search`를 부르면 됩니다. 그래서 텍스트를 받는 경로는 따로 두지 않습니다.
 
 JSON 문자열 안에서는 줄바꿈과 따옴표를 `\n`, `\"`로 적어야 합니다. Swagger나 curl에 여러 줄 이력서를 그대로 붙여 넣으면 422(`json_invalid`)가 납니다. FE는 `JSON.stringify`가 알아서 바꿔 줘서 상관없습니다.
@@ -56,15 +65,16 @@ agent를 돌리다 pydantic-ai가 `AgentRunError`를 내면 예외 종류에 따
 
 - 두 경로 모두 `responses`에 502 · 503 · 504 응답 모양(`ErrorDTO`)과 예시를 적었습니다. FE용 TS 타입에도 에러 모양이 생깁니다.
 - `/api/search` 요청에는 예시를 붙이지 않았습니다. 도메인 `Profile`에 예시를 넣으면 프로필 agent가 받는 출력 스키마에도 들어가서, 이력서에 없는 근무지를 예시대로 채울 수 있습니다. Swagger에서는 `/api/profile` 응답을 복사해 넣으면 됩니다.
-- `Profile`이 응답과 요청에 모두 쓰여서 스펙에는 `Profile-Output`과 `Profile-Input` 두 이름으로 나옵니다. 응답 쪽은 필드가 항상 있고(#41의 설정), 요청 쪽은 빈 목록이면 필드를 생략해도 됩니다. 그래서 응답 타입을 그대로 요청에 넣을 수 있습니다.
+- `Profile`이 응답과 요청에 모두 쓰여서 스펙에는 `Profile-Output`과 `Profile-Input` 두 이름으로 나옵니다. 응답 쪽은 필드가 항상 있고(#41의 설정), 요청 쪽은 빈 목록이면 필드를 생략해도 됩니다(`job_titles`는 하나 이상 필요). 그래서 응답 타입을 그대로 요청에 넣을 수 있습니다.
 
 ## 파일 구성
 
 | 파일 | 바뀐 것 |
 | --- | --- |
-| `adapter/inbound/api/route.py` | `/api/profile` 추가, `/api/search`가 `Profile`을 받음 |
+| `adapter/inbound/api/route.py` | `/api/profile` 추가, `/api/search`가 `Profile`을 받음. 공백이 아닌 직무명이 하나도 없으면 422 |
 | `adapter/inbound/api/error.py` | agent 실패를 로그에 남기고 502 · 503 · 504로 바꿈(`agent_error`), 같은 내용을 Swagger에 적음(`agent_errors`). 새 파일 |
 | `adapter/inbound/api/dto.py` | `SearchRequestDTO`를 `ProfileRequestDTO`(`{"resume_text": ...}`)로 바꾸고 `ErrorDTO` 추가. `ProfileRequestDTO`는 #44에서 파일 업로드로 바뀔 때 지움 |
+| `domain/profile.py` | `extra="forbid"` 추가, 모르는 키는 422 |
 | `web/lib/api-types/` | 스펙과 TS 타입 다시 생성 |
 
 ## 테스트
@@ -76,3 +86,4 @@ agent를 돌리다 pydantic-ai가 `AgentRunError`를 내면 예외 종류에 따
 | `test_profile_agent_failure_maps_to_status` | 프로필 agent의 오류 종류마다 503 · 504 · 502가 나오고, 본문은 `Profile extraction failed` |
 | `test_search_returns_postings_from_search_jobs` | 프로필을 보내면 `search_jobs`가 찾은 공고가 옴 |
 | `test_search_agent_failure_maps_to_status` | 검색 agent의 사용량 제한은 503, 도구 재시도 소진은 502이고, 본문은 `Job search failed` |
+| `test_search_rejects_invalid_profile` | 공백이 아닌 직무명이 없거나 모르는 키가 있으면 422이고 검색 agent는 돌지 않음 |

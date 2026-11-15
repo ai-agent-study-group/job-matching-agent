@@ -169,3 +169,23 @@ def test_search_agent_failure_maps_to_status(monkeypatch, error, status_code):
     assert response.status_code == status_code
     reason = AGENT_ERROR_REASONS[status_code]
     assert response.json() == {"detail": f"Job search failed. {reason}"}
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        {},
+        {"job_titles": []},
+        {"job_titles": [""]},
+        {"job_titles": ["  "]},
+        # 모르는 키가 있는 경우 (예전 /api/search 형식, locations 오타)
+        {"resume_text": "Data Analyst in Berlin"},
+        {"job_titles": ["Data Analyst"], "location": ["Berlin"]},
+    ],
+)
+def test_search_rejects_invalid_profile(monkeypatch, body):
+    # 422로 막혀서 검색 agent까지 가지 않아야 함
+    error = AssertionError("search agent must not run")
+    monkeypatch.setattr(app.state, "search_agent", FailingAgent(error), raising=False)
+
+    assert TestClient(app).post("/api/search", json=body).status_code == 422

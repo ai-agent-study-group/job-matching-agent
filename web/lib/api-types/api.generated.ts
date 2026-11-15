@@ -55,6 +55,7 @@ export interface paths {
          * @description Search the job sources through the MCP tools for postings that match the profile.
          *
          *     Pass the profile returned by /api/profile, edited by the user if needed.
+         *     job_titles needs at least one non-blank title. Unknown fields are rejected with 422.
          */
         post: operations["search"];
         delete?: never;
