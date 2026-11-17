@@ -3,6 +3,7 @@
 from typing import Annotated, Any
 
 from fastmcp import FastMCP
+from fastmcp.server.auth import AuthProvider
 from pydantic import Field
 
 from domain.job import JobPosting
@@ -13,8 +14,9 @@ READ_ONLY = {"readOnlyHint": True}
 SourceName = Annotated[str, Field(description="A source name returned by list_sources")]
 
 
-def create_server(registry: RegistryServicePort) -> FastMCP:
-    mcp = FastMCP("jobs")
+def create_server(registry: RegistryServicePort, auth: AuthProvider | None = None) -> FastMCP:
+    # auth는 HTTP(/mcp)로 오는 요청만 검사. 검색 agent처럼 서버 안에서 바로 부르는 호출은 검사 안 함
+    mcp = FastMCP("jobs", auth=auth)
 
     @mcp.tool(annotations=READ_ONLY)
     async def list_sources() -> list[Source]:
