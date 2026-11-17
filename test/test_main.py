@@ -5,12 +5,15 @@
 """
 
 import asyncio
+import importlib
+from unittest.mock import Mock
 
 import httpx2
 import pytest
 from fastmcp import Client
 from fastmcp.client.transports import StreamableHttpTransport
 
+import observability
 from main import app
 
 
@@ -55,3 +58,16 @@ def test_mcp_over_http_list_sources():
 
     names = [source["name"] for source in result.structured_content["result"]]
     assert names == ["arbeitsagentur", "freehire"]
+
+
+def test_app_configures_logfire_before_creating_mcp_server(monkeypatch):
+    """main.py 조립 때 Logfire 설정과 FastAPI 계측을 빠뜨리지 않는다."""
+    configure = Mock()
+    instrument = Mock()
+    monkeypatch.setattr(observability, "configure_logfire", configure)
+    monkeypatch.setattr(observability, "instrument_fastapi", instrument)
+
+    module = importlib.reload(importlib.import_module("main"))
+
+    configure.assert_called_once_with()
+    instrument.assert_called_once_with(module.app)
