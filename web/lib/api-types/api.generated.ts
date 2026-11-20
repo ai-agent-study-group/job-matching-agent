@@ -32,7 +32,9 @@ export interface paths {
         put?: never;
         /**
          * Extract a profile from a resume
-         * @description Extract experience, education, skills and languages from the resume text.
+         * @description Extract experience, education, skills and languages from the resume.
+         *
+         *     Send the resume in the `resume` form field, as plain text or as a file.
          */
         post: operations["profile"];
         delete?: never;
@@ -234,15 +236,14 @@ export interface components {
         };
         /**
          * ProfileRequestDTO
-         * @description Request body for extracting a profile from resume text.
+         * @description Form body for extracting a profile from a resume.
          */
         ProfileRequestDTO: {
             /**
-             * Resume Text
-             * @description Resume as plain text
-             * @example Data analyst, 3 years of Python and SQL. Looking for a full-time job in Berlin.
+             * Resume
+             * @description Resume as a PDF or DOCX file, or as plain text
              */
-            resume_text: string;
+            resume: string;
         };
         /** ValidationError */
         ValidationError: {
@@ -297,7 +298,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ProfileRequestDTO"];
+                "multipart/form-data": components["schemas"]["ProfileRequestDTO"];
             };
         };
         responses: {
@@ -308,6 +309,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Profile-Output"];
+                };
+            };
+            /** @description Resume files are not supported yet. Send the resume as text */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDTO"];
                 };
             };
             /** @description Validation Error */

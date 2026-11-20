@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.15'",
@@ -984,6 +984,7 @@ dependencies = [
     { name = "httpx2" },
     { name = "logfire", extra = ["fastapi", "httpx"] },
     { name = "pydantic-ai-slim", extra = ["anthropic", "openai"] },
+    { name = "python-multipart" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -1002,6 +1003,7 @@ requires-dist = [
     { name = "httpx2", specifier = ">=2.13.1" },
     { name = "logfire", extras = ["fastapi", "httpx"], specifier = ">=5.6.0" },
     { name = "pydantic-ai-slim", extras = ["anthropic", "openai"], specifier = ">=2.64.0" },
+    { name = "python-multipart", specifier = ">=0.0.32" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.54.0" },
 ]
 
