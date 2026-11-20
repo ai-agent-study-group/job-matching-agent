@@ -13,8 +13,16 @@ def test_profile_agent_returns_profile():
     # TestModel이 반환할 Profile 데이터 지정
     test_model = TestModel(
         custom_output_args={
-            "job_titles": ["Data Analyst", "BI Analyst"],
-            "locations": ["Berlin"],
+            "seniority": "mid",
+            "languages": [{"code": "de", "level": "fluent"}],
+            "experiences": [
+                {
+                    "title": "Data Analyst",
+                    "start": "2020-01",
+                    "end": "2022-12",
+                    "highlights": [{"text": "Built reports with SQL", "skills": ["SQL"]}],
+                }
+            ],
         }
     )
 
@@ -28,5 +36,8 @@ def test_profile_agent_returns_profile():
 
     # 결과가 Profile 객체인지 확인
     assert isinstance(result.output, Profile)
-    assert result.output.job_titles == ["Data Analyst", "BI Analyst"]
-    assert result.output.locations == ["Berlin"]
+    assert result.output.seniority == "mid"
+    assert result.output.experiences[0].highlights[0].skills == ["SQL"]
+    # 계산 필드는 TestModel 출력에 없어도 경력에서 계산됨
+    assert result.output.skills == ["SQL"]
+    assert result.output.months_of_experience == 36

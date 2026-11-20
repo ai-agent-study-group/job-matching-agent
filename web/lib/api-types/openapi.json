@@ -36,7 +36,7 @@
           "profile"
         ],
         "summary": "Extract a profile from a resume",
-        "description": "Extract job titles and preferred work locations from the resume text.",
+        "description": "Extract experience, education, skills and languages from the resume text.",
         "operationId": "profile",
         "requestBody": {
           "content": {
@@ -117,7 +117,7 @@
           "search"
         ],
         "summary": "Search job postings for a profile",
-        "description": "Search the job sources through the MCP tools for postings that match the profile.\n\nPass the profile returned by /api/profile, edited by the user if needed.\njob_titles needs at least one non-blank title. Unknown fields are rejected with 422.",
+        "description": "Search the job sources through the MCP tools for postings that match the profile.\n\nPass the profile returned by /api/profile. Unknown fields are rejected with 422.",
         "operationId": "search",
         "requestBody": {
           "content": {
@@ -199,6 +199,44 @@
   },
   "components": {
     "schemas": {
+      "Education": {
+        "properties": {
+          "degree": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Degree",
+            "description": "Degree or vocational training as written, e.g. \"M.Sc.\", \"Ausbildung\"."
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End",
+            "description": "\"YYYY-MM\" or \"YYYY\". null if ongoing."
+          }
+        },
+        "type": "object",
+        "required": [
+          "degree"
+        ],
+        "title": "Education"
+      },
       "ErrorDTO": {
         "properties": {
           "detail": {
@@ -214,6 +252,62 @@
         "title": "ErrorDTO",
         "description": "Error response body."
       },
+      "Experience": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Title"
+          },
+          "company": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Company"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start",
+            "description": "\"YYYY-MM\" or \"YYYY\"."
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End",
+            "description": "\"YYYY-MM\" or \"YYYY\". null if current."
+          },
+          "highlights": {
+            "items": {
+              "$ref": "#/components/schemas/Highlight"
+            },
+            "type": "array",
+            "title": "Highlights"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "Experience"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -226,6 +320,30 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "Highlight": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Text",
+            "description": "One bullet or line of a role, copied as written, including tech stack lines. Do not summarize or split."
+          },
+          "skills": {
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": "array",
+            "title": "Skills",
+            "description": "Tools, technologies and certificates named in this sentence, in their common official name."
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "Highlight"
       },
       "JobPosting": {
         "properties": {
@@ -292,57 +410,174 @@
         "title": "JobPosting",
         "description": "A job posting from a source, converted to our common format."
       },
+      "Language": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Code",
+            "description": "ISO 639-1 code, e.g. \"de\", \"en\"."
+          },
+          "level": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "basic",
+                  "good",
+                  "fluent",
+                  "native"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Level",
+            "description": "null if no level is stated."
+          }
+        },
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "title": "Language"
+      },
       "Profile-Input": {
         "properties": {
-          "job_titles": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Job Titles",
-            "description": "Relevant job titles based on the candidate's experience and skills. Use titles commonly found in job postings."
+          "seniority": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "intern",
+                  "junior",
+                  "mid",
+                  "senior",
+                  "lead"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seniority",
+            "description": "Career level. null if unclear."
           },
-          "locations": {
+          "languages": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/Language"
             },
             "type": "array",
-            "title": "Locations",
-            "description": "Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified."
+            "title": "Languages",
+            "description": "Only languages explicitly stated."
+          },
+          "experiences": {
+            "items": {
+              "$ref": "#/components/schemas/Experience"
+            },
+            "type": "array",
+            "title": "Experiences"
+          },
+          "educations": {
+            "items": {
+              "$ref": "#/components/schemas/Education"
+            },
+            "type": "array",
+            "title": "Educations"
+          },
+          "other_skills": {
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": "array",
+            "title": "Other Skills",
+            "description": "Skills listed outside any role, e.g. a Skills section."
           }
         },
         "additionalProperties": false,
         "type": "object",
-        "title": "Profile",
-        "description": "Profile information extracted from a candidate's resume."
+        "title": "Profile"
       },
       "Profile-Output": {
         "properties": {
-          "job_titles": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Job Titles",
-            "description": "Relevant job titles based on the candidate's experience and skills. Use titles commonly found in job postings."
+          "seniority": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "intern",
+                  "junior",
+                  "mid",
+                  "senior",
+                  "lead"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seniority",
+            "description": "Career level. null if unclear."
           },
-          "locations": {
+          "languages": {
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "type": "array",
+            "title": "Languages",
+            "description": "Only languages explicitly stated."
+          },
+          "experiences": {
+            "items": {
+              "$ref": "#/components/schemas/Experience"
+            },
+            "type": "array",
+            "title": "Experiences"
+          },
+          "educations": {
+            "items": {
+              "$ref": "#/components/schemas/Education"
+            },
+            "type": "array",
+            "title": "Educations"
+          },
+          "other_skills": {
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": "array",
+            "title": "Other Skills",
+            "description": "Skills listed outside any role, e.g. a Skills section."
+          },
+          "skills": {
             "items": {
               "type": "string"
             },
             "type": "array",
-            "title": "Locations",
-            "description": "Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified."
+            "title": "Skills",
+            "readOnly": true
+          },
+          "months_of_experience": {
+            "type": "integer",
+            "title": "Months Of Experience",
+            "readOnly": true
           }
         },
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "job_titles",
-          "locations"
+          "seniority",
+          "languages",
+          "experiences",
+          "educations",
+          "other_skills",
+          "skills",
+          "months_of_experience"
         ],
-        "title": "Profile",
-        "description": "Profile information extracted from a candidate's resume."
+        "title": "Profile"
       },
       "ProfileRequestDTO": {
         "properties": {
