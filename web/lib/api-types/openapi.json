@@ -36,11 +36,11 @@
           "profile"
         ],
         "summary": "Extract a profile from a resume",
-        "description": "Extract experience, education, skills and languages from the resume text.",
+        "description": "Extract experience, education, skills and languages from the resume.\n\nSend the resume in the `resume` form field, as plain text or as a file.",
         "operationId": "profile",
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/ProfileRequestDTO"
               }
@@ -55,6 +55,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Profile-Output"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Resume files are not supported yet. Send the resume as text",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
             }
@@ -581,22 +591,28 @@
       },
       "ProfileRequestDTO": {
         "properties": {
-          "resume_text": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Resume Text",
-            "description": "Resume as plain text",
-            "examples": [
-              "Data analyst, 3 years of Python and SQL. Looking for a full-time job in Berlin."
-            ]
+          "resume": {
+            "anyOf": [
+              {
+                "type": "string",
+                "contentMediaType": "application/octet-stream"
+              },
+              {
+                "type": "string",
+                "minLength": 1
+              }
+            ],
+            "title": "Resume",
+            "description": "Resume as a PDF or DOCX file, or as plain text"
           }
         },
+        "additionalProperties": false,
         "type": "object",
         "required": [
-          "resume_text"
+          "resume"
         ],
         "title": "ProfileRequestDTO",
-        "description": "Request body for extracting a profile from resume text."
+        "description": "Form body for extracting a profile from a resume."
       },
       "ValidationError": {
         "properties": {
