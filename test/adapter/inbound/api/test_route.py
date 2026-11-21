@@ -32,7 +32,17 @@ POSTING = JobPosting(
     title="Data Analyst",
     location="Berlin",
 )
-PROFILE = Profile(job_titles=["Data Analyst"], locations=["Berlin"])
+PROFILE = Profile(
+    seniority="mid",
+    experiences=[
+        {
+            "title": "Data Analyst",
+            "start": "2020-01",
+            "end": "2022-12",
+            "highlights": [{"text": "Built reports with SQL", "skills": ["SQL"]}],
+        }
+    ],
+)
 # 줄바꿈과 따옴표가 섞인 이력서. JSON으로 보낼 때 이스케이프돼도 agent에는 원문 그대로 가야 함
 RESUME = 'Data Analyst\n3 years of "Python" and SQL\nBerlin'
 
@@ -174,13 +184,12 @@ def test_search_agent_failure_maps_to_status(monkeypatch, error, status_code):
 @pytest.mark.parametrize(
     "body",
     [
-        {},
-        {"job_titles": []},
-        {"job_titles": [""]},
-        {"job_titles": ["  "]},
-        # 모르는 키가 있는 경우 (예전 /api/search 형식, locations 오타)
+        # 모르는 키가 있는 경우 (예전 /api/search 형식, experiences 오타)
         {"resume_text": "Data Analyst in Berlin"},
-        {"job_titles": ["Data Analyst"], "location": ["Berlin"]},
+        {"experience": []},
+        # 값이 형식에 안 맞는 경우
+        {"seniority": "expert"},
+        {"experiences": [{"title": "  "}]},
     ],
 )
 def test_search_rejects_invalid_profile(monkeypatch, body):
