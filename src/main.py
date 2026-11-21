@@ -13,7 +13,10 @@ from adapter.inbound.api.route import router as api_router
 from adapter.inbound.auth import create_mcp_auth
 from adapter.inbound.mcp.server import create_server
 from bootstrap import bootstrap
+from observability import configure_logfire, instrument_fastapi
 
+# FastMCP 4가 만드는 MCP/OpenTelemetry span도 같은 Logfire 설정으로 내보낸다.
+configure_logfire()
 container = bootstrap()
 mcp_server = create_server(container.registry, auth=create_mcp_auth())
 mcp_app = mcp_server.http_app(path="/mcp")
@@ -31,6 +34,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
 
 app = FastAPI(title="job-matching-agent API", lifespan=lifespan)
+instrument_fastapi(app)
 app.include_router(api_router)
 # "/"에 붙여서 주소가 /mcp가 됨. 모든 경로를 받으므로 라우트는 이 줄보다 위에서 등록할 것
 app.mount("/", mcp_app)

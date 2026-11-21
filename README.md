@@ -108,6 +108,19 @@ OPENAI_API_KEY=<API 키>
 
 Anthropic 모델을 쓰려면 `LLM_MODEL=anthropic:claude-haiku-5-5`와 `ANTHROPIC_API_KEY`를 적습니다.
 
+#### Logfire (선택)
+
+LLM · MCP 호출을 관찰하려면 [Logfire](https://logfire.pydantic.dev/)에서 프로젝트를 만든 뒤
+write token을 발급해 `.env`에 추가합니다.
+
+```env
+LOGFIRE_TOKEN=<Logfire write token>
+```
+
+토큰이 없으면 관찰 데이터를 보내지 않으며 앱·테스트·CI는 그대로 동작합니다. 토큰을 넣고
+앱을 실행한 뒤 Logfire 웹의 해당 프로젝트 **Live** 화면에서 요청 → agent → MCP 도구 → 출처
+API 단계별 시간·오류·토큰을 확인할 수 있습니다. 이력서와 공고 본문은 기록하지 않습니다.
+
 ```bash
 uv run --env-file .env uvicorn main:app --reload   # http://localhost:8000/health
 ```
