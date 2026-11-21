@@ -10,11 +10,12 @@ from pydantic_ai.mcp import MCPToolset
 from adapter.inbound.agent.profile import create_profile_agent
 from adapter.inbound.agent.search import create_search_agent
 from adapter.inbound.api.route import router as api_router
+from adapter.inbound.auth import create_mcp_auth
 from adapter.inbound.mcp.server import create_server
 from bootstrap import bootstrap
 
 container = bootstrap()
-mcp_server = create_server(container.registry)
+mcp_server = create_server(container.registry, auth=create_mcp_auth())
 mcp_app = mcp_server.http_app(path="/mcp")
 
 
