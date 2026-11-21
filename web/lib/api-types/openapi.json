@@ -111,48 +111,6 @@
         }
       }
     },
-    "/api/profile/upload": {
-      "post": {
-        "tags": [
-          "profile"
-        ],
-        "summary": "Extract profile from an uploaded resume",
-        "description": "Extract profile information from an uploaded PDF or DOCX resume.",
-        "operationId": "upload_profile",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_upload_profile"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Profile-Output"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/search": {
       "post": {
         "tags": [
@@ -241,20 +199,6 @@
   },
   "components": {
     "schemas": {
-      "Body_upload_profile": {
-        "properties": {
-          "file": {
-            "type": "string",
-            "contentMediaType": "application/octet-stream",
-            "title": "File"
-          }
-        },
-        "type": "object",
-        "required": [
-          "file"
-        ],
-        "title": "Body_upload_profile"
-      },
       "ErrorDTO": {
         "properties": {
           "detail": {
