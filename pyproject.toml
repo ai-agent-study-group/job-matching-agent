@@ -11,7 +11,6 @@ dependencies = [
     "pydantic-ai-slim[anthropic,openai]>=2.64.0",
     "pypdf>=7.1.0",
     "python-docx>=1.2.0",
-    "python-multipart>=0.0.32",
     "uvicorn[standard]>=0.54.0",
 ]
 
@@ -20,6 +19,7 @@ dev = [
     "httpx2>=2.13.1",
     "pre-commit>=4.7.0",
     "pytest>=9.1.1",
+    "reportlab>=4.0.0",
     "ruff>=0.17.0",
 ]
 
