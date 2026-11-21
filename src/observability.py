@@ -29,7 +29,7 @@ def _without_request_arguments(
 ) -> dict[str, Any]:
     """Keep FastAPI request spans from recording parsed request bodies.
 
-    ``/api/search``의 ``resume_text``가 ``fastapi.arguments.values``에
+    ``/api/profile``의 ``resume_text``가 ``fastapi.arguments.values``에
     들어가는 것을 막는다. URL, 상태 코드, 시간 같은 HTTP 메타데이터는
     FastAPI 계측기가 계속 기록한다.
     """
