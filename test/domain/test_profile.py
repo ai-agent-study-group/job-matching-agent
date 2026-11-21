@@ -39,6 +39,16 @@ def test_skills_merges_highlights_and_other_skills_without_duplicates():
         ([("2020", "2021")], 24),
         # 날짜를 읽을 수 없는 경력은 세지 않음
         ([(None, "2021-12"), ("2021 spring", "2021-12"), ("2020-01", "2020-03")], 3),
+        # 없는 달(00, 13)이 들어간 경력은 세지 않음
+        ([("2020-00", "2020-12"), ("2020-01", "2020-13"), ("2020-01", "2020-03")], 3),
+        # 월은 한 자리로 써도 읽음
+        ([("2023-1", "2023-3")], 3),
+        # 시작과 끝이 같은 달이면 1개월
+        ([("2023-01", "2023-01")], 1),
+        # 끝이 시작보다 앞이면 세지 않음
+        ([("2021-06", "2020-01")], 0),
+        # 1900년보다 앞선 연도가 들어간 경력은 세지 않음
+        ([("0000", "2020"), ("1899-12", "1900-03"), ("1900-01", "1900-03")], 3),
     ],
 )
 def test_months_of_experience(periods, months):
@@ -55,6 +65,25 @@ def test_months_of_experience_counts_a_current_role_until_today():
 
     # 작년 이번 달부터 이번 달까지: 13개월
     assert profile.months_of_experience == 13
+
+
+def test_months_of_experience_does_not_count_future_months():
+    today = date.today()
+    start = f"{today.year - 1}-{today.month:02d}"
+    end = f"{today.year + 1}-{today.month:02d}"
+
+    profile = Profile(experiences=[experience(start, end)])
+
+    # 끝이 내년이어도 이번 달까지만: 13개월
+    assert profile.months_of_experience == 13
+
+
+def test_months_of_experience_skips_a_role_that_starts_in_the_future():
+    year = date.today().year
+
+    profile = Profile(experiences=[experience(f"{year + 1}-01", f"{year + 2}-12")])
+
+    assert profile.months_of_experience == 0
 
 
 def test_computed_fields_are_not_in_the_llm_output_schema():

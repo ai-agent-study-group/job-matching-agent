@@ -49,7 +49,11 @@ def _month(value: str | None, default_month: int) -> int | None:
     match = re.fullmatch(r"(\d{4})(?:-(\d{1,2}))?", value or "")
     if not match:
         return None
-    return int(match[1]) * 12 + int(match[2] or default_month)
+    year, month = int(match[1]), int(match[2] or default_month)
+    # 있을 수 없는 날짜는 읽지 않음. 예: "0000", "1899-05", "2020-13"
+    if year < 1900 or not 1 <= month <= 12:
+        return None
+    return year * 12 + month
 
 
 class Profile(Qualifications):
@@ -91,5 +95,6 @@ class Profile(Qualifications):
             end = today if experience.end is None else _month(experience.end, 12)
             # 날짜를 읽을 수 없는 경력은 세지 않음. 예: start가 없거나 "2021 봄"
             if start is not None and end is not None:
-                months.update(range(start, end + 1))
+                # 아직 오지 않은 달은 세지 않음. 예: 2027-06까지 계약이어도 오늘까지만
+                months.update(range(start, min(end, today) + 1))
         return len(months)
