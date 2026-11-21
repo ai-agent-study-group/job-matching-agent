@@ -1,7 +1,6 @@
 from io import BytesIO
 from types import SimpleNamespace
 
-import pytest
 from docx import Document
 from fastapi.testclient import TestClient
 
@@ -38,7 +37,7 @@ def test_profile_upload_success(monkeypatch):
     )
 
     response = TestClient(app).post(
-        "/api/profile",
+        "/api/profile/upload",
         files={
             "file": (
                 "resume.docx",
@@ -57,7 +56,7 @@ def test_profile_upload_success(monkeypatch):
 
 def test_profile_upload_unsupported_file():
     response = TestClient(app).post(
-        "/api/profile",
+        "/api/profile/upload",
         files={"file": ("resume.txt", b"some text", "text/plain")},
     )
 
@@ -70,7 +69,7 @@ def test_profile_upload_empty_document():
     document.save(buffer)
 
     response = TestClient(app).post(
-        "/api/profile",
+        "/api/profile/upload",
         files={"file": ("empty.docx", buffer.getvalue())},
     )
 
@@ -79,7 +78,7 @@ def test_profile_upload_empty_document():
 
 def test_profile_upload_too_large():
     response = TestClient(app).post(
-        "/api/profile",
+        "/api/profile/upload",
         files={"file": ("resume.pdf", b"x" * (5 * 1024 * 1024 + 1))},
     )
 
