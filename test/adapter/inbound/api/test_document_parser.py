@@ -2,12 +2,13 @@ from io import BytesIO
 
 import pytest
 from docx import Document
+from pypdf import PdfWriter
 from reportlab.pdfgen import canvas
 
 from adapter.inbound.api.document_parser import (
-    document_to_text,
     InvalidDocumentError,
     UnsupportedDocumentError,
+    document_to_text,
 )
 
 
@@ -31,12 +32,14 @@ def create_docx():
 
 def test_pdf_extraction():
     text = document_to_text(create_pdf(), "resume.pdf")
+
     assert "Jane Doe" in text
     assert "Python and SQL" in text
 
 
 def test_docx_extraction():
     text = document_to_text(create_docx(), "resume.docx")
+
     assert "Jane Doe" in text
     assert "Python and SQL" in text
 
@@ -46,6 +49,17 @@ def test_unsupported_file():
         document_to_text(b"test", "resume.txt")
 
 
+def test_encrypted_pdf():
+    buffer = BytesIO()
+    writer = PdfWriter()
+    writer.add_blank_page(width=72, height=72)
+    writer.encrypt("secret")
+    writer.write(buffer)
+
+    with pytest.raises(InvalidDocumentError):
+        document_to_text(buffer.getvalue(), "resume.pdf")
+
+
 def test_empty_pdf():
     buffer = BytesIO()
     pdf = canvas.Canvas(buffer)
@@ -53,3 +67,8 @@ def test_empty_pdf():
 
     with pytest.raises(InvalidDocumentError):
         document_to_text(buffer.getvalue(), "empty.pdf")
+
+
+def test_invalid_docx():
+    with pytest.raises(InvalidDocumentError):
+        document_to_text(b"invalid docx", "resume.docx")

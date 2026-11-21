@@ -1,5 +1,5 @@
 from io import BytesIO
-from zipfile import BadZipFile, ZipFile, is_zipfile
+from zipfile import ZipFile, is_zipfile
 
 from docx import Document
 from pypdf import PdfReader
@@ -68,7 +68,7 @@ def document_to_text(data: bytes, filename: str) -> str:
 
             text = "\n".join(paragraphs + tables)
 
-    except (UnsupportedDocumentError, InvalidDocumentError):
+    except InvalidDocumentError:
         raise
 
     except Exception as exc:
