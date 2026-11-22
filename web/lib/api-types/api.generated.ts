@@ -32,7 +32,7 @@ export interface paths {
         put?: never;
         /**
          * Extract a profile from a resume
-         * @description Extract job titles and preferred work locations from the resume text.
+         * @description Extract experience, education, skills and languages from the resume text.
          */
         post: operations["profile"];
         delete?: never;
@@ -54,8 +54,7 @@ export interface paths {
          * Search job postings for a profile
          * @description Search the job sources through the MCP tools for postings that match the profile.
          *
-         *     Pass the profile returned by /api/profile, edited by the user if needed.
-         *     job_titles needs at least one non-blank title. Unknown fields are rejected with 422.
+         *     Pass the profile returned by /api/profile. Unknown fields are rejected with 422.
          */
         post: operations["search"];
         delete?: never;
@@ -68,6 +67,21 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** Education */
+        Education: {
+            /**
+             * Degree
+             * @description Degree or vocational training as written, e.g. "M.Sc.", "Ausbildung".
+             */
+            degree: string;
+            /** Subject */
+            subject?: string | null;
+            /**
+             * End
+             * @description "YYYY-MM" or "YYYY". null if ongoing.
+             */
+            end?: string | null;
+        };
         /**
          * ErrorDTO
          * @description Error response body.
@@ -79,10 +93,42 @@ export interface components {
              */
             detail: string;
         };
+        /** Experience */
+        Experience: {
+            /** Title */
+            title: string;
+            /** Company */
+            company?: string | null;
+            /**
+             * Start
+             * @description "YYYY-MM" or "YYYY".
+             */
+            start?: string | null;
+            /**
+             * End
+             * @description "YYYY-MM" or "YYYY". null if current.
+             */
+            end?: string | null;
+            /** Highlights */
+            highlights?: components["schemas"]["Highlight"][];
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** Highlight */
+        Highlight: {
+            /**
+             * Text
+             * @description One bullet or line of a role, copied as written, including tech stack lines. Do not summarize or split.
+             */
+            text: string;
+            /**
+             * Skills
+             * @description Tools, technologies and certificates named in this sentence, in their common official name.
+             */
+            skills?: string[];
         };
         /**
          * JobPosting
@@ -125,37 +171,66 @@ export interface components {
              */
             description: string | null;
         };
-        /**
-         * Profile
-         * @description Profile information extracted from a candidate's resume.
-         */
+        /** Language */
+        Language: {
+            /**
+             * Code
+             * @description ISO 639-1 code, e.g. "de", "en".
+             */
+            code: string;
+            /**
+             * Level
+             * @description null if no level is stated.
+             */
+            level?: ("basic" | "good" | "fluent" | "native") | null;
+        };
+        /** Profile */
         "Profile-Input": {
             /**
-             * Job Titles
-             * @description Relevant job titles based on the candidate's experience and skills. Use titles commonly found in job postings.
+             * Seniority
+             * @description Career level. null if unclear.
              */
-            job_titles?: string[];
+            seniority?: ("intern" | "junior" | "mid" | "senior" | "lead") | null;
             /**
-             * Locations
-             * @description Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified.
+             * Languages
+             * @description Only languages explicitly stated.
              */
-            locations?: string[];
+            languages?: components["schemas"]["Language"][];
+            /** Experiences */
+            experiences?: components["schemas"]["Experience"][];
+            /** Educations */
+            educations?: components["schemas"]["Education"][];
+            /**
+             * Other Skills
+             * @description Skills listed outside any role, e.g. a Skills section.
+             */
+            other_skills?: string[];
         };
-        /**
-         * Profile
-         * @description Profile information extracted from a candidate's resume.
-         */
+        /** Profile */
         "Profile-Output": {
             /**
-             * Job Titles
-             * @description Relevant job titles based on the candidate's experience and skills. Use titles commonly found in job postings.
+             * Seniority
+             * @description Career level. null if unclear.
              */
-            job_titles: string[];
+            seniority: ("intern" | "junior" | "mid" | "senior" | "lead") | null;
             /**
-             * Locations
-             * @description Preferred work locations explicitly stated in the resume. Do not infer preferences from the current address. Return an empty list if unspecified.
+             * Languages
+             * @description Only languages explicitly stated.
              */
-            locations: string[];
+            languages: components["schemas"]["Language"][];
+            /** Experiences */
+            experiences: components["schemas"]["Experience"][];
+            /** Educations */
+            educations: components["schemas"]["Education"][];
+            /**
+             * Other Skills
+             * @description Skills listed outside any role, e.g. a Skills section.
+             */
+            other_skills: string[];
+            /** Skills */
+            readonly skills: string[];
+            /** Months Of Experience */
+            readonly months_of_experience: number;
         };
         /**
          * ProfileRequestDTO
