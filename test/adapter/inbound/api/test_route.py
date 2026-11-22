@@ -82,6 +82,19 @@ def test_profile_returns_profile_from_resume(monkeypatch):
     assert response.json() == PROFILE.model_dump()
 
 
+def test_profile_accepts_resume_text_as_multipart(monkeypatch):
+    """multipart로 온 글도 받는다.
+
+    목적: FE는 FormData로 보내서 multipart로 옴. post_resume()의 `data=`는 urlencoded로 감.
+    """
+    monkeypatch.setattr(app.state, "profile_agent", FakeProfileAgent(), raising=False)
+
+    response = TestClient(app).post("/api/profile", files={"resume": (None, RESUME)})
+
+    assert response.status_code == 200
+    assert response.json() == PROFILE.model_dump()
+
+
 def test_profile_rejects_blank_resume():
     for resume in ["", "   "]:
         assert post_resume(resume).status_code == 422
@@ -103,6 +116,19 @@ def test_profile_rejects_invalid_form(monkeypatch, form):
     monkeypatch.setattr(app.state, "profile_agent", FailingAgent(error), raising=False)
 
     assert TestClient(app).post("/api/profile", data=form).status_code == 422
+
+
+def test_profile_rejects_old_json_request(monkeypatch):
+    """예전 JSON 요청(`{"resume_text": ...}`)은 422로 막는다.
+
+    목적: 폼으로 바뀐 뒤에도 예전 방식으로 보내는 쪽이 조용히 통과하지 않게 함.
+    """
+    error = AssertionError("profile agent must not run")
+    monkeypatch.setattr(app.state, "profile_agent", FailingAgent(error), raising=False)
+
+    response = TestClient(app).post("/api/profile", json={"resume_text": RESUME})
+
+    assert response.status_code == 422
 
 
 def test_profile_rejects_resume_file_until_parser_exists(monkeypatch):
