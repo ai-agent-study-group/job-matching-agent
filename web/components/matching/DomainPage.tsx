@@ -3,6 +3,7 @@ import { ArrowLeft, FlaskConical, FolderOpen } from "lucide-react";
 import { ChatPanel } from "./ChatPanel";
 import { jobFields } from "@/domain/matching/jobs";
 import type { Domain } from "@/domain/matching/types";
+import { MatchingFlow } from "./MatchingFlow";
 
 export const DomainPage = ({ domain }: { domain: Domain }) => {
   const c = jobFields[domain];
@@ -53,6 +54,7 @@ export const DomainPage = ({ domain }: { domain: Domain }) => {
           </section>
         </aside>
       </div>
+      {domain === "backend" && <MatchingFlow />}
     </main>
   );
 };
