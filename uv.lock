@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.15'",
@@ -986,6 +986,7 @@ dependencies = [
     { name = "pydantic-ai-slim", extra = ["anthropic", "openai"] },
     { name = "pypdf" },
     { name = "python-docx" },
+    { name = "python-multipart" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -1007,6 +1008,7 @@ requires-dist = [
     { name = "pydantic-ai-slim", extras = ["anthropic", "openai"], specifier = ">=2.64.0" },
     { name = "pypdf", specifier = ">=7.1.0" },
     { name = "python-docx", specifier = ">=1.2.0" },
+    { name = "python-multipart", specifier = ">=0.0.32" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.54.0" },
 ]
 
