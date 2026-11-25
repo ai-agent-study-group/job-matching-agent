@@ -3,6 +3,7 @@ from zipfile import ZipFile, is_zipfile
 
 from docx import Document
 from fastapi import HTTPException, UploadFile
+from fastapi.concurrency import run_in_threadpool
 from pypdf import PdfReader
 
 MAX_FILE_SIZE = 5 * 1024 * 1024
@@ -83,10 +84,8 @@ async def document_to_text(file: UploadFile) -> str:
         )
 
     try:
-        if extension == "pdf":
-            text = _pdf_to_text(data)
-        else:
-            text = _docx_to_text(data)
+        # 글 뽑기는 await가 없는 동기 함수라 다른 스레드에서 돌림. 그동안 서버가 다른 요청을 받음
+        text = await run_in_threadpool(_pdf_to_text if extension == "pdf" else _docx_to_text, data)
 
     except Exception as exc:
         raise HTTPException(

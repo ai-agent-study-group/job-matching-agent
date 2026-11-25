@@ -2,10 +2,11 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, File, HTTPException, Request, status
+from fastapi import APIRouter, File, Request, status
 from pydantic_ai.exceptions import AgentRunError
 
 from adapter.inbound.agent.search import extract_jobs
+from adapter.inbound.api.document_parser import document_to_text
 from adapter.inbound.api.dto import ErrorDTO, ProfileRequestDTO
 from adapter.inbound.api.error import agent_error, agent_errors
 from domain.job import JobPosting
@@ -13,8 +14,6 @@ from domain.profile import Profile
 
 # operationId를 함수 이름으로 씀. FE TS 타입의 이름이 search_api_search_post 대신 search가 됨
 router = APIRouter(generate_unique_id_function=lambda route: route.name)
-
-RESUME_FILE_UNSUPPORTED = "Resume files are not supported yet. Send the resume as text"
 
 
 @router.get("/health", tags=["system"], summary="Health check")
@@ -27,9 +26,13 @@ def health() -> dict[str, str]:
     tags=["profile"],
     summary="Extract a profile from a resume",
     responses={
+        status.HTTP_413_CONTENT_TOO_LARGE: {
+            "model": ErrorDTO,
+            "description": "The resume file is larger than 5 MB",
+        },
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: {
             "model": ErrorDTO,
-            "description": RESUME_FILE_UNSUPPORTED,
+            "description": "The resume file is not a PDF or DOCX",
         },
         **agent_errors("Profile extraction failed"),
     },
@@ -37,13 +40,13 @@ def health() -> dict[str, str]:
 async def profile(body: Annotated[ProfileRequestDTO, File()], request: Request) -> Profile:
     """Extract experience, education, skills and languages from the resume.
 
-    Send the resume in the `resume` form field, as plain text or as a file.
+    Send the resume in the `resume` form field, as plain text or as a PDF or DOCX file.
+    A file with no extractable text is rejected with 422 and a one-sentence `detail`.
     """
-    # 파일을 텍스트로 바꾸는 부분은 #44에서 붙임. 그때까지 파일은 받지 않음
-    if not isinstance(body.resume, str):
-        raise HTTPException(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, RESUME_FILE_UNSUPPORTED)
+    resume = body.resume
+    text = resume if isinstance(resume, str) else await document_to_text(resume)
     try:
-        result = await request.app.state.profile_agent.run(body.resume)
+        result = await request.app.state.profile_agent.run(text)
     except AgentRunError as e:
         raise agent_error(e, "Profile extraction failed") from e
     return result.output
