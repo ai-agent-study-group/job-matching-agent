@@ -30,7 +30,7 @@ export const MatchingFlow = () => {
     return () => window.clearTimeout(timer);
   }, [currentStep, searchStatus]);
 
-  return +(
+  return (
     <section aria-label="이력서 매칭 데모" className="space-y-6 py-8">
       <MatchingSteps currentStep={currentStep} />
 
