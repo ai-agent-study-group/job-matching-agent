@@ -48,10 +48,25 @@ jobs:
       - run: npm run type-check
       - run: npm run build
 
+  branch-name:
+    name: Branch name
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          pattern='^(feat|fix|refactor|task)/[0-9]+-[a-z0-9._-]+$|^(docs|chore)/[a-z0-9._-]+$'
+          if ! printf '%s' "$BRANCH" | grep -Eq "$pattern"; then
+            echo "::error::브랜치 이름이 규칙에 맞지 않음: $BRANCH (예: feat/98-profile-resume-input, 티켓 없는 유지보수는 chore/bump-deps, 문서는 docs/meeting-notes). CONTRIBUTING.md의 브랜치 항목 참고"
+            exit 1
+          fi
+
   all-checks:                 # 보호 규칙이 보는 유일한 검사
     name: all-checks
     if: always()
-    needs: [backend, frontend]
+    needs: [backend, frontend, branch-name]
     runs-on: ubuntu-latest
     steps:
       - name: Fail if any required job failed

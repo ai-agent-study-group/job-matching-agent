@@ -30,8 +30,26 @@
 ## 브랜치 (코드 변경)
 
 - main에서 분기
-- 이름: `<type>/<짧은-설명>` (예: `feat/greenhouse-adapter`)
-- 변경 종류(type): `feat`(기능 추가), `fix`(오류 수정), `refactor`(동작을 유지하며 코드 정리), `test`(테스트), `docs`(문서), `chore`(설정·관리 작업)
+- 이름: `<type>/<티켓번호>-<짧은-설명>` (예: `feat/98-profile-resume-input`)
+- 티켓 없이 하는 작은 유지보수는 `chore/<짧은-설명>` (예: `chore/bump-deps`), 문서는 티켓이 없으면 `docs/<짧은-설명>` (예: `docs/meeting-2026-11-03`)
+- 짧은 설명은 영문 소문자, 숫자, `.`, `_`, `-`만 사용
+- type은 티켓의 Type과 레이블에 맞춰 고름
+
+| type | 언제 쓰는지 |
+| --- | --- |
+| `feat` | Feature 티켓 |
+| `fix` | Bug 티켓 |
+| `refactor` | `refactor` 레이블이 붙은 Task (동작은 그대로, 코드 구조만 바꿈) |
+| `docs` | `documentation` 레이블이 붙은 Task (티켓 없으면 번호 생략) |
+| `task` | 그 밖의 Task (설정, 인프라, 관측 등) |
+| `chore` | 티켓 없는 작은 유지보수 (의존성, 설정 파일 등) |
+
+- 커밋 메시지도 같은 type으로 시작 (예: `feat: 이력서 파일 업로드 받기 (#98)`). 병합을 merge commit으로 하므로 커밋 이력이 그대로 남음
+- PR의 자동 검사(CI)가 아래 정규식으로 브랜치 이름을 확인함. 맞지 않으면 `all-checks`가 실패해 병합되지 않음
+
+  ```
+  ^(feat|fix|refactor|task)/[0-9]+-[a-z0-9._-]+$|^(docs|chore)/[a-z0-9._-]+$
+  ```
 
 ## 변경 검토 요청(Pull Request)
 
