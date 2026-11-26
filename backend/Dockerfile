@@ -1,5 +1,5 @@
 # 로컬 실행:
-#   docker build -t jma:dev .
+#   docker build -t jma:dev backend
 #   docker run --rm -p 8000:8000 jma:dev
 #   curl localhost:8000/health   # {"status":"ok"}
 
