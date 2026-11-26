@@ -30,8 +30,8 @@ export const MatchingFlow = () => {
     return () => window.clearTimeout(timer);
   }, [currentStep, searchStatus]);
 
-  return (
-+   <section aria-label="이력서 매칭 데모" className="space-y-6 py-8">
+  return +(
+    <section aria-label="이력서 매칭 데모" className="space-y-6 py-8">
       <MatchingSteps currentStep={currentStep} />
 
       <div hidden={currentStep !== 1}>
@@ -89,7 +89,7 @@ export const MatchingFlow = () => {
       )}
 
       {currentStep === 4 && <JobList showEmpty={showEmpty} />}
-      
+
       <div className="flex gap-2">
         {currentStep > 1 && (
           <button
