@@ -14,7 +14,7 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "generate:types": "uv run python ../scripts/export_openapi.py && openapi-typescript lib/api-types/openapi.json -o lib/api-types/api.generated.ts"
+    "generate:types": "uv run --project ../backend python ../scripts/export_openapi.py && openapi-typescript lib/api-types/openapi.json -o lib/api-types/api.generated.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

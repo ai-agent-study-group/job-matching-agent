@@ -17,6 +17,9 @@ jobs:
   backend:
     name: Backend CI
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4

@@ -3,7 +3,7 @@ from pathlib import Path
 
 from main import app
 
-SPEC = Path(__file__).parents[4] / "web/lib/api-types/openapi.json"
+SPEC = Path(__file__).parents[5] / "web/lib/api-types/openapi.json"
 
 
 def test_committed_openapi_spec_matches_the_app():
