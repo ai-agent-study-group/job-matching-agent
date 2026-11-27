@@ -1,5 +1,7 @@
 ## Railway 백엔드 배포 가이드 및 작업 기록 — Issue #48
 
+> 이 문서는 당시의 배포 기록입니다. 현재 저장소 구조에서는 백엔드 Root Directory가 `/backend`이며 Dockerfile도 그 안에 있습니다. 최신 실행 방법은 저장소 README를 참고하세요.
+
 - **프로젝트:** `ai-agent-study-group/job-matching-agent`
 - **관련 이슈:** [#48 — Cloud provider Railway](https://github.com/ai-agent-study-group/job-matching-agent/issues/48)
 - **작성일:** 2026-11-17

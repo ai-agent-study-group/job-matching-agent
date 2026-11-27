@@ -66,7 +66,7 @@ agent는 MCP 도구로 제공하지 않습니다. 제공하면 AI 앱이 agent�
 
 ## 폴더 구조
 
-`src/`는 헥사고날(포트 · 어댑터) 구조입니다. `domain`과 `service`는 FastAPI, MCP, 출처 API에 의존하지 않고, `port`에 정한 인터페이스로만 바깥과 연결됩니다.
+`backend/src/`는 헥사고날(포트 · 어댑터) 구조입니다. `domain`과 `service`는 FastAPI, MCP, 출처 API에 의존하지 않고, `port`에 정한 인터페이스로만 바깥과 연결됩니다.
 
 ```
 src/
@@ -94,8 +94,8 @@ docs/           문서 사이트(index.html)와 그림. 문서 본문은 Wiki에
 ### 백엔드
 
 ```bash
-uv sync                            # 의존성과 개발 도구 설치
-uv run pre-commit install          # 커밋 전 ruff 검사 · FE 타입 생성 hook 설치 (clone 후 한 번)
+uv sync --project backend          # 의존성과 개발 도구 설치
+uv run --project backend pre-commit install  # 커밋 전 검사 설치 (clone 후 한 번)
 (cd web && npm ci)                 # FE 타입 생성 hook이 쓰는 도구 설치 (clone 후 한 번)
 ```
 
@@ -133,14 +133,14 @@ LOGFIRE_TOKEN=<Logfire write token>
 API 단계별 시간·오류·토큰을 확인할 수 있습니다. 이력서와 공고 본문은 기록하지 않습니다.
 
 ```bash
-uv run --env-file .env uvicorn main:app --reload   # http://localhost:8000/health
+uv run --project backend --env-file .env uvicorn main:app --app-dir backend/src --reload   # http://localhost:8000/health
 ```
 
 앱을 띄우면 MCP 서버도 `http://localhost:8000/mcp`에서 함께 열립니다. 다른 터미널에서 도구 목록을 보거나 도구 하나를 불러 볼 수 있습니다.
 
 ```bash
-uv run fastmcp list http://localhost:8000/mcp
-uv run fastmcp call http://localhost:8000/mcp --target list_sources
+uv run --project backend fastmcp list http://localhost:8000/mcp
+uv run --project backend fastmcp call http://localhost:8000/mcp --target list_sources
 ```
 
 Claude Code에서 쓰려면 이 주소를 MCP 서버로 등록합니다.
@@ -154,8 +154,8 @@ claude mcp add --transport http jobs http://localhost:8000/mcp
 테스트와 린트는 아래 명령으로 실행합니다. CI도 PR마다 같은 검사를 돌립니다.
 
 ```bash
-uv run pytest
-uv run ruff check . && uv run ruff format --check .
+(cd backend && uv run pytest)
+(cd backend && uv run ruff check . && uv run ruff format --check .)
 ```
 
 - 의존성 추가: `uv add <라이브러리>` (개발 도구는 `uv add --dev <라이브러리>`)
@@ -164,10 +164,14 @@ uv run ruff check . && uv run ruff format --check .
 Docker로 실행할 수도 있습니다.
 
 ```bash
-docker build -t jma:dev .
-docker run --rm -p 8000:8000 jma:dev
+docker build -t jma:dev backend
+docker run --rm --env-file .env -p 8000:8000 jma:dev
 curl localhost:8000/health   # {"status":"ok"}
 ```
+
+루트 `.env`를 준비한 뒤 `docker compose up --build`로 두 서비스를 함께 실행합니다. 각각 실행할 때는 `docker compose up --build backend` 또는 `docker compose up --build web`을 사용합니다.
+
+Railway에서는 같은 저장소로 두 서비스를 만들고 Root Directory를 각각 `/backend`, `/web`으로 지정합니다. 각 디렉터리의 Dockerfile을 사용하며, 기존 백엔드 서비스의 Root Directory 변경을 코드 배포와 함께 적용해야 합니다. 백엔드 비밀 변수는 서비스에 설정합니다. 웹의 `NEXT_PUBLIC_SITE_URL`은 빌드 시점의 공개 주소입니다. 현재 웹에는 백엔드 API 주소 설정이 없으므로 서비스 실행과 API 연동은 별개입니다. PR 미리보기, Vercel 연결 해제와 공개 도메인은 Railway/GitHub 설정에서 별도로 처리합니다.
 
 ### 프론트엔드
 
