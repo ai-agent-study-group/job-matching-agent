@@ -44,7 +44,7 @@ export default function RootLayout({
         <Providers>{children}</Providers>
         <footer className="page-shell mt-16 flex flex-wrap justify-between gap-3 border-t border-slate-200 py-7 text-xs leading-6 text-slate-500">
           <span>{SITE_NAME} · 채용공고와 이력서를 한국어로 매칭.</span>
-          <span>학습용 데모 · 실제 AI 미연결 · 일반 정보 안내</span>
+          <span>학습용 데모 · 일반 정보 안내</span>
         </footer>
       </body>
     </html>
