@@ -6,15 +6,15 @@
 /* 디자인 토큰 — DESIGN.md 단일 출처. 값 변경·다크모드는 여기서만. */
 
 :root {
-  --radius: 1rem; /* DESIGN: md 16px — 컴포넌트 기본 */
+  --radius: 0.5rem; /* 컴포넌트 기본 8px — 프로페셔널 네트워크 톤 */
 
-  --background: #fafafa;
+  --background: #f4f2ee;
   --foreground: #111111;
   --card: #ffffff;
   --card-foreground: #111111;
   --popover: #ffffff;
   --popover-foreground: #111111;
-  --primary: #5b8cff;
+  --primary: #0b5fb4;
   --primary-foreground: #ffffff;
   --secondary: #f2f2f2;
   --secondary-foreground: #111111;
@@ -24,9 +24,9 @@
   --accent-foreground: #111111;
   --destructive: #ff453a;
   --destructive-foreground: #ffffff;
-  --border: #e5e5e5;
-  --input: #e5e5e5;
-  --ring: #5b8cff;
+  --border: #e0dfdc;
+  --input: #c9c8c5;
+  --ring: #0b5fb4;
 
   /* 브랜드 액센트 (Tailwind 기본에 없는 값만 토큰화) */
   --accent-yellow: #ffd54f;
@@ -101,11 +101,11 @@
   --color-accent-green: var(--accent-green);
   --color-accent-red: var(--accent-red);
 
-  /* DESIGN: sm8 / md16 / lg24 / pill */
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 1.5rem;
+  /* sm4 / md6 / lg8 / xl8 (카드) / pill */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.5rem;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -150,8 +150,7 @@
     @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
   }
   .soft-card {
-    @apply rounded-3xl border border-slate-200/75 bg-white;
-    box-shadow: 0 10px 30px -16px rgb(15 23 42 / 0.13);
+    @apply rounded-lg border border-border bg-card shadow-sm;
   }
   .eyebrow {
     @apply text-xs font-semibold tracking-[.12em] text-slate-500;
