@@ -4,14 +4,14 @@ import { SITE_NAME } from "@/constants/site";
 
 export const SiteHeader = () => {
   return (
-    <header className="border-b border-slate-200/70 bg-white/80">
+    <header className="border-b border-border bg-card">
       <div className="page-shell flex min-h-20 flex-wrap items-center justify-between gap-3 py-4">
         <Link
           href="/"
           className="flex items-center gap-3"
           aria-label={`${SITE_NAME} 홈`}
         >
-          <span className="flex size-10 items-center justify-center rounded-2xl bg-slate-900 text-white">
+          <span className="flex size-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <FileSearch size={23} />
           </span>
           <span className="text-sm font-semibold tracking-tight">
@@ -20,12 +20,12 @@ export const SiteHeader = () => {
         </Link>
         <nav
           aria-label="주 메뉴"
-          className="flex items-center gap-5 text-sm text-slate-600"
+          className="flex items-center gap-5 text-sm text-muted-foreground"
         >
-          <Link href="/backend" className="hover:text-blue-600">
+          <Link href="/backend" className="hover:text-primary">
             백엔드·서버
           </Link>
-          <Link href="/data" className="hover:text-blue-600">
+          <Link href="/data" className="hover:text-primary">
             데이터·AI
           </Link>
         </nav>

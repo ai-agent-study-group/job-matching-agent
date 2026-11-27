@@ -1,29 +1,47 @@
 # AGENTS.md
 
-Codex 및 기타 코딩 에이전트용 안내. 이 폴더(`web/`)는 job-matching-agent의 프론트엔드(Next.js JMA 앱)다. **전체 가이드는 [CLAUDE.md](CLAUDE.md)가 단일 출처 — 작업 전 읽는다.** 아래는 빠른 참조다.
+Guide for Codex and other coding agents. This folder (`web/`) is the
+job-matching-agent frontend (Next.js JMA app). **Full guide: [CLAUDE.md](CLAUDE.md) is the
+single source — read before working.** Below is a quick reference.
 
-## 스택
+## Stack
 
-Next.js 16 (App Router) · React 19 · TypeScript(strict) · Tailwind v4 · shadcn/ui(Radix) · lucide-react · **Zustand**(클라 상태) · **TanStack Query**(서버 데이터, `components/shared/Providers.tsx`) · npm. 애니메이션은 CSS 우선. **i18n 미사용**(단일 언어, `lang="ko"`). Cloudflare·테스트 러너는 미도입.
+Next.js 16 (App Router) · React 19 · TypeScript (strict) · Tailwind v4 · shadcn/ui
+(Radix) · lucide-react · **Zustand** (client state) · **TanStack Query** (server data,
+`components/shared/Providers.tsx`) · npm. Animation CSS-first. **No i18n** (single
+language, `lang="ko"`). Cloudflare and test runners not adopted.
 
-## 명령어
+## Commands
 
 ```bash
-npm install          # .npmrc legacy-peer-deps 적용
+npm install          # applies .npmrc legacy-peer-deps
 npm run dev          # :3000
 npm run build
 npm run lint         # eslint
 npm run type-check   # tsc --noEmit
 ```
 
-## 꼭 지킬 것
+## Must follow
 
-- **규칙 정본은 레포 루트 [`docs/fe/`](../docs/fe/)** (web 폴더 아님) — [TECH.md](../docs/fe/TECH.md)(구조·스택) · [AI_RULES.md](../docs/fe/AI_RULES.md)(서버/클라·선언 스타일) · [ANIMATION.md](../docs/fe/ANIMATION.md) · [FEATURE.md](../docs/fe/FEATURE.md) · [web-app.md](../docs/fe/web-app.md)(개요).
-- **구조**: 목적별 레이어. `app·components → domain → data·constants → utils·lib`. 역방향 import 금지. 별칭 `@/*` → `web/` 루트.
-- **컴포넌트**: 라우트 진입점만 `export default function`, 나머지는 `const` 화살표 함수. 기본 Server Component, 필요 시만 `'use client'`. `any` 금지.
-- **`components/ui/`는 shadcn 생성물** — 직접 수정 금지, 바깥 래퍼로 커스터마이즈.
-- **shadcn add 함정**: `npx shadcn@latest add` 후 `cn` import가 깨짐 → `sed -i '' 's|from "cn"|from "@/utils/style"|g' components/ui/*.tsx`.
-- **Tailwind**: 기본 스케일 우선, 임의 값 `[]` 금지. 토큰은 `app/globals.css`.
-- **브랜치/PR**: `main`에서 `<type>/<설명>` 분기, 코드 변경은 PR + CI 통과. 루트 [CONTRIBUTING.md](../CONTRIBUTING.md).
+- **Rules live in [`web/docs/`](docs/)** — [TECH.md](docs/TECH.md) (structure·stack·a11y) ·
+  [AI_RULES.md](docs/AI_RULES.md) (server/client·declaration·lift state) ·
+  [API.md](docs/API.md) (backend) · [TESTING.md](docs/TESTING.md) (responsive·a11y checks) ·
+  [ANIMATION.md](docs/ANIMATION.md) · [FEATURE.md](docs/FEATURE.md) ·
+  [DESIGN.md](docs/DESIGN.md) (LinkedIn-style tone).
+- **Structure**: purpose-first layers. `app·components → domain → data·constants → utils·lib`.
+  No reverse import. Alias `@/*` → `web/` root.
+- **Components**: only route entry points use `export default function`; others are `const`
+  arrow functions. Server Component by default, `'use client'` only when needed. No `any`.
+  JSDoc with `{type}` above every top-level function/component (AI_RULES.md › 함수 주석).
+- **`components/ui/` is shadcn output** — never edit directly; customize via wrappers outside.
+- **shadcn add**: `aliases.utils` → `@/lib/utils` shim re-exports `cn` from `utils/style.ts`;
+  generated imports work as-is.
+- **Tailwind**: default scale first, no arbitrary `[]` values. Tokens in `app/globals.css`.
+- **Checks before commit/push**: after vibe-coding, pass `npm run type-check` → `lint` →
+  `build` before committing. Stop and report on failure. Details in [CLAUDE.md](CLAUDE.md).
+- **Skills**: before coding, use the relevant skill in `web/skills/` (`next-coding-rules`·
+  `shadcn`·`next-seo`·`css-animation`·`frontend-design`).
+- **Branch/PR**: branch from `main` as `<type>/<desc>`; code changes need PR + CI pass.
+  Root [CONTRIBUTING.md](../CONTRIBUTING.md).
 
-자세한 내용은 [CLAUDE.md](CLAUDE.md).
+See [CLAUDE.md](CLAUDE.md) for details.

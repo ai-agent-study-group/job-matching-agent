@@ -36,13 +36,13 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-4"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-card focus:p-4"
         >
           본문으로 건너뛰기
         </a>
         <SiteHeader />
         <Providers>{children}</Providers>
-        <footer className="page-shell mt-16 flex flex-wrap justify-between gap-3 border-t border-slate-200 py-7 text-xs leading-6 text-slate-500">
+        <footer className="page-shell mt-16 flex flex-wrap justify-between gap-3 border-t border-border py-7 text-xs leading-6 text-muted-foreground">
           <span>{SITE_NAME} · 채용공고와 이력서를 한국어로 매칭.</span>
           <span>학습용 데모 · 실제 AI 미연결 · 일반 정보 안내</span>
         </footer>
