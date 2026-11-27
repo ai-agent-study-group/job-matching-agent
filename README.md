@@ -99,7 +99,18 @@ uv run pre-commit install          # 커밋 전 ruff 검사 · FE 타입 생성 
 (cd web && npm ci)                 # FE 타입 생성 hook이 쓰는 도구 설치 (clone 후 한 번)
 ```
 
-앱을 띄우기 전에 저장소 루트의 `.env`에 LLM 모델과 API 키를 적습니다. `LLM_MODEL`이 없으면 앱이 시작되지 않습니다. `.env`는 git에 올라가지 않습니다.
+앱을 띄우기 전에 저장소 루트의 `.env`에 환경변수를 적습니다. `.env`는 git에 올라가지 않습니다. 배포(Railway)에서는 같은 변수를 서비스의 Variables에 넣습니다.
+
+| 변수 | 로컬 | 배포 (Railway) | 내용 |
+|---|---|---|---|
+| `LLM_MODEL` | 필수 | 필수 | 예: `openai:gpt-4.1-mini`. 없으면 앱이 시작되지 않음 |
+| `OPENAI_API_KEY` 또는 `ANTHROPIC_API_KEY` | 필수 | 필수 | `LLM_MODEL`에 맞는 키 |
+| `LOGFIRE_TOKEN` | 선택 | 선택 | 없으면 관찰 데이터를 보내지 않음 (아래 Logfire) |
+| `AUTHKIT_DOMAIN` | 넣지 않음 | 필수 | `/mcp` 로그인을 맡는 WorkOS AuthKit 주소. 없으면 `/mcp`가 로그인 없이 열림 |
+| `BASE_URL` | 넣지 않음 | 필수 | 서버의 공개 주소. `AUTHKIT_DOMAIN`만 있고 이 값이 없으면 앱이 시작되지 않음 |
+| `PORT` | 넣지 않음 | Railway가 넣음 | 앱이 열리는 포트 |
+
+`AUTHKIT_DOMAIN`과 `BASE_URL`의 값과 WorkOS 설정은 [BE 티켓 39](https://github.com/ai-agent-study-group/job-matching-agent/wiki/BE-티켓-39)에 있습니다. 로컬 `.env`는 아래처럼 적습니다.
 
 ```env
 LLM_MODEL=openai:gpt-4.1-mini
@@ -137,6 +148,8 @@ Claude Code에서 쓰려면 이 주소를 MCP 서버로 등록합니다.
 ```bash
 claude mcp add --transport http jobs http://localhost:8000/mcp
 ```
+
+배포된 서버의 MCP에 연결하는 방법은 Wiki [MCP 커넥터 연결](https://github.com/ai-agent-study-group/job-matching-agent/wiki/MCP-커넥터-연결)에 있습니다.
 
 테스트와 린트는 아래 명령으로 실행합니다. CI도 PR마다 같은 검사를 돌립니다.
 
