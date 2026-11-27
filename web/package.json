@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "next dev",
+    "dev:api": "cd .. && uv run --env-file .env uvicorn main:app --app-dir src --port 8000 --reload",
+    "dev:all": "npm run dev:api & npm run dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
