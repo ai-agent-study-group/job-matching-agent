@@ -85,12 +85,12 @@ export default function AdminPage() {
           <br />
           스터디 실습 안내.
         </h1>
-        <p className="mt-5 text-base leading-8 text-slate-500">
+        <p className="mt-5 text-base leading-8 text-muted-foreground">
           웹은 준비되어 있습니다. 조건을 보내는 것부터 공고를 찾아 읽고 이력서와
           매칭하는 에이전트까지, 동작을 관찰하며 직접 만들어봅니다.
         </p>
       </section>
-      <p className="mt-6 rounded-xl bg-slate-100 p-4 text-sm leading-7 text-slate-600">
+      <p className="mt-6 rounded-lg bg-muted p-4 text-sm leading-7 text-muted-foreground">
         스터디원용 내부 안내입니다. 공개 메뉴에는 연결하지 않습니다. 현재 로그인
         보호는 없으므로 주소를 아는 사람은 열 수 있습니다. 공개 배포 전 관리자
         인증을 구현해야 합니다.
@@ -101,7 +101,7 @@ export default function AdminPage() {
           <h2 id="pipeline-title" className="section-title">
             세 단계 에이전트 파이프라인
           </h2>
-          <p className="mt-4 text-sm leading-7 text-slate-600">
+          <p className="mt-4 text-sm leading-7 text-muted-foreground">
             수집 → 매칭·평가 → 리포트·액션의 3단계로 설계합니다. 현재 데모는 이
             흐름을 규칙 기반 목 데이터로 재현하며, 각 단계를 실제
             모델·수집·알림으로 확장합니다.
@@ -110,16 +110,18 @@ export default function AdminPage() {
         <div className="grid gap-4 md:grid-cols-3">
           {pipeline.map((p) => (
             <article key={p.step} className="soft-card p-6">
-              <span className="flex size-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+              <span className="flex size-10 items-center justify-center rounded-lg bg-brand-subtle text-primary">
                 <p.icon size={20} />
               </span>
-              <p className="eyebrow mt-4 text-blue-600">STEP {p.step}</p>
+              <p className="eyebrow mt-4 text-primary">STEP {p.step}</p>
               <h3 className="mt-2 text-lg font-semibold">{p.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-slate-600">{p.role}</p>
-              <p className="mt-3 text-xs leading-6 text-slate-500">
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                {p.role}
+              </p>
+              <p className="mt-3 text-xs leading-6 text-muted-foreground">
                 현재: {p.now}
               </p>
-              <p className="mt-4 break-words rounded-xl bg-slate-50 p-3 font-mono text-xs leading-6 text-slate-600">
+              <p className="mt-4 break-words rounded-lg bg-muted p-3 font-mono text-xs leading-6 text-muted-foreground">
                 {p.file}
               </p>
             </article>
@@ -195,17 +197,17 @@ export default function AdminPage() {
           },
         ].map((item) => (
           <article key={item.route} className="soft-card p-6">
-            <p className="eyebrow text-blue-600">{item.route}</p>
+            <p className="eyebrow text-primary">{item.route}</p>
             <h3 className="mt-2 text-lg font-semibold">{item.title}</h3>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
+            <p className="mt-3 text-sm leading-7 text-muted-foreground">
               현재: {item.now}
             </p>
-            <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-7 text-slate-600">
+            <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-7 text-muted-foreground">
               {item.steps.map((step) => (
                 <li key={step}>{step}</li>
               ))}
             </ol>
-            <p className="mt-4 break-words rounded-xl bg-slate-50 p-3 font-mono text-xs leading-6 text-slate-600">
+            <p className="mt-4 break-words rounded-lg bg-muted p-3 font-mono text-xs leading-6 text-muted-foreground">
               수정 위치: {item.files}
             </p>
           </article>
@@ -222,13 +224,15 @@ export default function AdminPage() {
           ],
         ].map(([title, text], i) => (
           <div className="soft-card p-6" key={title}>
-            <p className="eyebrow text-blue-600">STEP {i + 1}</p>
+            <p className="eyebrow text-primary">STEP {i + 1}</p>
             <h2 className="mt-3 font-semibold">{title}</h2>
-            <p className="mt-3 text-sm leading-7 text-slate-500">{text}</p>
+            <p className="mt-3 text-sm leading-7 text-muted-foreground">
+              {text}
+            </p>
           </div>
         ))}
       </section>
-      <p className="mt-5 rounded-xl bg-amber-50 px-5 py-4 text-sm leading-7 text-amber-900">
+      <p className="mt-5 rounded-lg bg-warning/10 px-5 py-4 text-sm leading-7 text-warning">
         현재 웹은 도구 흐름을 보여주는 규칙 기반 목 데모입니다. 실제 모델을
         연결한 뒤 ‘모델이 행동을 선택하는 과정’을 실습합니다.
       </p>
@@ -239,12 +243,12 @@ export default function AdminPage() {
             key={w.num}
           >
             <div>
-              <p className="eyebrow text-blue-600">WEEK {w.num}</p>
+              <p className="eyebrow text-primary">WEEK {w.num}</p>
               <h2 className="mt-3 text-xl font-semibold">{w.title}</h2>
             </div>
             <div>
               <p className="text-sm font-medium leading-7">{w.goal}</p>
-              <div className="mt-4 space-y-3 text-sm leading-7 text-slate-500">
+              <div className="mt-4 space-y-3 text-sm leading-7 text-muted-foreground">
                 <p className="flex gap-3">
                   <Code2 size={17} className="mt-1 shrink-0" />
                   {w.dev}
@@ -254,17 +258,17 @@ export default function AdminPage() {
                   {w.everyone}
                 </p>
               </div>
-              <p className="mt-5 break-words rounded-xl bg-slate-50 px-4 py-3 font-mono text-xs text-slate-500">
+              <p className="mt-5 break-words rounded-lg bg-muted px-4 py-3 font-mono text-xs text-muted-foreground">
                 실습 위치: {w.file}
               </p>
             </div>
           </article>
         ))}
       </section>
-      <section className="mt-12 grid gap-8 rounded-3xl bg-slate-900 p-8 text-white sm:grid-cols-2">
+      <section className="mt-12 grid gap-8 rounded-lg border bg-card p-8 sm:grid-cols-2">
         <div>
           <h2 className="text-xl font-semibold">개발 경험이 없어도 괜찮아요</h2>
-          <p className="mt-4 text-sm leading-8 text-slate-400">
+          <p className="mt-4 text-sm leading-8 text-muted-foreground">
             실제 구직 조건을 만들고, 공고 원문을 확인하고, 매칭 규칙을
             고쳐보세요. 개발 경험자와 짝을 이루어 실행과 설정 변경도 직접
             해봅니다.
@@ -272,25 +276,25 @@ export default function AdminPage() {
         </div>
         <div>
           <h2 className="text-xl font-semibold">마지막에 보여줄 세 가지</h2>
-          <ul className="mt-4 space-y-3 text-sm text-slate-300">
+          <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
             {[
               "공고를 찾고 출처와 함께 매칭 설명하기",
               "조건이 부족하면 직무·기술 추가 질문하기",
               "맞는 공고가 없으면 확인 불가 안내하기",
             ].map((t) => (
               <li className="flex items-center gap-2" key={t}>
-                <Check size={16} className="text-blue-300" />
+                <Check size={16} className="text-primary" />
                 {t}
               </li>
             ))}
           </ul>
         </div>
       </section>
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-sm text-slate-500">
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-sm text-muted-foreground">
         <p>주 1회 · 2시간 · 조건 3개를 비교하는 작은 과제</p>
         <Link
           href="/backend"
-          className="flex items-center gap-2 font-medium text-blue-600"
+          className="flex items-center gap-2 font-medium text-primary"
         >
           데모부터 살펴보기
           <ArrowRight size={16} />

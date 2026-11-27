@@ -49,12 +49,12 @@ FE rules live in **[`web/docs/`](docs/)**. Read before coding. **CLAUDE.md is a 
 these are canonical.**
 
 - [TECH.md](docs/TECH.md) — stack, purpose-first layers, state, accessibility (a11y), SEO, naming, performance.
-- [AI_RULES.md](docs/AI_RULES.md) — server/client split, declaration style, lift state up, Tailwind priority, response rules.
+- [AI_RULES.md](docs/AI_RULES.md) — server/client split, declaration style, lift state up, Tailwind priority, JSDoc, response rules.
 - [API.md](docs/API.md) — backend API, type reuse, loading/error/empty states, resume-matching flow.
 - [TESTING.md](docs/TESTING.md) — pre-commit manual checks: responsive, keyboard/a11y, supported browsers.
 - [ANIMATION.md](docs/ANIMATION.md) — animation vocabulary and CSS implementation.
 - [FEATURE.md](docs/FEATURE.md) — shared feature patterns (settings, share, error handling).
-- [DESIGN.md](docs/DESIGN.md) — design tokens.
+- [DESIGN.md](docs/DESIGN.md) — LinkedIn-style design tone: tokens, layout, component patterns.
 
 ## Architecture (purpose-first layers)
 
@@ -79,13 +79,16 @@ app·components  →  domain  →  data·constants  →  utils·lib
 - **Server Component** by default; `'use client'` only for user input / browser APIs.
   Indexable content renders server-side (SEO).
 - `components/ui/` is shadcn output — **never edit directly**. Customize via wrappers outside `ui/`.
-- Tailwind: default scale first, no arbitrary `[]` values. Brand values as `globals.css` tokens (`bg-accent-yellow`).
+- Tailwind: default scale first, no arbitrary `[]` values. Brand values as `globals.css` tokens (`bg-brand-subtle`).
 - No `any`.
+- JSDoc (`@param {type} name - desc`, `@returns {type}`) above every top-level
+  function/component. Format: [AI_RULES.md](docs/AI_RULES.md) › 함수 주석 (JSDoc).
 
 ## Style tokens
 
 `app/globals.css` is the single source. Implement the palette as shadcn semantic
-tokens (`--background`·`--primary`…) + brand accents + light/dark blocks. Change
+tokens (`--background`·`--primary`…) + brand/status tokens (`--brand-hover`·`--brand-subtle`·
+`--success`·`--warning`) + light/dark blocks. Tone: LinkedIn web (blue `#0A66C2`, warm gray bg, white cards). Change
 colors/radius here only.
 
 State location, responsive, backend API, and accessibility rules moved out —

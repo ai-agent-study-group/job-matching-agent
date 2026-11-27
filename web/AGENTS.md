@@ -26,14 +26,16 @@ npm run type-check   # tsc --noEmit
 - **Rules live in [`web/docs/`](docs/)** — [TECH.md](docs/TECH.md) (structure·stack·a11y) ·
   [AI_RULES.md](docs/AI_RULES.md) (server/client·declaration·lift state) ·
   [API.md](docs/API.md) (backend) · [TESTING.md](docs/TESTING.md) (responsive·a11y checks) ·
-  [ANIMATION.md](docs/ANIMATION.md) · [FEATURE.md](docs/FEATURE.md).
+  [ANIMATION.md](docs/ANIMATION.md) · [FEATURE.md](docs/FEATURE.md) ·
+  [DESIGN.md](docs/DESIGN.md) (LinkedIn-style tone).
 - **Structure**: purpose-first layers. `app·components → domain → data·constants → utils·lib`.
   No reverse import. Alias `@/*` → `web/` root.
 - **Components**: only route entry points use `export default function`; others are `const`
   arrow functions. Server Component by default, `'use client'` only when needed. No `any`.
+  JSDoc with `{type}` above every top-level function/component (AI_RULES.md › 함수 주석).
 - **`components/ui/` is shadcn output** — never edit directly; customize via wrappers outside.
-- **shadcn add pitfall**: after `npx shadcn@latest add`, `cn` import breaks →
-  `sed -i '' 's|from "cn"|from "@/utils/style"|g' components/ui/*.tsx`.
+- **shadcn add**: `aliases.utils` → `@/lib/utils` shim re-exports `cn` from `utils/style.ts`;
+  generated imports work as-is.
 - **Tailwind**: default scale first, no arbitrary `[]` values. Tokens in `app/globals.css`.
 - **Checks before commit/push**: after vibe-coding, pass `npm run type-check` → `lint` →
   `build` before committing. Stop and report on failure. Details in [CLAUDE.md](CLAUDE.md).

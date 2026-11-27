@@ -123,9 +123,36 @@ lib/                # 외부 SDK·인프라 어댑터만
    스타일을 적용할 때 아래 순서를 반드시 지킨다. 위 단계로 표현 가능하면 아래 단계를 쓰지 않는다.
    1. **Tailwind 기본 스케일/유틸리티 우선** — `p-4`, `gap-2`, `text-sm`, `rounded-2xl`, `size-6` 등 기본 제공 값을 최대한 활용한다. 프로젝트의 spacing(4의 배수)·radius·아이콘 크기 등은 대부분 Tailwind 기본과 1:1로 매핑되므로(`DESIGN.md` 참조) 기본 스케일로 충분하다.
    2. **반응형도 기본 브레이크포인트 사용** — 화면 크기 대응은 `sm:`, `md:`, `lg:`, `xl:` 등 [Tailwind 기본 브레이크포인트](https://tailwindcss.com/docs/responsive-design)를 쓴다. 커스텀 미디어쿼리·임의 브레이크포인트를 만들지 않는다.
-   3. **기본에 없는 브랜드 값만 토큰화** — 브랜드 컬러 등 Tailwind 기본에 없는 값은 `globals.css`에 CSS 변수(`--*`)/`@theme` 토큰으로 정의하고, 그 토큰명 유틸리티(`bg-accent-yellow`, `text-caption` 등)로 참조한다. 토큰 정의는 `DESIGN.md`를 기준으로 한다.
+   3. **기본에 없는 브랜드 값만 토큰화** — 브랜드 컬러 등 Tailwind 기본에 없는 값은 `globals.css`에 CSS 변수(`--*`)/`@theme` 토큰으로 정의하고, 그 토큰명 유틸리티(`bg-brand-subtle`, `text-caption` 등)로 참조한다. 토큰 정의는 `DESIGN.md`를 기준으로 한다.
    4. **임의 값 `[]` 하드코딩 금지** — `w-[110px]`, `text-[10px]`, `top-[7px]` 처럼 대괄호에 특정 px를 직접 박는 것을 금지한다. 정말 불가피하면 `w-[var(--card-w)]`처럼 토큰 변수를 참조하는 형태만 허용한다.
    - 이유: 기본 스케일을 쓰면 디자인이 자동으로 일관되고, 값 변경·다크모드·테마 대응이 `globals.css` 한 곳에서 끝난다.
+
+---
+
+## 함수 주석 (JSDoc)
+
+파일 최상위의 모든 함수와 컴포넌트(export 여부와 상관없이)에는 바로 위에 JSDoc 블록을 단다.
+
+```ts
+/**
+ * 두 숫자를 더한 결과를 반환합니다.
+ * @param {number} a - 첫 번째 숫자
+ * @param {number} b - 두 번째 숫자
+ * @returns {number} 두 숫자의 합
+ * @example
+ * const sum = add(2, 3); // 5
+ */
+export const add = (a: number, b: number): number => a + b;
+```
+
+- **요약**: 한국어 한 문장(`~합니다`)으로 무엇을 하는지 쓴다. DB·파일 쓰기, 네트워크 호출, 프로세스 실행 같은 부작용이 있으면 함께 적는다.
+- **`@param {타입} 이름 - 설명`**: 매개변수마다 하나씩 쓴다. 타입은 TypeScript 시그니처와 같게 적는다. 시그니처를 바꾸면 주석 타입도 함께 고친다(tsc는 주석 타입을 검사하지 않는다).
+- **컴포넌트 props**: `@param {object} props - 컴포넌트 props`를 쓰고, prop마다 `@param {타입} props.이름 - 설명`을 쓴다. props가 없으면 생략한다.
+- **`@returns {타입} 설명`**: 항상 쓴다. 컴포넌트는 `{JSX.Element}`, 비동기 함수는 `{Promise<T>}`, 반환값이 없으면 `{void}`.
+- **`@throws {Error} 조건`**: 사용자에게 보이는 에러를 의도적으로 던질 때 쓴다.
+- **`@example`**: 입력과 출력이 분명한 순수 함수(문자열 변환, 계산 등)에만 쓴다. 컴포넌트·DB·네트워크 코드에는 쓰지 않는다.
+- **범위 밖**: 함수 안의 이벤트 핸들러·짧은 콜백, `components/ui/`(shadcn 생성물).
+- 일반 스킬(`next-coding-rules`)의 TSDoc 예시는 타입을 생략하지만, 이 프로젝트는 위 형식(`{타입}` 포함)을 따른다.
 
 ---
 

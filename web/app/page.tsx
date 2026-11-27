@@ -26,34 +26,34 @@ export default function HomePage() {
             <br />
             공고를 찾아 이력서와 맞추는
             <br />
-            <span className="text-blue-600">에이전트와 함께.</span>
+            <span className="text-primary">에이전트와 함께.</span>
           </h1>
-          <p className="mt-6 max-w-md text-base leading-8 text-slate-500">
+          <p className="mt-6 max-w-md text-base leading-8 text-muted-foreground">
             채용공고를 찾아 이력서와 비교하고, 강점과 보완할 점을 확인하세요.
             관련 공고의 요건과 원문 출처를 함께 안내합니다.
           </p>
           <Button
             asChild
-            className="mt-7 h-auto rounded-full bg-slate-900 px-6 py-3 text-sm hover:bg-slate-900/90"
+            className="mt-7 h-auto rounded-full px-6 py-3 text-sm"
           >
             <Link href="/backend">
               매칭 시작하기 <ArrowRight size={16} />
             </Link>
           </Button>
-          <p className="mt-4 text-xs text-slate-500">
+          <p className="mt-4 text-xs text-muted-foreground">
             현재는 AI API 없이 실행하는 학습용 데모입니다.
           </p>
         </div>
-        <div className="relative rounded-[2rem] bg-[#edf2f7] p-6 sm:p-9">
-          <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
-            <span className="size-2 rounded-full bg-blue-500" />
+        <div className="relative rounded-lg bg-muted p-6 sm:p-9">
+          <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+            <span className="size-2 rounded-full bg-primary" />
             조건에서 근거 있는 매칭까지
           </div>
-          <div className="ml-8 mt-7 rounded-2xl rounded-tr-sm bg-blue-600 p-5 text-sm text-white shadow-lg shadow-blue-900/10">
+          <div className="ml-8 mt-7 rounded-lg rounded-tr-sm bg-primary p-5 text-sm text-primary-foreground">
             Java/Spring 경험으로 지원할 공고가 있나요?
           </div>
-          <div className="mt-4 rounded-2xl bg-white p-6 shadow-sm">
-            <div className="mb-4 flex items-center gap-2 text-xs text-slate-500">
+          <div className="mt-4 rounded-lg bg-card p-6 shadow-sm">
+            <div className="mb-4 flex items-center gap-2 text-xs text-muted-foreground">
               <FolderSearch size={16} />
               채용공고에서 관련 요건 확인
             </div>
@@ -62,11 +62,11 @@ export default function HomePage() {
               <br />
               요건과 출처를 함께 확인합니다.
             </p>
-            <div className="mt-5 rounded-xl bg-slate-50 px-4 py-3 text-xs text-slate-500">
+            <div className="mt-5 rounded-lg bg-muted px-4 py-3 text-xs text-muted-foreground">
               검색 → 읽기 → 매칭
             </div>
           </div>
-          <p className="mt-5 text-center text-xs text-slate-600">
+          <p className="mt-5 text-center text-xs text-muted-foreground">
             개념을 설명하기 위한 예시 화면
           </p>
         </div>
@@ -77,7 +77,7 @@ export default function HomePage() {
             <p className="eyebrow mb-3">CHOOSE YOUR FIELD</p>
             <h2 className="section-title">어떤 직무를 찾고 있나요?</h2>
           </div>
-          <span className="hidden text-xs text-slate-500 sm:block">
+          <span className="hidden text-xs text-muted-foreground sm:block">
             직무별 공고부터 비교해보세요
           </span>
         </div>
@@ -88,7 +88,7 @@ export default function HomePage() {
               name: "백엔드·서버",
               icon: Server,
               description: "서버 개발 공고의 요건과 이력서를 비교해보세요.",
-              color: "bg-blue-50 text-blue-600",
+              color: "bg-brand-subtle text-primary",
               example: "Java · Node · 트래픽",
             },
             {
@@ -96,31 +96,31 @@ export default function HomePage() {
               name: "데이터·AI",
               icon: Database,
               description: "데이터·ML 공고와 역량 차이를 살펴보세요.",
-              color: "bg-emerald-50 text-emerald-600",
+              color: "bg-success/10 text-success",
               example: "Python · RAG · 파이프라인",
             },
           ].map((item) => (
             <Link
               key={item.path}
               href={item.path}
-              className="soft-card group p-7 transition hover:-translate-y-1 hover:border-blue-200"
+              className="soft-card group p-7 transition hover:border-primary"
             >
               <div className="flex justify-between">
                 <span
-                  className={`flex size-12 items-center justify-center rounded-2xl ${item.color}`}
+                  className={`flex size-12 items-center justify-center rounded-lg ${item.color}`}
                 >
                   <item.icon size={24} />
                 </span>
                 <ArrowUpRight
-                  className="text-slate-300 transition group-hover:text-blue-600"
+                  className="text-muted-foreground transition group-hover:text-primary"
                   size={22}
                 />
               </div>
               <h3 className="mt-6 text-xl font-semibold">{item.name}</h3>
-              <p className="mt-3 text-sm leading-7 text-slate-500">
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">
                 {item.description}
               </p>
-              <p className="mt-5 text-xs font-medium text-slate-500">
+              <p className="mt-5 text-xs font-medium text-muted-foreground">
                 {item.example}
               </p>
             </Link>
@@ -131,14 +131,14 @@ export default function HomePage() {
         <div className="mb-6">
           <p className="eyebrow mb-3">EXAMPLE MATCH</p>
           <h2 className="section-title">매칭 결과는 이렇게 보입니다</h2>
-          <p className="mt-3 max-w-xl text-sm leading-7 text-slate-500">
+          <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">
             이력서와 채용공고를 비교한 예시입니다. 아래는 설명을 위한 데모
             데이터이며, 실제 점수·강점·보완점은 모델 연결 후 계산합니다.
           </p>
         </div>
         <div className="grid gap-5 lg:grid-cols-[300px_1fr]">
           <div className="soft-card p-6">
-            <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+            <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
               <FileText size={16} />
               이력서 요약 (예시)
             </div>
@@ -148,7 +148,7 @@ export default function HomePage() {
                 (s) => (
                   <Badge
                     key={s}
-                    className="rounded-full bg-blue-50 px-3 py-1 text-blue-600"
+                    className="rounded-full bg-brand-subtle px-3 py-1 text-primary"
                   >
                     {s}
                   </Badge>
@@ -159,7 +159,7 @@ export default function HomePage() {
           <div className="soft-card p-7">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-medium text-slate-500">
+                <p className="text-xs font-medium text-muted-foreground">
                   매칭된 공고
                 </p>
                 <h3 className="mt-1 text-lg font-semibold">
@@ -167,43 +167,43 @@ export default function HomePage() {
                 </h3>
               </div>
               <div className="shrink-0 text-right">
-                <p className="text-3xl font-semibold text-blue-600">82%</p>
-                <p className="text-xs text-slate-400">요건 적합도</p>
+                <p className="text-3xl font-semibold text-primary">82%</p>
+                <p className="text-xs text-muted-foreground">요건 적합도</p>
               </div>
             </div>
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
               <div>
-                <p className="mb-3 flex items-center gap-2 text-xs font-semibold text-emerald-600">
+                <p className="mb-3 flex items-center gap-2 text-xs font-semibold text-success">
                   <CheckCircle2 size={15} />
                   강점 — 요건 충족
                 </p>
-                <ul className="space-y-2 text-sm leading-6 text-slate-600">
+                <ul className="space-y-2 text-sm leading-6 text-muted-foreground">
                   <li>· Java·Spring Boot 서버 개발 (필수 3년↑ 충족)</li>
                   <li>· REST API 설계 경험</li>
                   <li>· 관계형 데이터베이스(MySQL) 경험</li>
                 </ul>
               </div>
               <div>
-                <p className="mb-3 flex items-center gap-2 text-xs font-semibold text-amber-600">
+                <p className="mb-3 flex items-center gap-2 text-xs font-semibold text-warning">
                   <AlertCircle size={15} />
                   보완 — 우대 사항
                 </p>
-                <ul className="space-y-2 text-sm leading-6 text-slate-600">
+                <ul className="space-y-2 text-sm leading-6 text-muted-foreground">
                   <li>· Kubernetes·AWS 운영 경험 미기재</li>
                   <li>· MSA 구조 경험 보강 필요</li>
                   <li>· 결제·정산 도메인 이해 강조 권장</li>
                 </ul>
               </div>
             </div>
-            <div className="mt-6 flex items-center gap-2 border-t border-slate-100 pt-4 text-xs text-slate-500">
+            <div className="mt-6 flex items-center gap-2 border-t border-border pt-4 text-xs text-muted-foreground">
               <Link2 size={14} />
               출처: 사람이 검토한 채용공고 요약 ·{" "}
-              <code className="text-slate-400">backend-fintech</code>
+              <code className="text-muted-foreground">backend-fintech</code>
             </div>
           </div>
         </div>
       </section>
-      <section className="mt-16 rounded-3xl bg-slate-900 px-7 py-9 text-white sm:px-10">
+      <section className="mt-16 rounded-lg border bg-card px-7 py-9 sm:px-10">
         <h2 className="text-xl font-semibold">매칭은 이렇게 진행됩니다</h2>
         <div className="mt-7 grid gap-6 sm:grid-cols-3">
           {[
@@ -229,12 +229,14 @@ export default function HomePage() {
             const I = Icon as typeof FolderSearch;
             return (
               <div key={String(num)}>
-                <I size={22} className="mb-4 text-blue-300" />
+                <I size={22} className="mb-4 text-primary" />
                 <p className="text-sm font-semibold">
-                  <span className="mr-2 text-slate-400">{String(num)}</span>
+                  <span className="mr-2 text-muted-foreground">
+                    {String(num)}
+                  </span>
                   {String(title)}
                 </p>
-                <p className="mt-2 text-sm leading-7 text-slate-400">
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">
                   {String(text)}
                 </p>
               </div>
