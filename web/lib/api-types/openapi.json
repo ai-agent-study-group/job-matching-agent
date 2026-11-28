@@ -36,7 +36,7 @@
           "profile"
         ],
         "summary": "Extract a profile from a resume",
-        "description": "Extract experience, education, skills and languages from the resume.\n\nSend the resume in the `resume` form field, as plain text or as a file.",
+        "description": "Extract experience, education, skills and languages from the resume.\n\nSend the resume in the `resume` form field, as plain text or as a PDF or DOCX file.\nA file with no extractable text is rejected with 422 and a one-sentence `detail`.",
         "operationId": "profile",
         "requestBody": {
           "content": {
@@ -59,12 +59,39 @@
               }
             }
           },
-          "415": {
-            "description": "Resume files are not supported yet. Send the resume as text",
+          "413": {
+            "description": "The resume file is larger than 5 MB",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "The resume file is not a PDF or DOCX",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The form is invalid (`detail` is a list), or the resume file has no extractable text (`detail` is a sentence)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/HTTPValidationError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrorDTO"
+                    }
+                  ]
                 }
               }
             }
@@ -104,16 +131,6 @@
                 },
                 "example": {
                   "detail": "Profile extraction failed. The LLM did not respond in time. Try again later"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }

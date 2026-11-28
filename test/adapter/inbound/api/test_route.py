@@ -1,6 +1,8 @@
+from io import BytesIO
 from types import SimpleNamespace
 
 import pytest
+from docx import Document
 from fastapi.testclient import TestClient
 from pydantic import BaseModel
 from pydantic_ai.exceptions import (
@@ -45,6 +47,7 @@ PROFILE = Profile(
 )
 # 줄바꿈과 따옴표가 섞인 이력서. 폼으로 보내도 agent에는 원문 그대로 가야 함
 RESUME = 'Data Analyst\n3 years of "Python" and SQL\nBerlin'
+DOCX_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 
 def post_resume(resume: str):
@@ -131,21 +134,38 @@ def test_profile_rejects_old_json_request(monkeypatch):
     assert response.status_code == 422
 
 
-def test_profile_rejects_resume_file_until_parser_exists(monkeypatch):
-    """파일로 온 이력서는 415로 막는다.
+def test_profile_accepts_resume_file(monkeypatch):
+    """파일로 온 이력서는 글로 바꿔 agent에 넘긴다.
 
-    목적: 파일을 텍스트로 바꾸는 부분(#44)이 아직 없음. 바이트를 그대로 agent에 넘기면 안 됨.
+    목적: 파일의 바이트가 아니라 뽑아낸 글이 agent에 가야 함. FakeProfileAgent가 글이 RESUME과 같은지 확인함.
+    """
+    monkeypatch.setattr(app.state, "profile_agent", FakeProfileAgent(), raising=False)
+    buffer = BytesIO()
+    document = Document()
+    for line in RESUME.split("\n"):
+        document.add_paragraph(line)
+    document.save(buffer)
+
+    files = {"resume": ("cv.docx", buffer.getvalue(), DOCX_TYPE)}
+    response = TestClient(app).post("/api/profile", files=files)
+
+    assert response.status_code == 200
+    assert response.json() == PROFILE.model_dump()
+
+
+def test_profile_rejects_unsupported_resume_file(monkeypatch):
+    """PDF · DOCX가 아닌 파일은 415로 막는다.
+
+    목적: 파서가 낸 오류가 라우트를 거쳐 그대로 나가야 함. agent까지 가면 안 됨.
     """
     error = AssertionError("profile agent must not run")
     monkeypatch.setattr(app.state, "profile_agent", FailingAgent(error), raising=False)
 
-    files = {"resume": ("cv.pdf", b"%PDF-1.4", "application/pdf")}
+    files = {"resume": ("cv.txt", b"Data Analyst", "text/plain")}
     response = TestClient(app).post("/api/profile", files=files)
 
     assert response.status_code == 415
-    assert response.json() == {
-        "detail": "Resume files are not supported yet. Send the resume as text"
-    }
+    assert response.json() == {"detail": "Only PDF and DOCX files are supported."}
 
 
 @pytest.mark.parametrize(

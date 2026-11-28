@@ -34,7 +34,8 @@ export interface paths {
          * Extract a profile from a resume
          * @description Extract experience, education, skills and languages from the resume.
          *
-         *     Send the resume in the `resume` form field, as plain text or as a file.
+         *     Send the resume in the `resume` form field, as plain text or as a PDF or DOCX file.
+         *     A file with no extractable text is rejected with 422 and a one-sentence `detail`.
          */
         post: operations["profile"];
         delete?: never;
@@ -311,7 +312,16 @@ export interface operations {
                     "application/json": components["schemas"]["Profile-Output"];
                 };
             };
-            /** @description Resume files are not supported yet. Send the resume as text */
+            /** @description The resume file is larger than 5 MB */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDTO"];
+                };
+            };
+            /** @description The resume file is not a PDF or DOCX */
             415: {
                 headers: {
                     [name: string]: unknown;
@@ -320,13 +330,13 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorDTO"];
                 };
             };
-            /** @description Validation Error */
+            /** @description The form is invalid (`detail` is a list), or the resume file has no extractable text (`detail` is a sentence) */
             422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["HTTPValidationError"] | components["schemas"]["ErrorDTO"];
                 };
             };
             /** @description The agent failed for another reason, such as an LLM error */
