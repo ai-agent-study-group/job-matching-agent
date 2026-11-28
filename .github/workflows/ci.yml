@@ -63,10 +63,31 @@ jobs:
             exit 1
           fi
 
-  all-checks:                 # 보호 규칙이 보는 유일한 검사
+  no-merge-commits:
+    name: No merge commits
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # 기본값은 GitHub가 만든 합친 커밋이라, PR 브랜치 자체를 받음
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Check merge commits
+        env:
+          BASE: origin/${{ github.base_ref }}
+        run: |
+          merges=$(git rev-list --merges "$BASE..HEAD")
+          if [ -n "$merges" ]; then
+            echo "::error::브랜치에 merge 커밋이 있음. git rebase origin/main 후 force push로 정리 (Update branch는 'Update with rebase'로)"
+            git log --oneline --merges "$BASE..HEAD"
+            exit 1
+          fi
+
+  all-checks:
     name: all-checks
     if: always()
-    needs: [backend, frontend, branch-name]
+    needs: [backend, frontend, branch-name, no-merge-commits]
     runs-on: ubuntu-latest
     steps:
       - name: Fail if any required job failed
