@@ -5,13 +5,16 @@
 """
 
 import asyncio
+from unittest.mock import Mock
 
 import httpx2
 import pytest
 from fastmcp import Client
 from fastmcp.client.transports import StreamableHttpTransport
+from fastmcp.server.auth.providers.jwt import JWTVerifier
 
-from main import app
+import main as main_module
+from main import create_app, create_prod_app
 
 
 @pytest.fixture(autouse=True)
@@ -22,6 +25,7 @@ def llm_model(monkeypatch):
 
 def run(check):
     """앱의 lifespan을 돌리고 /mcp에 클라이언트를 붙여 check(client)를 돌린다."""
+    app = create_app()
 
     def asgi_client(**kwargs):
         return httpx2.AsyncClient(transport=httpx2.ASGITransport(app=app), **kwargs)
@@ -55,3 +59,33 @@ def test_mcp_over_http_list_sources():
 
     names = [source["name"] for source in result.structured_content["result"]]
     assert names == ["arbeitsagentur", "freehire"]
+
+
+def test_create_app_ignores_auth_env_vars(monkeypatch):
+    """셸에 WorkOS 환경 변수가 있어도 create_app()은 인증을 붙이지 않는다.
+
+    목적: 테스트가 실행 환경의 AUTHKIT_DOMAIN · WORKOS_CLIENT_ID 영향을 받지 않게 함.
+    """
+    monkeypatch.setenv("AUTHKIT_DOMAIN", "jma-without-scheme.authkit.app")
+    monkeypatch.setenv("WORKOS_CLIENT_ID", "client_test")
+
+    tools = run(lambda client: client.list_tools())
+
+    assert {t.name for t in tools} == {"list_sources", "get_usage", "search_jobs", "get_job"}
+
+
+def test_create_prod_app_wires_auth_from_env(monkeypatch):
+    """배포용 팩토리 함수는 환경 변수에서 인증 설정을 읽고 Logfire 계측을 연결한다."""
+    configure_logfire = Mock()
+    instrument_fastapi = Mock()
+    monkeypatch.delenv("AUTHKIT_DOMAIN", raising=False)
+    monkeypatch.setenv("WORKOS_CLIENT_ID", "client_test")
+    monkeypatch.setattr(main_module, "configure_logfire", configure_logfire)
+    monkeypatch.setattr(main_module, "instrument_fastapi", instrument_fastapi)
+
+    app = create_prod_app()
+
+    configure_logfire.assert_called_once_with()
+    instrument_fastapi.assert_called_once_with(app)
+    assert isinstance(app.state.api_auth, JWTVerifier)
+    assert app.state.api_auth.jwks_uri == "https://api.workos.com/sso/jwks/client_test"

@@ -2,12 +2,13 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, File, HTTPException, Request, status
+from fastapi import APIRouter, Depends, File, HTTPException, Request, status
 from pydantic_ai.exceptions import AgentRunError
 
 from adapter.inbound.agent.search import extract_jobs
 from adapter.inbound.api.dto import ErrorDTO, ProfileRequestDTO
 from adapter.inbound.api.error import agent_error, agent_errors
+from adapter.inbound.auth import current_user
 from domain.job import JobPosting
 from domain.profile import Profile
 
@@ -15,6 +16,12 @@ from domain.profile import Profile
 router = APIRouter(generate_unique_id_function=lambda route: route.name)
 
 RESUME_FILE_UNSUPPORTED = "Resume files are not supported yet. Send the resume as text"
+UNAUTHORIZED = {
+    status.HTTP_401_UNAUTHORIZED: {
+        "model": ErrorDTO,
+        "description": "Missing or invalid authentication token",
+    }
+}
 
 
 @router.get("/health", tags=["system"], summary="Health check")
@@ -26,7 +33,9 @@ def health() -> dict[str, str]:
     "/api/profile",
     tags=["profile"],
     summary="Extract a profile from a resume",
+    dependencies=[Depends(current_user)],
     responses={
+        **UNAUTHORIZED,
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: {
             "model": ErrorDTO,
             "description": RESUME_FILE_UNSUPPORTED,
@@ -53,7 +62,11 @@ async def profile(body: Annotated[ProfileRequestDTO, File()], request: Request) 
     "/api/search",
     tags=["search"],
     summary="Search job postings for a profile",
-    responses=agent_errors("Job search failed"),
+    dependencies=[Depends(current_user)],
+    responses={
+        **UNAUTHORIZED,
+        **agent_errors("Job search failed"),
+    },
 )
 async def search(body: Profile, request: Request) -> list[JobPosting]:
     """Search the job sources through the MCP tools for postings that match the profile.

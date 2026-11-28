@@ -106,8 +106,9 @@ uv run pre-commit install          # 커밋 전 ruff 검사 · FE 타입 생성 
 | `LLM_MODEL` | 필수 | 필수 | 예: `openai:gpt-4.1-mini`. 없으면 앱이 시작되지 않음 |
 | `OPENAI_API_KEY` 또는 `ANTHROPIC_API_KEY` | 필수 | 필수 | `LLM_MODEL`에 맞는 키 |
 | `LOGFIRE_TOKEN` | 선택 | 선택 | 없으면 관찰 데이터를 보내지 않음 (아래 Logfire) |
-| `AUTHKIT_DOMAIN` | 넣지 않음 | 필수 | `/mcp` 로그인을 맡는 WorkOS AuthKit 주소. 없으면 `/mcp`가 로그인 없이 열림 |
+| `AUTHKIT_DOMAIN` | 넣지 않음 | 필수 | `/mcp` 로그인을 맡는 WorkOS AuthKit 주소 (예: `https://jma.authkit.app`). 없으면 `/mcp`가 로그인 없이 열림 |
 | `BASE_URL` | 넣지 않음 | 필수 | 서버의 공개 주소. `AUTHKIT_DOMAIN`만 있고 이 값이 없으면 앱이 시작되지 않음 |
+| `WORKOS_CLIENT_ID` | `/api` 호출 시 필수 | 필수 | `/api` 로그인 토큰을 검사하는 WorkOS Client ID. 없으면 `/api` 요청은 401로 막힘 |
 | `PORT` | 넣지 않음 | Railway가 넣음 | 앱이 열리는 포트 |
 
 `AUTHKIT_DOMAIN`과 `BASE_URL`의 값과 WorkOS 설정은 [BE 티켓 39](https://github.com/ai-agent-study-group/job-matching-agent/wiki/BE-티켓-39)에 있습니다. 로컬 `.env`는 아래처럼 적습니다.
@@ -133,7 +134,7 @@ LOGFIRE_TOKEN=<Logfire write token>
 API 단계별 시간·오류·토큰을 확인할 수 있습니다. 이력서와 공고 본문은 기록하지 않습니다.
 
 ```bash
-uv run --env-file .env uvicorn main:app --reload   # http://localhost:8000/health
+uv run --env-file .env uvicorn main:create_prod_app --factory --reload   # http://localhost:8000/health
 ```
 
 앱을 띄우면 MCP 서버도 `http://localhost:8000/mcp`에서 함께 열립니다. 다른 터미널에서 도구 목록을 보거나 도구 하나를 불러 볼 수 있습니다.

@@ -311,6 +311,15 @@ export interface operations {
                     "application/json": components["schemas"]["Profile-Output"];
                 };
             };
+            /** @description Missing or invalid authentication token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDTO"];
+                };
+            };
             /** @description Resume files are not supported yet. Send the resume as text */
             415: {
                 headers: {
@@ -393,6 +402,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JobPosting"][];
+                };
+            };
+            /** @description Missing or invalid authentication token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDTO"];
                 };
             };
             /** @description Validation Error */
