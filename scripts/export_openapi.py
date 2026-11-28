@@ -3,8 +3,11 @@
 import json
 from pathlib import Path
 
-from main import app
+from main import create_app
 
 OUT = Path(__file__).resolve().parents[1] / "web/lib/api-types/openapi.json"
 
-OUT.write_text(json.dumps(app.openapi(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+OUT.write_text(
+    json.dumps(create_app().openapi(), indent=2, ensure_ascii=False) + "\n",
+    encoding="utf-8",
+)

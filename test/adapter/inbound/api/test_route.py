@@ -2,6 +2,7 @@ from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
+from fastmcp.server.auth import AccessToken
 from pydantic import BaseModel
 from pydantic_ai.exceptions import (
     ModelAuthenticationError,
@@ -17,13 +18,23 @@ from pydantic_ai.models.function import FunctionModel
 
 from adapter.inbound.agent.search import create_search_agent
 from adapter.inbound.api.error import AGENT_ERROR_REASONS
+from adapter.inbound.auth import current_user
 from adapter.inbound.mcp.server import create_server
 from domain.job import JobPosting
 from domain.profile import Profile
-from main import app
+from main import create_app
 from port.outbound.source import JobSource
 from service.job import JobService
 from service.registry import RegistryService
+
+app = create_app()
+# 기존 라우트 테스트는 로그인 검사를 건너뛰고 라우트 본문만 검증하도록 가짜 사용자를 넣는다
+app.dependency_overrides[current_user] = lambda: AccessToken(
+    token="test-token",
+    client_id="user-test",
+    scopes=[],
+    subject="user-test",
+)
 
 POSTING = JobPosting(
     source="fake",
