@@ -330,13 +330,13 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorDTO"];
                 };
             };
-            /** @description Validation Error */
+            /** @description The form is invalid (`detail` is a list), or the resume file has no extractable text (`detail` is a sentence) */
             422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["HTTPValidationError"] | components["schemas"]["ErrorDTO"];
                 };
             };
             /** @description The agent failed for another reason, such as an LLM error */

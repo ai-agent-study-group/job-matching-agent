@@ -79,6 +79,23 @@
               }
             }
           },
+          "422": {
+            "description": "The form is invalid (`detail` is a list), or the resume file has no extractable text (`detail` is a sentence)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/HTTPValidationError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrorDTO"
+                    }
+                  ]
+                }
+              }
+            }
+          },
           "502": {
             "description": "The agent failed for another reason, such as an LLM error",
             "content": {
@@ -114,16 +131,6 @@
                 },
                 "example": {
                   "detail": "Profile extraction failed. The LLM did not respond in time. Try again later"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }

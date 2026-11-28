@@ -2,13 +2,13 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, File, Request, status
+from fastapi import APIRouter, File, Request
 from pydantic_ai.exceptions import AgentRunError
 
 from adapter.inbound.agent.search import extract_jobs
 from adapter.inbound.api.document_parser import document_to_text
-from adapter.inbound.api.dto import ErrorDTO, ProfileRequestDTO
-from adapter.inbound.api.error import agent_error, agent_errors
+from adapter.inbound.api.dto import ProfileRequestDTO
+from adapter.inbound.api.error import agent_error, agent_errors, resume_file_errors
 from domain.job import JobPosting
 from domain.profile import Profile
 
@@ -26,14 +26,7 @@ def health() -> dict[str, str]:
     tags=["profile"],
     summary="Extract a profile from a resume",
     responses={
-        status.HTTP_413_CONTENT_TOO_LARGE: {
-            "model": ErrorDTO,
-            "description": "The resume file is larger than 5 MB",
-        },
-        status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: {
-            "model": ErrorDTO,
-            "description": "The resume file is not a PDF or DOCX",
-        },
+        **resume_file_errors(),
         **agent_errors("Profile extraction failed"),
     },
 )

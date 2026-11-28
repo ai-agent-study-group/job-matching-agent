@@ -47,3 +47,33 @@ def agent_errors(step: str) -> dict:
         }
         for code, reason in AGENT_ERROR_REASONS.items()
     }
+
+
+def resume_file_errors() -> dict:
+    """Swagger에 적을 이력서 파일 오류 응답."""
+    return {
+        status.HTTP_413_CONTENT_TOO_LARGE: {
+            "model": ErrorDTO,
+            "description": "The resume file is larger than 5 MB",
+        },
+        status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: {
+            "model": ErrorDTO,
+            "description": "The resume file is not a PDF or DOCX",
+        },
+        # FastAPI는 422를 detail 배열(폼 검증 실패)로만 적어서, 파일 오류의 detail 문장이 FE 타입에 빠짐.
+        # 두 형식을 직접 적어, FE 타입에도 detail이 "배열 또는 문장"으로 나오게 함
+        status.HTTP_422_UNPROCESSABLE_CONTENT: {
+            "description": "The form is invalid (`detail` is a list), "
+            "or the resume file has no extractable text (`detail` is a sentence)",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "anyOf": [
+                            {"$ref": "#/components/schemas/HTTPValidationError"},
+                            {"$ref": "#/components/schemas/ErrorDTO"},
+                        ]
+                    }
+                }
+            },
+        },
+    }
