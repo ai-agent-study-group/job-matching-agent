@@ -84,10 +84,37 @@ jobs:
             exit 1
           fi
 
+  # 커밋 전 api-types 훅을 설치하지 않은 사람이 API를 바꿔도 PR에서 잡히도록 같은 생성을 돌려 봄
+  api-types:
+    name: API types up to date
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+        working-directory: web
+      - run: npm run generate:types
+        working-directory: web
+      - name: Fail if the committed files are stale
+        run: |
+          if ! git diff --exit-code web/lib/api-types/; then
+            echo "::error::openapi.json 또는 api.generated.ts가 최신이 아님. web/에서 npm run generate:types 후 두 파일을 커밋"
+            exit 1
+          fi
+
   all-checks:
     name: all-checks
     if: always()
-    needs: [backend, frontend, branch-name, no-merge-commits]
+    needs: [backend, frontend, branch-name, no-merge-commits, api-types]
     runs-on: ubuntu-latest
     steps:
       - name: Fail if any required job failed

@@ -99,6 +99,8 @@ uv run pre-commit install          # 커밋 전 ruff 검사 · FE 타입 생성 
 (cd web && npm ci)                 # FE 타입 생성 hook이 쓰는 도구 설치 (clone 후 한 번)
 ```
 
+hook은 clone마다 직접 설치해야 합니다. 설치하지 않아도 커밋은 되지만, API를 바꾸고 FE 타입을 다시 만들지 않으면 PR의 CI(`API types up to date`)가 실패합니다. 그때는 `web/`에서 `npm run generate:types`를 돌리고 바뀐 두 파일을 커밋합니다.
+
 앱을 띄우기 전에 저장소 루트의 `.env`에 환경변수를 적습니다. `.env`는 git에 올라가지 않습니다. 배포(Railway)에서는 같은 변수를 서비스의 Variables에 넣습니다.
 
 | 변수 | 로컬 | 배포 (Railway) | 내용 |
